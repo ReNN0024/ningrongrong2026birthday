@@ -556,6 +556,27 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   to { transform: scaleX(1); }
 }
 
+/* PC 端左栏四段等距布局 */
+@media (min-width: 1024px) {
+  .guide-panel {
+    --guide-min-gap: 8px;
+    height: 100%;
+    min-height: 0;
+    padding: 21px 18px 20px;
+    display: grid;
+    grid-template-rows: auto auto auto auto;
+    row-gap: var(--guide-min-gap);
+    align-content: space-between;
+    overflow-y: auto;
+    scrollbar-width: thin;
+  }
+  .guide-scroll { display: contents; }
+  .guide-primary { min-width: 0; }
+  .steps { margin: 18px 0 0; }
+  .axis-legend, .tip-card { margin: 0; }
+  .guide-footer { margin: 0; padding: 0; }
+}
+
 @media (max-width: 370px) {
   .site-header { margin-inline: 3px; }
   .mobile-credits { display: flex; flex-basis: 43%; font-size: 5.5px; }
