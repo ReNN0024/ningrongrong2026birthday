@@ -505,6 +505,55 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   body.is-immersive .coordinate-section { flex: 0 0 auto; width: 100%; height: auto; }
   body.is-immersive .coordinate-frame { width: min(calc(100vw - 24px), 342px, calc(100dvh - 286px)); height: auto; max-width: 342px; }
   body.is-immersive .library-panel { flex: 1 1 286px; width: min(calc(100vw - 24px), 342px); height: auto; min-height: 220px; max-height: 330px; margin: 0 auto; }
+
+  /* 移动端隐藏 FRAGMENTS */
+  .library-head .section-index { display: none; }
+
+  /* 长按三段式反馈 */
+  .logo-card .logo-thumb {
+    transition: transform 140ms ease, filter 140ms ease;
+  }
+  .logo-card.is-holding .logo-thumb {
+    transform: scale(1.02);
+  }
+  .logo-card.is-holding .logo-thumb::before {
+    content: "";
+    position: absolute;
+    left: 15%;
+    bottom: -3px;
+    width: 70%;
+    height: 2px;
+    border-radius: 2px;
+    background: #b88a3a;
+    transform: scaleX(0);
+    transform-origin: left;
+    animation: hold-progress 280ms linear forwards;
+  }
+  .logo-card.is-drag-ready .logo-thumb {
+    transform: translateY(-6px) scale(1.08);
+    filter: drop-shadow(0 10px 12px rgba(69, 56, 41, 0.22)) drop-shadow(0 0 6px rgba(184, 138, 58, 0.35));
+  }
+  .drag-ghost { width: 62px; height: 62px; }
+  .drag-ghost.is-active { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+  .drag-ghost-tip {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: max-content;
+    padding: 5px 9px;
+    border-radius: 12px;
+    color: #fff;
+    background: rgba(69, 63, 58, 0.88);
+    box-shadow: 0 5px 12px rgba(55, 45, 35, 0.16);
+    font-size: 9px;
+    white-space: nowrap;
+    pointer-events: none;
+  }
+}
+
+@keyframes hold-progress {
+  to { transform: scaleX(1); }
 }
 
 @media (max-width: 370px) {

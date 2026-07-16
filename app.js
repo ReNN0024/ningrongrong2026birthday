@@ -348,12 +348,13 @@
 
   function startDrag(id, source, event) {
     const item = state.placed.find(entry => entry.id === id);
-    drag = { id, source, pointerId: event.pointerId, startPlaced: item ? { ...item } : null, x: event.clientX, y: event.clientY };
+    const sourceElement = press?.element || null;
+    drag = { id, source, pointerId: event.pointerId, sourceElement, startPlaced: item ? { ...item } : null, x: event.clientX, y: event.clientY };
     press = null;
     clearTimeout(hoverTimer);
     closePreview();
     const logo = logoMap.get(id);
-    dom.ghost.innerHTML = mediaMarkup(logo);
+    dom.ghost.innerHTML = `${mediaMarkup(logo)}<span class="drag-ghost-tip">\u62D6\u5230\u5750\u6807\u4E2D</span>`;
     dom.ghost.classList.add("is-active");
     updateDrag(event.clientX, event.clientY);
     if (source === "placed") {
@@ -367,10 +368,12 @@
     if (!drag) return;
     drag.x = x; drag.y = y;
     dom.ghost.style.left = `${x}px`;
-    dom.ghost.style.top = `${y}px`;
+    dom.ghost.style.top = `${y - 18}px`;
     const frameRect = dom.frame.getBoundingClientRect();
     const inFrame = isPointInRect(x, y, frameRect);
     dom.frame.classList.toggle("is-drop-valid", inFrame);
+    const tip = dom.ghost.querySelector(".drag-ghost-tip");
+    if (tip) tip.textContent = inFrame ? "\u677E\u5F00\u653E\u7F6E" : "\u62D6\u5230\u5750\u6807\u4E2D";
     const targetRect = dom.libraryHead.getBoundingClientRect();
     const inReturn = drag.source === "placed" && isPointInRect(x, y, targetRect);
     dom.returnTarget.classList.toggle("is-over", inReturn);
@@ -397,7 +400,9 @@
   }
 
   function cleanupDrag() {
+    drag?.sourceElement?.classList.remove("is-holding", "is-drag-ready");
     dom.ghost.classList.remove("is-active");
+    dom.ghost.innerHTML = "";
     dom.frame.classList.remove("is-drop-valid");
     dom.library.classList.remove("is-returning");
     dom.returnTarget.classList.remove("is-over");
@@ -431,13 +436,19 @@
     press = {
       id, source, pointerId: event.pointerId, x: event.clientX, y: event.clientY,
       moved: false, longReady: false, timer: 0, scrolling: false,
-      lastY: event.clientY, lastTime: performance.now(), scrollVelocity: 0
+      lastY: event.clientY, lastTime: performance.now(), scrollVelocity: 0,
+      element: button
     };
     button.setPointerCapture?.(event.pointerId);
     if (source === "library" && isMobile()) {
+      button.classList.add("is-holding");
       press.timer = window.setTimeout(() => {
         if (press && press.id === id && !press.moved) {
           press.longReady = true;
+          press.element.classList.remove("is-holding");
+          press.element.classList.add("is-drag-ready");
+          navigator.vibrate?.(18);
+          announce("\u5DF2\u62FE\u53D6 Logo\uFF0C\u53EF\u4EE5\u62D6\u52A8\u653E\u7F6E");
           startDrag(id, source, event);
         }
       }, 280);
@@ -462,6 +473,7 @@
         press.lastY = event.clientY;
         press.lastTime = performance.now();
         clearTimeout(press.timer);
+        press.element?.classList.remove("is-holding", "is-drag-ready");
       } else if (press.scrolling) {
         const now = performance.now();
         const elapsed = Math.max(1, now - press.lastTime);
@@ -492,6 +504,7 @@
     if (drag?.pointerId === event.pointerId) { finishDrag(event); return; }
     if (!press || press.pointerId !== event.pointerId) return;
     clearTimeout(press.timer);
+    press.element?.classList.remove("is-holding", "is-drag-ready");
     const current = press; press = null;
     if (current.scrolling) {
       startListMomentum(current.scrollVelocity);
@@ -508,6 +521,7 @@
 
   function onGlobalPointerCancel(event) {
     clearTimeout(press?.timer);
+    press?.element?.classList.remove("is-holding", "is-drag-ready");
     if (drag?.pointerId === event.pointerId) finishDrag(event, true);
     if (press?.pointerId === event.pointerId) press = null;
     if (toolbarDrag?.pointerId === event.pointerId) toolbarDrag = null;
