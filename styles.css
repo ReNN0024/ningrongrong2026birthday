@@ -375,7 +375,8 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .preview-popover {
   position: fixed;
   z-index: 200;
-  width: clamp(180px, 23vw, 310px);
+  width: max-content;
+  max-width: calc(100vw - 20px);
   pointer-events: none;
   padding: 9px;
   border-radius: 18px;
@@ -386,9 +387,9 @@ button:disabled { cursor: not-allowed; opacity: .36; }
   transition: opacity .15s ease, transform .15s ease;
 }
 .preview-popover.is-visible { opacity: 1; transform: none; }
-.preview-popover > div { width: 100%; aspect-ratio: 16 / 10; overflow: hidden; border-radius: 11px; background: #ead9bf; }
-.preview-popover img { width: 100%; height: 100%; display: block; object-fit: cover; }
-.preview-placeholder { width: 100%; height: 100%; }
+.preview-popover > div { width: max-content; max-width: 100%; overflow: hidden; border-radius: 11px; background: #ead9bf; }
+.preview-popover img { display: block; width: auto; height: auto; max-width: min(310px, calc(100vw - 38px)); max-height: min(70vh, 520px); object-fit: contain; }
+.preview-placeholder { width: min(310px, calc(100vw - 38px)); aspect-ratio: 16 / 10; }
 .preview-popover .placeholder-mark { display: block; width: 100%; height: 100%; }
 
 .drag-ghost { position: fixed; z-index: 500; width: 58px; height: 58px; pointer-events: none; transform: translate(-50%,-50%) scale(.96); opacity: 0; filter: drop-shadow(0 8px 10px rgba(49,40,30,.25)); }
@@ -497,8 +498,9 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .mobile-progress { min-height: 40px; flex: 0 0 auto; align-items: center; justify-content: space-between; padding: 7px 16px; border-top: 1px solid var(--line); background: rgba(255,251,244,.85); font-size: 9px; }
   .mobile-progress strong { font-weight: 400; color: var(--muted); }
   .mobile-progress em { font: 500 17px var(--serif); color: var(--gold-deep); font-style: normal; }
-  .preview-popover { width: min(64vw, 245px); padding: 7px; border-radius: 14px; pointer-events: none; }
+  .preview-popover { width: max-content; max-width: calc(100vw - 20px); padding: 7px; border-radius: 14px; pointer-events: none; }
   .preview-popover > div { border-radius: 9px; }
+  .preview-popover img { max-width: min(64vw, 245px); max-height: min(62vh, 420px); }
   .drag-ghost { width: 54px; height: 54px; }
   body.is-immersive .app-shell { padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); }
   body.is-immersive .workspace { width: 100%; height: calc(100dvh - max(16px, env(safe-area-inset-top) + env(safe-area-inset-bottom))); display: flex; flex-direction: column; justify-content: center; gap: 8px; }

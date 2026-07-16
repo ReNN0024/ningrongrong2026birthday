@@ -534,10 +534,19 @@
       : `<div class="preview-placeholder" style="background:${logo.color}"></div>`;
     dom.preview.hidden = false;
     const anchorEl = anchor?.closest?.(".placed-logo") || dom.placedLayer.querySelector(`[data-logo-id="${id}"]`);
-    requestAnimationFrame(() => {
-      positionPreview(anchorEl);
-      dom.preview.classList.add("is-visible");
-    });
+    const previewImage = dom.previewMedia.querySelector("img");
+    const showPreview = () => {
+      requestAnimationFrame(() => {
+        positionPreview(anchorEl);
+        dom.preview.classList.add("is-visible");
+      });
+    };
+    if (previewImage && !previewImage.complete) {
+      previewImage.addEventListener("load", showPreview, { once: true });
+      previewImage.addEventListener("error", showPreview, { once: true });
+    } else {
+      showPreview();
+    }
   }
 
   function positionPreview(anchor) {
