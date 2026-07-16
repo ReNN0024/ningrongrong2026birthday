@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#f8f2e8">
+  <meta name="description" content="与我周旋久——宁荣荣2026宁做我生日庆典预热活动">
+  <title>宁荣荣·与我周旋久</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="paper-noise" aria-hidden="true"></div>
+  <main class="app-shell" id="app">
+    <header class="site-header">
+      <div class="title-block">
+        <h1>宁荣荣·与我周旋久</h1>
+        <p class="subtitle">宁荣荣2026宁做我生日庆典 · 预热活动</p>
+        <span class="title-rule" aria-hidden="true"></span>
+      </div>
+      <div class="mobile-credits" aria-label="制作名单">
+        <span>主办 / 发行 · @宁荣荣_琉璃记熠（微博）</span>
+        <span>网页 / 策划 · @酒起子起不来（微博）</span>
+        <span>LOGO 绘制 · 甘吉得藕（米画师）</span>
+      </div>
+    </header>
+
+    <section class="workspace" aria-label="碎片坐标编辑器">
+      <aside class="guide-panel desktop-only">
+        <div class="guide-scroll">
+          <p class="section-index">HOW TO PLAY</p>
+          <h2>找到你的坐标</h2>
+          <p class="guide-intro">把 41 份碎片，放进她的故事里。</p>
+          <ol class="steps">
+            <li><b>选一个 Logo</b><span>从右侧素材栏开始</span></li>
+            <li><b>放入坐标系</b><span>单击居中 · 拖动定位</span></li>
+            <li><b>微调并探索</b><span>滚轮缩放 · 拖动视角</span></li>
+          </ol>
+          <div class="axis-legend">
+            <div class="axis-legend-head"><strong>怎样读坐标？</strong><span>越靠近词语，表达越强烈</span></div>
+            <div class="mini-axis" aria-hidden="true">
+              <span class="mini-axis-line mini-axis-x"></span>
+              <span class="mini-axis-line mini-axis-y"></span>
+              <i class="mini-axis-origin"></i>
+              <b class="mini-left">荆棘</b><b class="mini-right">繁花</b>
+              <b class="mini-top">不忘</b><b class="mini-bottom">寻常</b>
+            </div>
+          </div>
+          <div class="tip-card">
+            <strong><i>i</i>小提示</strong>
+            <p>1、悬停已放置 Logo 预览图片</p>
+            <p>2、Logo 可以互相重叠，后放置的会显示在上层</p>
+            <p>3、右下角可重置坐标系位置与全屏查看</p>
+          </div>
+        </div>
+        <div class="guide-footer">
+          <div class="progress-copy"><span>已放置</span><strong><em id="placedCountDesktop">00</em> / <span data-total>41</span></strong></div>
+          <div class="credits">
+            <span>Credits</span>
+            <p>主办 / 发行 · @宁荣荣_琉璃记熠（微博）</p>
+            <p>网页 / 策划 · @酒起子起不来（微博）</p>
+            <p>LOGO 绘制 · 甘吉得藕（米画师）</p>
+          </div>
+        </div>
+      </aside>
+
+      <section class="coordinate-section" aria-label="人生坐标系">
+        <div class="coordinate-main">
+          <div class="mobile-instruction mobile-only">
+            <div class="mobile-guide-step guide-select"><span>1</span><p><b>选 Logo</b><small>从下方开始</small></p></div>
+            <div class="mobile-guide-step guide-place"><span>2</span><p><b>轻触放置</b><small>长按拖动定位</small></p></div>
+            <div class="mobile-guide-step guide-adjust"><span>3</span><p><b>微调位置</b><small>轻触预览图片</small></p></div>
+          </div>
+          <div class="coordinate-editor">
+          <div class="coordinate-frame" id="coordinateFrame">
+          <div class="coordinate-world" id="coordinateWorld">
+            <div class="quadrant-glow" aria-hidden="true"></div>
+            <div class="axis axis-x" aria-hidden="true"></div>
+            <div class="axis axis-y" aria-hidden="true"></div>
+            <div class="origin-mark" aria-hidden="true"></div>
+            <div class="guide-line guide-line-x" id="guideLineX" aria-hidden="true"></div>
+            <div class="guide-line guide-line-y" id="guideLineY" aria-hidden="true"></div>
+            <div class="quadrant-label q-ul"><strong>荆棘 × 不忘</strong><span>那些刺入生命的痛楚</span></div>
+            <div class="quadrant-label q-ur"><strong>繁花 × 不忘</strong><span>那些永远珍藏的美丽</span></div>
+            <div class="quadrant-label q-ll"><strong>荆棘 × 寻常</strong><span>风波总会平息</span></div>
+            <div class="quadrant-label q-lr"><strong>繁花 × 寻常</strong><span>盛景亦是寻常</span></div>
+            <div class="axis-copy axis-left"><strong>荆棘</strong><span>淬砺方成风骨</span></div>
+            <div class="axis-copy axis-right"><strong>繁花</strong><span>圆满酿就荣光</span></div>
+            <div class="axis-copy axis-top"><strong>不忘</strong><span>悲喜镌入骨血</span></div>
+            <div class="axis-copy axis-bottom"><strong>寻常</strong><span>烟火织就日常</span></div>
+            <div class="placed-layer" id="placedLayer"></div>
+          </div>
+          <div class="drop-feedback" id="dropFeedback" aria-hidden="true"><span>松开放置</span></div>
+          <div class="preview-popover" id="previewPopover" role="dialog" aria-label="Logo 图片预览" hidden>
+            <div id="previewMedia"></div>
+          </div>
+          </div>
+          <div class="coordinate-side-tools">
+          <div class="coordinate-toolbar" id="coordinateToolbar" role="toolbar" aria-label="坐标工具条">
+            <button class="toolbar-handle" id="toolbarHandle" type="button" aria-label="拖动工具条"><i></i><i></i><i></i><i></i><i></i><i></i></button>
+            <button class="desktop-tool" id="zoomOutBtn" type="button" aria-label="缩小坐标视角">−</button>
+            <output class="desktop-tool zoom-value" id="zoomValue" aria-label="当前缩放比例">100%</output>
+            <button class="desktop-tool" id="zoomInBtn" type="button" aria-label="放大坐标视角">＋</button>
+            <button id="resetViewBtn" type="button" aria-label="回归到最开始的视角" title="复原视角">↺</button>
+            <button id="guideBtn" type="button" aria-label="显示两条辅助线" aria-pressed="false" title="显示辅助线"><span class="guide-icon"></span></button>
+            <button id="fullscreenBtn" type="button" aria-label="进入全屏" aria-pressed="false" title="全屏"><span class="fullscreen-icon"></span></button>
+          </div>
+          <div class="viewport-minimap desktop-only" id="viewportMinimap" role="application" aria-label="当前画布位置预览，可点击或拖动定位">
+            <div class="minimap-axis minimap-axis-x" aria-hidden="true"></div>
+            <div class="minimap-axis minimap-axis-y" aria-hidden="true"></div>
+            <span class="minimap-label minimap-top">不忘</span>
+            <span class="minimap-label minimap-right">繁花</span>
+            <span class="minimap-label minimap-bottom">寻常</span>
+            <span class="minimap-label minimap-left">荆棘</span>
+            <div class="minimap-viewport" id="minimapViewport" aria-hidden="true"></div>
+          </div>
+          </div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="library-panel" id="libraryPanel" aria-label="待选 Logo">
+        <div class="library-head" id="libraryHead">
+          <div class="library-title-row">
+            <div><p class="section-index">FRAGMENTS</p><h2>待选 LOGO</h2></div>
+            <div class="history-actions" role="group" aria-label="历史操作">
+              <button id="undoBtn" type="button" aria-label="撤销上一步" disabled><span>↺</span><small>撤销</small></button>
+              <button id="redoBtn" type="button" aria-label="重做下一步" disabled><span>↻</span><small>重做</small></button>
+              <button class="clear-btn" id="clearBtn" type="button" aria-label="一键清空全部已放置 Logo"><span>清空</span></button>
+            </div>
+          </div>
+          <p class="library-help">轻触放至原点 · 拖动精准放置 · 点击已放置项可定位</p>
+          <div class="filter-row" role="group" aria-label="Logo 筛选">
+            <button class="filter-btn is-active" data-filter="all" type="button" aria-pressed="true">全部 <span data-total>41</span></button>
+            <button class="filter-btn" data-filter="unplaced" type="button" aria-pressed="false">未放置 <span id="unplacedCount">41</span></button>
+          </div>
+          <div class="return-target" id="returnTarget" aria-hidden="true"><span>↓</span>松开放回待选区</div>
+        </div>
+        <div class="logo-scroll" id="logoScroll">
+          <div class="logo-grid" id="logoGrid"></div>
+          <div class="empty-state" id="emptyState" hidden>所有碎片都已放入坐标</div>
+        </div>
+        <div class="mobile-progress mobile-only"><span>已放置</span><strong><em id="placedCountMobile">00</em> / <span data-total>41</span></strong></div>
+      </aside>
+    </section>
+  </main>
+
+  <div class="immersive-return" id="immersiveReturn" aria-hidden="true">松开放回待选区</div>
+  <div class="drag-ghost" id="dragGhost" aria-hidden="true"></div>
+  <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
+  <div class="sr-only" id="liveRegion" aria-live="polite"></div>
+
+  <dialog class="confirm-dialog" id="clearDialog" aria-labelledby="clearTitle">
+    <div class="dialog-card">
+      <p class="section-index">CLEAR ALL</p>
+      <h2 id="clearTitle">清空全部坐标？</h2>
+      <p>已放置的 Logo 将全部回到待选区。清空后仍可撤销一次。</p>
+      <div class="dialog-actions">
+        <button id="cancelClearBtn" type="button">暂不清空</button>
+        <button class="danger" id="confirmClearBtn" type="button">确认清空</button>
+      </div>
+    </div>
+  </dialog>
+
+  <noscript>请启用 JavaScript 后参与活动。</noscript>
+  <script src="app.js" defer></script>
+</body>
+</html>
