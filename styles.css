@@ -535,6 +535,17 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   }
   .drag-ghost { width: 62px; height: 62px; }
   .drag-ghost.is-active { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
+
+  /* 移动端：去掉操作指引框、待选 LOGO 框的细内框 */
+  .mobile-instruction::after,
+  .library-panel::after {
+    content: none;
+  }
+
+  /* 移动端：工具栏始终显示在坐标系框线之上 */
+  .coordinate-toolbar {
+    z-index: 40;
+  }
 }
 
 @keyframes hold-progress {
