@@ -560,6 +560,7 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .steps { margin: 18px 0 0; }
   .axis-legend, .tip-card { margin: 0; }
   .guide-footer { margin: 0; padding: 0; }
+  .drag-ghost > :not(img) { display: none !important; }
 }
 
 @media (max-width: 370px) {
