@@ -219,7 +219,7 @@
         state.placed.push({ id, x: point.x, y: point.y, z: nextZ() });
       }
       state.selectedId = id;
-    }, isNew ? `${logoMap.get(id).name} 放置成功` : `${logoMap.get(id).name} 位置已更新`);
+    }, isNew ? `${logoMap.get(id).name} 放置成功` : "");
     markOverlap(id);
   }
 
