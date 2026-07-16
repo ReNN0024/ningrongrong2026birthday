@@ -56,11 +56,46 @@
   let previewHideTimer = 0;
   let toolbarDrag = null;
   let minimapDrag = null;
+  let listMomentumFrame = 0;
   const stagePointers = new Map();
   let stageGesture = null;
 
   function escapeHTML(value) {
     return String(value).replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&#39;", '"': "&quot;" }[char]));
+  }
+
+  function stopListMomentum() {
+    if (!listMomentumFrame) return;
+    cancelAnimationFrame(listMomentumFrame);
+    listMomentumFrame = 0;
+  }
+
+  function startListMomentum(velocity) {
+    stopListMomentum();
+    if (Math.abs(velocity) < .04) return;
+    let lastTime = performance.now();
+    const step = now => {
+      const elapsed = Math.min(32, now - lastTime);
+      lastTime = now;
+      const before = dom.scroll.scrollTop;
+      dom.scroll.scrollTop += velocity * elapsed;
+      velocity *= Math.pow(.94, elapsed / 16.67);
+      const reachedBoundary = dom.scroll.scrollTop === before;
+      if (Math.abs(velocity) < .02 || reachedBoundary) {
+        listMomentumFrame = 0;
+        return;
+      }
+      listMomentumFrame = requestAnimationFrame(step);
+    };
+    listMomentumFrame = requestAnimationFrame(step);
+  }
+
+  function applyLibraryTouchMode() {
+    const mobile = isMobile();
+    dom.grid.querySelectorAll(".logo-card").forEach(card => {
+      card.style.touchAction = mobile ? "none" : "pan-y";
+      card.style.webkitTouchCallout = mobile ? "none" : "";
+    });
   }
 
   function mediaMarkup(logo, className = "") {
@@ -106,6 +141,7 @@
         <span class="logo-thumb">${mediaMarkup(logo)}</span><span>${escapeHTML(logo.name)}</span>
       </button>`;
     }).join("");
+    applyLibraryTouchMode();
     dom.empty.hidden = visible.length > 0;
   }
 
@@ -375,8 +411,13 @@
     const button = event.target.closest(source === "library" ? ".logo-card" : ".placed-logo");
     if (!button) return;
     const id = button.dataset.logoId;
+    if (source === "library" && isMobile()) stopListMomentum();
     if (source === "library" && state.placed.some(item => item.id === id)) {
-      press = { id, source, pointerId: event.pointerId, x: event.clientX, y: event.clientY, moved: false, placedLibrary: true };
+      press = {
+        id, source, pointerId: event.pointerId, x: event.clientX, y: event.clientY,
+        moved: false, placedLibrary: true, scrolling: false,
+        lastY: event.clientY, lastTime: performance.now(), scrollVelocity: 0
+      };
       button.setPointerCapture?.(event.pointerId);
       return;
     }
@@ -387,7 +428,11 @@
       updateGuides();
       scheduleSave();
     }
-    press = { id, source, pointerId: event.pointerId, x: event.clientX, y: event.clientY, moved: false, longReady: false, timer: 0 };
+    press = {
+      id, source, pointerId: event.pointerId, x: event.clientX, y: event.clientY,
+      moved: false, longReady: false, timer: 0, scrolling: false,
+      lastY: event.clientY, lastTime: performance.now(), scrollVelocity: 0
+    };
     button.setPointerCapture?.(event.pointerId);
     if (source === "library" && isMobile()) {
       press.timer = window.setTimeout(() => {
@@ -410,6 +455,25 @@
     if (!press || press.pointerId !== event.pointerId) return;
     const distance = Math.hypot(event.clientX - press.x, event.clientY - press.y);
     const threshold = isMobile() ? 8 : 4;
+    if (isMobile() && press.source === "library") {
+      if (!press.scrolling && distance > threshold) {
+        press.moved = true;
+        press.scrolling = true;
+        press.lastY = event.clientY;
+        press.lastTime = performance.now();
+        clearTimeout(press.timer);
+      } else if (press.scrolling) {
+        const now = performance.now();
+        const elapsed = Math.max(1, now - press.lastTime);
+        const deltaY = press.lastY - event.clientY;
+        dom.scroll.scrollTop += deltaY;
+        press.scrollVelocity = deltaY / elapsed;
+        press.lastY = event.clientY;
+        press.lastTime = now;
+      }
+      if (press.scrolling) event.preventDefault();
+      return;
+    }
     if (distance <= threshold) return;
     press.moved = true;
     clearTimeout(press.timer);
@@ -429,6 +493,10 @@
     if (!press || press.pointerId !== event.pointerId) return;
     clearTimeout(press.timer);
     const current = press; press = null;
+    if (current.scrolling) {
+      startListMomentum(current.scrollVelocity);
+      return;
+    }
     if (current.moved) return;
     if (current.source === "library") {
       if (current.placedLibrary) focusPlaced(current.id);
@@ -752,7 +820,7 @@
     });
 
     window.addEventListener("resize", () => {
-      closePreview(); requestAnimationFrame(() => { clampView(); applyView(); resetToolbarIfNeeded(); });
+      closePreview(); requestAnimationFrame(() => { applyLibraryTouchMode(); clampView(); applyView(); resetToolbarIfNeeded(); });
     });
     window.visualViewport?.addEventListener("resize", () => requestAnimationFrame(resetToolbarIfNeeded));
     window.addEventListener("pagehide", saveNow);
