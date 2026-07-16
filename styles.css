@@ -535,21 +535,6 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   }
   .drag-ghost { width: 62px; height: 62px; }
   .drag-ghost.is-active { opacity: 1; transform: translate(-50%, -50%) scale(1.08); }
-  .drag-ghost-tip {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    width: max-content;
-    padding: 5px 9px;
-    border-radius: 12px;
-    color: #fff;
-    background: rgba(69, 63, 58, 0.88);
-    box-shadow: 0 5px 12px rgba(55, 45, 35, 0.16);
-    font-size: 9px;
-    white-space: nowrap;
-    pointer-events: none;
-  }
 }
 
 @keyframes hold-progress {

@@ -354,7 +354,7 @@
     clearTimeout(hoverTimer);
     closePreview();
     const logo = logoMap.get(id);
-    dom.ghost.innerHTML = `${mediaMarkup(logo)}<span class="drag-ghost-tip">\u62D6\u5230\u5750\u6807\u4E2D</span>`;
+    dom.ghost.innerHTML = mediaMarkup(logo);
     dom.ghost.classList.add("is-active");
     updateDrag(event.clientX, event.clientY);
     if (source === "placed") {
@@ -372,8 +372,6 @@
     const frameRect = dom.frame.getBoundingClientRect();
     const inFrame = isPointInRect(x, y, frameRect);
     dom.frame.classList.toggle("is-drop-valid", inFrame);
-    const tip = dom.ghost.querySelector(".drag-ghost-tip");
-    if (tip) tip.textContent = inFrame ? "\u677E\u5F00\u653E\u7F6E" : "\u62D6\u5230\u5750\u6807\u4E2D";
     const targetRect = dom.libraryHead.getBoundingClientRect();
     const inReturn = drag.source === "placed" && isPointInRect(x, y, targetRect);
     dom.returnTarget.classList.toggle("is-over", inReturn);
