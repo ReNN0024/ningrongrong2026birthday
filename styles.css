@@ -166,7 +166,7 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .tip-card { margin-top: 8px; padding: 11px 14px 10px; border-radius: 14px; background: #5a4034; color: #fff; }
 .tip-card strong { display: flex; align-items: center; gap: 7px; margin-bottom: 7px; font: 600 12px var(--sans); }
 .tip-card strong i { width: 16px; height: 16px; display: grid; place-items: center; border-radius: 50%; background: #f4d77e; color: #2d2a27; font: 700 10px var(--symbol); }
-.tip-card p { margin: 3px 0; color: #eee8e3; font-size: 8.8px; line-height: 1.45; white-space: nowrap; }
+.tip-card p { margin: 3px 0; color: #eee8e3; font-size: 8.8px; line-height: 1.45;  }
 
 .guide-footer { margin-top: auto; padding-top: 11px; }
 .progress-copy { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
