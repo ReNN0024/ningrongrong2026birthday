@@ -1,0 +1,29 @@
+/*
+ * 全站字体配置
+ * 后续更换字体时，只修改这个文件。
+ */
+
+:root {
+  /* 标题、坐标文字、Logo 名称 */
+  --serif:
+    "Songti SC",
+    "STSong",
+    "Noto Serif CJK SC",
+    "SimSun",
+    serif;
+
+  /* 操作说明、按钮、辅助信息 */
+  --sans:
+    -apple-system,
+    BlinkMacSystemFont,
+    "PingFang SC",
+    "Microsoft YaHei",
+    "Noto Sans CJK SC",
+    sans-serif;
+
+  /* 特殊符号 */
+  --symbol:
+    Georgia,
+    "Times New Roman",
+    serif;
+}
