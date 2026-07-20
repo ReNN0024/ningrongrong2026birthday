@@ -75,6 +75,8 @@
 ## 常见问题和预防
 
 - 素材替换只需覆盖同名 PNG，无需修改代码
+- 用户发送的截图（如 image.png、image_20260720191824384.png 等）不应保存在 assets 根目录，这些是临时文件，处理完素材后应删除
+- 素材处理流程：用户提供的原始图片应直接处理并保存到 `assets/logos/` 或 `assets/detail-images/` 对应位置，不要在 `assets/` 根目录额外保存原图副本
 - 素材处理流程：用户提供的原始图片应直接处理并保存到 `assets/logos/` 或 `assets/detail-images/` 对应位置，不要在 `assets/` 根目录额外保存原图副本
 - localStorage key 为 `ningrongrong-2026-coordinate-v1`，清除浏览器数据会重置坐标
 - 移动端交互依赖 touch 事件，桌面端依赖 mouse 事件，通过 `matchMedia` 区分
