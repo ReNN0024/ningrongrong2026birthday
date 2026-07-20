@@ -4,6 +4,14 @@
 
 ---
 
+## [1.3.0] - 2026-07-20
+
+### Changed
+- 全局字体替换：所有使用 serif 字体的文案改为 sans 字体，字号保持不变
+- 涉及：PC 操作指引栏、坐标系与坐标工具、待选 Logo 栏、清空确认弹窗等
+- 更新 `fonts.css` 变量定义：`--font-page-title`、`--font-section-title`、`--font-axis-label`、`--font-quadrant-label`、`--font-progress-number`、`--font-guide-panel`、`--font-guide-title`、`--font-guide-subtitle`、`--font-placeholder`、`--font-number` 从 serif 改为 sans
+- 更新 `styles.css` 中所有 `var(--serif)` 为 `var(--sans)`
+
 ## [1.2.4] - 2026-07-20
 
 ### Fixed

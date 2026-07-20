@@ -55,7 +55,7 @@
   --weight-section-label: 600;
 
   /* 找到你的坐标、待选 LOGO、弹窗标题 */
-  --font-panel-title: var(--font-serif-base);
+  --font-panel-title: var(--font-sans-base);
   --weight-panel-title: 500;
 
   /* 操作步骤标题、小提示标题、怎样读坐标 */
@@ -67,7 +67,7 @@
   --weight-body: 400;
 
   /* 坐标主词、象限组合词 */
-  --font-coordinate-title: var(--font-serif-base);
+  --font-coordinate-title: var(--font-sans-base);
   --weight-coordinate-title: 500;
 
   /* 坐标解释文案 */
@@ -75,11 +75,11 @@
   --weight-coordinate-description: 400;
 
   /* Logo 名称 */
-  --font-logo-name: var(--font-serif-base);
+  --font-logo-name: var(--font-sans-base);
   --weight-logo-name: 500;
 
   /* 占位 Logo 编号 */
-  --font-placeholder: var(--font-serif-base);
+  --font-placeholder: var(--font-sans-base);
   --weight-placeholder: 600;
 
   /* 按钮、筛选项、Toast、弹窗按钮 */
@@ -87,7 +87,7 @@
   --weight-ui: 400;
 
   /* 序号、进度数字、缩放比例 */
-  --font-number: var(--font-serif-base);
+  --font-number: var(--font-sans-base);
   --weight-number: 500;
 
   /* Credits 名单 */
