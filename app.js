@@ -9,7 +9,7 @@
   const isIOS = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   const placeholderColors = ["#caa7a2", "#cdbb83", "#9bb9bd", "#aabe91", "#c494aa", "#b7a58e", "#d5aa7c"];
-  const officialNames = ["远航", "暝夜", "心跳", "醇香", "代言", "心意"];
+  const officialNames = ["远航", "夜", "心跳", "醇香", "代言", "心意", "昏晓", "幻蝶", "幻蝶"];
   const slotForIndex = index => `${Math.floor(index / 4) + 1}_${index % 4 + 1}`;
   const logos = Array.from({ length: 41 }, (_, index) => {
     const slot = slotForIndex(index);
@@ -98,8 +98,8 @@
     });
   }
 
-  function mediaMarkup(logo, className = "") {
-    if (logo.src) return `<img class="${className}" src="${logo.src}" alt="" draggable="false">`;
+  function mediaMarkup(logo, className = "", lazy = false) {
+    if (logo.src) return `<img class="${className}" src="${logo.src}" alt="" draggable="false"${lazy ? ' loading="lazy"' : ""}>`;
     return `<span class="placeholder-mark ${className}" style="background:${logo.color}">${escapeHTML(logo.slot || logo.name)}</span>`;
   }
 
@@ -138,7 +138,7 @@
       const sequence = String(logos.indexOf(logo) + 1).padStart(2, "0");
       const label = logo.placeholder ? `占位 Logo ${sequence}` : logo.name;
       return `<button class="logo-card${placed ? " is-placed" : ""}${state.selectedId === logo.id ? " is-focused" : ""}" type="button" data-logo-id="${logo.id}" aria-label="${placed ? "定位已放置" : "放置"}${escapeHTML(label)}" aria-pressed="${state.selectedId === logo.id}">
-        <span class="logo-thumb">${mediaMarkup(logo)}</span><span>${escapeHTML(logo.name)}</span>
+        <span class="logo-thumb">${mediaMarkup(logo, "", true)}</span><span>${escapeHTML(logo.name)}</span>
       </button>`;
     }).join("");
     applyLibraryTouchMode();

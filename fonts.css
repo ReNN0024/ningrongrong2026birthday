@@ -1,0 +1,281 @@
+/*
+ * 全站字体配置
+ * 字号和行高仍由 styles.css 管理。
+ * 字体族和字重统一在本文件中管理。
+ */
+
+:root {
+  /* =========================
+     基础字体库
+     ========================= */
+
+  --font-serif-base:
+    "Songti SC",
+    "STSong",
+    "Noto Serif CJK SC",
+    "SimSun",
+    serif;
+
+  --font-sans-base:
+    -apple-system,
+    BlinkMacSystemFont,
+    "PingFang SC",
+    "Microsoft YaHei",
+    "Noto Sans CJK SC",
+    sans-serif;
+
+  --font-symbol-base:
+    Georgia,
+    "Times New Roman",
+    serif;
+
+  /*
+   * 保留旧变量，兼容 styles.css 中尚未拆分的内容。
+   */
+  --serif: var(--font-serif-base);
+  --sans: var(--font-sans-base);
+  --symbol: var(--font-symbol-base);
+
+
+  /* =========================
+     按文案用途配置字体
+     以后主要修改这里
+     ========================= */
+
+  /* 页面主标题：宁荣荣·与我周旋久 */
+  --font-page-title: var(--font-sans-base);
+  --weight-page-title: 500;
+
+  /* 页面副标题：生日庆典 · 预热活动 */
+  --font-page-subtitle: var(--font-sans-base);
+  --weight-page-subtitle: 400;
+
+  /* HOW TO PLAY、FRAGMENTS、Credits、CLEAR ALL */
+  --font-section-label: var(--font-sans-base);
+  --weight-section-label: 600;
+
+  /* 找到你的坐标、待选 LOGO、弹窗标题 */
+  --font-panel-title: var(--font-serif-base);
+  --weight-panel-title: 500;
+
+  /* 操作步骤标题、小提示标题、怎样读坐标 */
+  --font-guide-heading: var(--font-sans-base);
+  --weight-guide-heading: 600;
+
+  /* 普通说明文字 */
+  --font-body: var(--font-sans-base);
+  --weight-body: 400;
+
+  /* 坐标主词、象限组合词 */
+  --font-coordinate-title: var(--font-serif-base);
+  --weight-coordinate-title: 500;
+
+  /* 坐标解释文案 */
+  --font-coordinate-description: var(--font-sans-base);
+  --weight-coordinate-description: 400;
+
+  /* Logo 名称 */
+  --font-logo-name: var(--font-serif-base);
+  --weight-logo-name: 500;
+
+  /* 占位 Logo 编号 */
+  --font-placeholder: var(--font-serif-base);
+  --weight-placeholder: 600;
+
+  /* 按钮、筛选项、Toast、弹窗按钮 */
+  --font-ui: var(--font-sans-base);
+  --weight-ui: 400;
+
+  /* 序号、进度数字、缩放比例 */
+  --font-number: var(--font-serif-base);
+  --weight-number: 500;
+
+  /* Credits 名单 */
+  --font-credit: var(--font-sans-base);
+  --weight-credit: 400;
+
+  /* 箭头、特殊符号 */
+  --font-symbol: var(--font-symbol-base);
+  --weight-symbol: 400;
+}
+
+
+/* =========================
+   页面标题
+   ========================= */
+
+.title-block h1 {
+  font-family: var(--font-page-title);
+  font-weight: var(--weight-page-title);
+}
+
+.subtitle {
+  font-family: var(--font-page-subtitle);
+  font-weight: var(--weight-page-subtitle);
+}
+
+
+/* =========================
+   英文栏目名称
+   ========================= */
+
+.section-index,
+.credits > span {
+  font-family: var(--font-section-label);
+  font-weight: var(--weight-section-label);
+}
+
+
+/* =========================
+   面板标题
+   ========================= */
+
+.guide-scroll h2,
+.library-head h2,
+.dialog-card h2 {
+  font-family: var(--font-panel-title);
+  font-weight: var(--weight-panel-title);
+}
+
+
+/* =========================
+   操作指引
+   ========================= */
+
+.steps b,
+.tip-card strong {
+  font-family: var(--font-guide-heading);
+  font-weight: var(--weight-guide-heading);
+}
+
+.axis-legend-head strong {
+  font-family: var(--font-guide-heading);
+  font-weight: 600;
+}
+
+.guide-intro,
+.steps span,
+.axis-legend-head span,
+.tip-card p,
+.library-help,
+.dialog-card > p:not(.section-index) {
+  font-family: var(--font-body);
+  font-weight: var(--weight-body);
+}
+
+
+/* 移动端三步操作指引 */
+
+.mobile-guide-step b {
+  font-family: var(--font-guide-heading);
+  font-weight: 700;
+}
+
+.mobile-guide-step small {
+  font-family: var(--font-body);
+  font-weight: var(--weight-body);
+}
+
+
+/* =========================
+   坐标系主词
+   ========================= */
+
+.quadrant-label strong,
+.axis-copy strong,
+.mini-axis b,
+.minimap-label {
+  font-family: var(--font-coordinate-title);
+  font-weight: var(--weight-coordinate-title);
+}
+
+
+/* 坐标系说明文字 */
+
+.quadrant-label span,
+.axis-copy span {
+  font-family: var(--font-coordinate-description);
+  font-weight: var(--weight-coordinate-description);
+}
+
+
+/* =========================
+   Logo 名称与占位编号
+   ========================= */
+
+.logo-card > span:last-child,
+.empty-state {
+  font-family: var(--font-logo-name);
+  font-weight: var(--weight-logo-name);
+}
+
+.logo-thumb .placeholder-mark,
+.placed-logo .placeholder-mark,
+.drag-ghost .placeholder-mark {
+  font-family: var(--font-placeholder);
+  font-weight: var(--weight-placeholder);
+}
+
+
+/* 已放置状态徽标 */
+
+.logo-card.is-placed .logo-thumb::after {
+  font-family: var(--font-ui);
+  font-weight: var(--weight-ui);
+}
+
+
+/* =========================
+   UI 操作文字
+   ========================= */
+
+.history-actions button,
+.filter-btn,
+.return-target,
+.drop-feedback span,
+.toast,
+.dialog-actions button,
+.mobile-progress,
+.coordinate-toolbar {
+  font-family: var(--font-ui);
+  font-weight: var(--weight-ui);
+}
+
+
+/* =========================
+   数字与进度
+   ========================= */
+
+.steps li::before,
+.progress-copy em,
+.mobile-progress em,
+.mobile-guide-step > span,
+.zoom-value {
+  font-family: var(--font-number);
+  font-weight: var(--weight-number);
+}
+
+
+/* =========================
+   Credits
+   ========================= */
+
+.credits p,
+.mobile-credits {
+  font-family: var(--font-credit);
+  font-weight: var(--weight-credit);
+}
+
+
+/* =========================
+   特殊符号
+   ========================= */
+
+.tip-card strong i,
+#zoomOutBtn,
+#zoomInBtn,
+#resetViewBtn,
+.history-actions button:not(.clear-btn) > span {
+  font-family: var(--font-symbol);
+  font-weight: var(--weight-symbol);
+}
