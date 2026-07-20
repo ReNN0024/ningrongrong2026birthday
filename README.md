@@ -23,18 +23,25 @@
 
 ```text
 index.html              主页面
-styles.css              样式
+fonts.css               字体配置（字体族、字重、选择器绑定）
+styles.css              样式（布局、颜色、动画）
 app.js                  交互逻辑
 .nojekyll               GitHub Pages 配置
 assets/
   logos/                Logo 缩略图（41组）
   detail-images/        预览大图（41组）
+  fonts/                自定义字体文件（按需添加）
 ASSET_REPLACEMENT_GUIDE.md   素材替换指南
+FONT_REPLACEMENT_GUIDE.md    字体替换指南
 ```
 
 ## 素材替换
 
 41 组素材均采用"行_列"命名规则，覆盖 `assets/logos/` 和 `assets/detail-images/` 中对应 PNG 即可，无需修改代码。详见 [`ASSET_REPLACEMENT_GUIDE.md`](./ASSET_REPLACEMENT_GUIDE.md)。
+
+## 字体替换
+
+所有文案的字体和字重配置集中在 `fonts.css` 中管理。每条文案均有唯一编号（如 H01、C01、L15），替换时只需提交需要修改的编号、新字体和新字重。详见 [`FONT_REPLACEMENT_GUIDE.md`](./FONT_REPLACEMENT_GUIDE.md)。
 
 ## Credits
 
