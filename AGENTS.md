@@ -67,6 +67,7 @@
 
 ## 用户偏好与长期约束
 
+- **版本管理**：每次更新必须记录版本号和更新日志，写入 `CHANGELOG.md`（格式遵循 Keep a Changelog，版本号遵循 Semantic Versioning）
 - 素材命名规则：`行_列.png`（如 `1_1.png`），覆盖 `assets/logos/` 和 `assets/detail-images/` 中对应文件即可替换
 - 不依赖任何第三方 CDN 或 npm 包
 - 需兼容 iOS Safari / 微信内置浏览器 / Android WebView
