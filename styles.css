@@ -594,3 +594,146 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; }
 }
+
+/* PC 三栏等高、自适应布局 */
+@media (min-width: 1024px) {
+  .app-shell {
+    /* 两侧面板宽度 */
+    --guide-width: clamp(250px, 15vw, 290px);
+    --library-width: clamp(260px, 19vw, 390px);
+
+    /* 工具栏和导航框所占宽度 */
+    --tool-lane-width: clamp(56px, 4vw, 72px);
+
+    /*
+     * 坐标系到左右面板的距离完全相等。
+     * 右侧间距内部包含：
+     * 8px + 工具区宽度 + 8px
+     */
+    --panel-gap: calc(var(--tool-lane-width) + 16px);
+
+    /*
+     * 坐标系尺寸同时受以下条件限制：
+     * 1. 最大不超过 780px
+     * 2. 不超过当前屏幕可用高度
+     * 3. 不超过扣除两侧面板和间距后的可用宽度
+     */
+    --stage-size: min(
+      780px,
+      calc(100dvh - 108px),
+      calc(
+        100vw
+        - 24px
+        - var(--guide-width)
+        - var(--library-width)
+        - var(--panel-gap)
+        - var(--panel-gap)
+      )
+    );
+
+    --layout-width: calc(
+      var(--guide-width)
+      + var(--stage-size)
+      + var(--library-width)
+      + var(--panel-gap)
+      + var(--panel-gap)
+    );
+  }
+
+  /* 标题和下方三栏使用相同的整体宽度 */
+  .site-header {
+    width: var(--layout-width);
+    max-width: none;
+  }
+
+  .workspace {
+    width: var(--layout-width);
+    max-width: none;
+    height: var(--stage-size);
+    min-height: 0;
+    margin-inline: auto;
+
+    display: grid;
+    grid-template-columns:
+      var(--guide-width)
+      var(--stage-size)
+      var(--library-width);
+
+    column-gap: var(--panel-gap);
+    align-items: stretch;
+    justify-content: center;
+  }
+
+  /* 左右两个面板共同使用坐标系高度 */
+  .guide-panel,
+  .library-panel {
+    width: 100%;
+    height: var(--stage-size);
+    min-height: 0;
+  }
+
+  .coordinate-section,
+  .coordinate-main,
+  .coordinate-editor {
+    width: var(--stage-size);
+    height: var(--stage-size);
+    min-width: 0;
+    min-height: 0;
+  }
+
+  .coordinate-main {
+    display: block;
+  }
+
+  /*
+   * 不再使用"坐标系 + 72px 工具栏"的内部 Grid，
+   * 否则坐标系会被工具栏挤窄。
+   */
+  .coordinate-editor {
+    position: relative;
+    display: block;
+  }
+
+  /* 坐标系严格使用共同尺寸，永远保持正方形 */
+  .coordinate-frame {
+    width: var(--stage-size);
+    height: var(--stage-size);
+    max-width: none;
+    aspect-ratio: 1 / 1;
+    margin: 0;
+    align-self: auto;
+  }
+
+  /*
+   * 工具栏放进坐标系和 Logo 栏之间的等距区域。
+   * 距离坐标系右边缘固定为 8px。
+   */
+  .coordinate-side-tools {
+    position: absolute;
+    left: calc(100% + 8px);
+    right: auto;
+    top: auto;
+    bottom: 0;
+
+    width: var(--tool-lane-width);
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  /* 工具栏和导航框左边缘对齐 */
+  .coordinate-toolbar {
+    align-self: flex-start;
+    margin: 0;
+  }
+
+  .viewport-minimap {
+    width: var(--tool-lane-width);
+    height: var(--tool-lane-width);
+    flex: 0 0 var(--tool-lane-width);
+  }
+}
