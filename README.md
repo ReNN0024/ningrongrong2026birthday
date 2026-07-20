@@ -2,7 +2,7 @@
 
 宁荣荣 2026 生日庆典预热活动的双端响应式 H5。原生静态页面，不依赖 Node.js、构建工具或第三方 CDN。
 
-**在线体验**：https://snjor-kii.github.io/ningrongrong2026birthday/
+**在线体验**：https://renn0024.github.io/ningrongrong2026birthday/
 
 ## 已实现能力
 
