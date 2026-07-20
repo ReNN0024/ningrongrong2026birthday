@@ -240,10 +240,10 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .axis-top { top: 2%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; }
 .axis-bottom { bottom: 2%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; }
 
-.placed-layer { position: absolute; inset: 0; z-index: 5; }
+.placed-layer { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
 .placed-logo {
   position: absolute;
-  width: clamp(44px, 7.2%, 62px);
+  width: 54px;
   aspect-ratio: 1;
   border: 0;
   padding: 0;
@@ -251,14 +251,15 @@ button:disabled { cursor: not-allowed; opacity: .36; }
   transform: translate(-50%, -50%);
   cursor: grab;
   touch-action: none;
-  filter: drop-shadow(0 5px 6px rgba(59, 48, 36, .16));
+  pointer-events: auto;
+  filter: none;
 }
 .placed-logo:active { cursor: grabbing; }
-.placed-logo img, .placed-logo .placeholder-mark { width: 100%; height: 100%; object-fit: contain; display: block; }
+.placed-logo img, .placed-logo .placeholder-mark { display: block; width: 100%; height: 100%; object-fit: contain; }
 .placed-logo .placeholder-mark { display: grid; place-items: center; color: rgba(255,255,255,.82); font: 600 12px var(--serif); border-radius: 10px; }
-.placed-logo.is-selected { filter: drop-shadow(0 0 2px rgba(154, 110, 27, .8)) drop-shadow(0 6px 8px rgba(59, 48, 36, .2)); }
+.placed-logo.is-selected { filter: none; }
 .placed-logo.is-overlap { animation: overlapPulse .7s ease; }
-@keyframes overlapPulse { 45% { filter: drop-shadow(0 0 8px rgba(174, 116, 38, .9)); transform: translate(-50%, -50%) scale(1.08); } }
+@keyframes overlapPulse { 45% { transform: translate(-50%, -50%) scale(1.08); } }
 
 .coordinate-toolbar {
   position: static;
@@ -471,7 +472,6 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .coordinate-frame { width: calc(100% - 24px); max-width: 342px; aspect-ratio: 1; margin-inline: auto; }
   .quadrant-label strong { font-size: 9px; }.quadrant-label span { font-size: 6px; }
   .axis-copy strong { font-size: 11px; }.axis-copy span { font-size: 6px; }
-  .placed-logo { width: clamp(40px, 13vw, 54px); }
   .coordinate-toolbar { position: absolute; left: 20px; right: auto; bottom: 8px; width: auto; height: 40px; min-width: 0; min-height: 40px; flex-direction: row; padding: 0 2px; gap: 1px; margin: 0; border-radius: 7px; }
   .coordinate-toolbar button { position: relative; width: 44px; height: 40px; }
   .coordinate-toolbar button::after { content: ""; position: absolute; inset: -2px 0; }

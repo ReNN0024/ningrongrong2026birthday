@@ -148,8 +148,35 @@
   function renderPlaced() {
     dom.placedLayer.innerHTML = [...state.placed].sort((a, b) => a.z - b.z).map(item => {
       const logo = logoMap.get(item.id);
-      return `<button class="placed-logo${state.selectedId === item.id ? " is-selected" : ""}" type="button" data-logo-id="${item.id}" style="left:${50 + item.x * 42}%;top:${50 - item.y * 42}%;z-index:${item.z}" aria-label="${escapeHTML(logo.name)}，已放置在坐标 ${item.x.toFixed(2)}, ${item.y.toFixed(2)}">${mediaMarkup(logo)}</button>`;
+      return `<button class="placed-logo${state.selectedId === item.id ? " is-selected" : ""}" type="button" data-logo-id="${item.id}" style="z-index:${item.z}" aria-label="${escapeHTML(logo.name)}，已放置在坐标 ${item.x.toFixed(2)}, ${item.y.toFixed(2)}">${mediaMarkup(logo)}</button>`;
     }).join("");
+    updatePlacedLayout();
+  }
+
+  function getBaseLogoSize(frameSize) {
+    if (isMobile()) {
+      return Math.min(54, Math.max(40, window.innerWidth * 0.13));
+    }
+    return Math.min(62, Math.max(44, frameSize * 0.072));
+  }
+
+  function updatePlacedLayout() {
+    const frameSize = dom.frame.clientWidth;
+    if (!frameSize) return;
+    const scale = state.view.scale;
+    const center = frameSize / 2;
+    const usable = frameSize * 0.42;
+    const logoSize = getBaseLogoSize(frameSize) * scale;
+    const placedMap = new Map(state.placed.map(item => [item.id, item]));
+    dom.placedLayer.querySelectorAll(".placed-logo").forEach(element => {
+      const item = placedMap.get(element.dataset.logoId);
+      if (!item) return;
+      const left = center + state.view.panX + item.x * usable * scale;
+      const top = center + state.view.panY - item.y * usable * scale;
+      element.style.left = `${left}px`;
+      element.style.top = `${top}px`;
+      element.style.width = `${logoSize}px`;
+    });
   }
 
   function updateCounts() {
@@ -278,6 +305,7 @@
 
   function applyView() {
     dom.world.style.transform = `translate(${state.view.panX}px, ${state.view.panY}px) scale(${state.view.scale})`;
+    updatePlacedLayout();
     dom.zoomValue.textContent = `${Math.round(state.view.scale * 100)}%`;
     $("#zoomOutBtn").disabled = state.view.scale <= 1.001;
     updateMinimap();
