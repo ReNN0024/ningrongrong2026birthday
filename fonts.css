@@ -43,7 +43,7 @@
      ========================= */
 
   /* 页面主标题：宁荣荣·与我周旋久 */
-  --font-page-title: var(--font-serif-base);
+  --font-page-title: var(--font-sans-base);
   --weight-page-title: 500;
 
   /* 页面副标题：生日庆典 · 预热活动 */
