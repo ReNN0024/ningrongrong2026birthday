@@ -17,8 +17,8 @@
       id: slot,
       slot,
       name: officialNames[index] || slot,
-      src: `${ASSET_ROOT}/logos/${slot}.png`,
-      detail: `${ASSET_ROOT}/detail-images/${slot}.png`,
+      src: `${ASSET_ROOT}/logos/${slot}.webp`,
+      detail: `${ASSET_ROOT}/detail-images/${slot}.webp`,
       color: placeholderColors[index % placeholderColors.length],
       placeholder: index >= officialNames.length
     };
