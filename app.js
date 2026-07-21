@@ -661,8 +661,11 @@
       if (wasBlankTap && state.selectedId) {
         state.selectedId = null;
         closePreview();
-        renderLibrary();
-        renderPlaced();
+        dom.grid.querySelectorAll(".logo-card").forEach(card => {
+          card.classList.remove("is-focused");
+          card.setAttribute("aria-pressed", "false");
+        });
+        dom.placedLayer.querySelectorAll(".placed-logo").forEach(el => el.classList.remove("is-selected"));
         updateGuides();
       }
     } else if (stagePointers.size === 1) {
