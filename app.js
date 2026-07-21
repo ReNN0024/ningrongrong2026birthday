@@ -9,7 +9,7 @@
   const isIOS = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   const placeholderColors = ["#caa7a2", "#cdbb83", "#9bb9bd", "#aabe91", "#c494aa", "#b7a58e", "#d5aa7c"];
-  const officialNames = ["远航", "夜", "心跳", "醇香", "代言", "心意", "昏晓", "幻蝶", "幻蝶"];
+  const officialNames = ["远航", "夜", "心跳", "醇香", "代言", "心意", "昏晓", "幻蝶", "晨曦"];
   const slotForIndex = index => `${Math.floor(index / 4) + 1}_${index % 4 + 1}`;
   const logos = Array.from({ length: 41 }, (_, index) => {
     const slot = slotForIndex(index);
@@ -17,8 +17,8 @@
       id: slot,
       slot,
       name: officialNames[index] || slot,
-      src: `${ASSET_ROOT}/logos/${slot}.png`,
-      detail: `${ASSET_ROOT}/detail-images/${slot}.png`,
+      src: `${ASSET_ROOT}/logos/${slot}.webp`,
+      detail: `${ASSET_ROOT}/detail-images/${slot}.webp`,
       color: placeholderColors[index % placeholderColors.length],
       placeholder: index >= officialNames.length
     };
@@ -454,7 +454,10 @@
     }
     if (source === "placed") {
       state.selectedId = id;
-      renderLibrary();
+      dom.grid.querySelectorAll(".logo-card").forEach(card => {
+        card.classList.toggle("is-focused", card.dataset.logoId === id);
+        card.setAttribute("aria-pressed", String(card.dataset.logoId === id));
+      });
       dom.placedLayer.querySelectorAll(".placed-logo").forEach(el => el.classList.toggle("is-selected", el.dataset.logoId === id));
       updateGuides();
       scheduleSave();

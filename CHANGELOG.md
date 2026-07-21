@@ -4,6 +4,30 @@
 
 ---
 
+## [1.3.2] - 2026-07-21
+
+### Fixed — by Snjór
+- 移动端点击坐标系上已放置的 Logo 查看预览时，待选 Logo 列表不再整体重建刷新
+- 改为仅更新选中高亮 class，消除图片重载闪烁
+
+## [1.3.1] - 2026-07-20
+
+### Changed
+- 更新 PC 端小提示文案，补充缩放比例和辅助线功能说明
+
+## [1.3.0] - 2026-07-20
+
+### Changed
+- 全局字体替换：所有使用 serif 字体的文案改为 sans 字体，字号保持不变
+- 涉及：PC 操作指引栏、坐标系与坐标工具、待选 Logo 栏、清空确认弹窗等
+- 更新 `fonts.css` 变量定义：`--font-page-title`、`--font-section-title`、`--font-axis-label`、`--font-quadrant-label`、`--font-progress-number`、`--font-guide-panel`、`--font-guide-title`、`--font-guide-subtitle`、`--font-placeholder`、`--font-number` 从 serif 改为 sans
+- 更新 `styles.css` 中所有 `var(--serif)` 为 `var(--sans)`
+
+## [1.2.4] - 2026-07-20
+
+### Fixed
+- 修正 3_1 名称从「幻蝶」改为「晨曦」
+
 ## [1.2.3] - 2026-07-20
 
 ### Added
