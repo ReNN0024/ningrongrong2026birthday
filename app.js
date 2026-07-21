@@ -454,7 +454,10 @@
     }
     if (source === "placed") {
       state.selectedId = id;
-      renderLibrary();
+      dom.grid.querySelectorAll(".logo-card").forEach(card => {
+        card.classList.toggle("is-focused", card.dataset.logoId === id);
+        card.setAttribute("aria-pressed", String(card.dataset.logoId === id));
+      });
       dom.placedLayer.querySelectorAll(".placed-logo").forEach(el => el.classList.toggle("is-selected", el.dataset.logoId === id));
       updateGuides();
       scheduleSave();
