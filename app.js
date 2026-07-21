@@ -133,15 +133,30 @@
   function renderLibrary() {
     const placedIds = new Set(state.placed.map(item => item.id));
     const visible = logos.filter(item => state.filter === "all" || !placedIds.has(item.id));
-    dom.grid.innerHTML = visible.map((logo, index) => {
-      const placed = placedIds.has(logo.id);
-      const sequence = String(logos.indexOf(logo) + 1).padStart(2, "0");
-      const label = logo.placeholder ? `占位 Logo ${sequence}` : logo.name;
-      return `<button class="logo-card${placed ? " is-placed" : ""}${state.selectedId === logo.id ? " is-focused" : ""}" type="button" data-logo-id="${logo.id}" aria-label="${placed ? "定位已放置" : "放置"}${escapeHTML(label)}" aria-pressed="${state.selectedId === logo.id}">
-        <span class="logo-thumb">${mediaMarkup(logo, "", true)}</span><span>${escapeHTML(logo.name)}</span>
-      </button>`;
-    }).join("");
-    applyLibraryTouchMode();
+    const currentCards = dom.grid.querySelectorAll(".logo-card");
+    if (currentCards.length !== visible.length) {
+      dom.grid.innerHTML = visible.map((logo, index) => {
+        const placed = placedIds.has(logo.id);
+        const sequence = String(logos.indexOf(logo) + 1).padStart(2, "0");
+        const label = logo.placeholder ? `占位 Logo ${sequence}` : logo.name;
+        return `<button class="logo-card${placed ? " is-placed" : ""}${state.selectedId === logo.id ? " is-focused" : ""}" type="button" data-logo-id="${logo.id}" aria-label="${placed ? "定位已放置" : "放置"}${escapeHTML(label)}" aria-pressed="${state.selectedId === logo.id}">
+          <span class="logo-thumb">${mediaMarkup(logo, "", true)}</span><span>${escapeHTML(logo.name)}</span>
+        </button>`;
+      }).join("");
+      applyLibraryTouchMode();
+    } else {
+      currentCards.forEach(card => {
+        const id = card.dataset.logoId;
+        const placed = placedIds.has(id);
+        const logo = logoMap.get(id);
+        const sequence = String(logos.indexOf(logo) + 1).padStart(2, "0");
+        const label = logo.placeholder ? `占位 Logo ${sequence}` : logo.name;
+        card.classList.toggle("is-placed", placed);
+        card.classList.toggle("is-focused", state.selectedId === id);
+        card.setAttribute("aria-pressed", String(state.selectedId === id));
+        card.setAttribute("aria-label", `${placed ? "定位已放置" : "放置"}${escapeHTML(label)}`);
+      });
+    }
     dom.empty.hidden = visible.length > 0;
   }
 
