@@ -481,7 +481,14 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
       linear-gradient(135deg, rgba(255, 253, 247, .98), rgba(250, 241, 225, .9)),
       rgba(255, 253, 244, .95);
     box-shadow: 0 10px 26px rgba(103, 75, 31, .07);
-    transition: opacity .18s ease, transform .18s ease;
+    opacity: 1;
+    transform: translateY(0);
+    transition: opacity .36s ease, transform .36s ease;
+  }
+  .mobile-instruction.is-hiding {
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
   }
   .mobile-guide-full {
     min-height: 30px;
