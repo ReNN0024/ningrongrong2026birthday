@@ -224,7 +224,7 @@
     mutatePlaced(() => {
       state.placed.push({ id, x: 0, y: 0, z: nextZ() });
       state.selectedId = id;
-    }, `${logoMap.get(id).name} 已放到坐标原点`);
+    });
     announce(`${logoMap.get(id).name}已放置`);
     markOverlap(id);
   }
@@ -241,14 +241,13 @@
     clampView();
     applyView();
     renderAll();
-    toast(`已定位 ${logoMap.get(id).name}`);
   }
 
   function removePlaced(id) {
     mutatePlaced(() => {
       state.placed = state.placed.filter(item => item.id !== id);
       if (state.selectedId === id) state.selectedId = null;
-    }, `${logoMap.get(id).name} 已放回待选区`);
+    });
     closePreview();
   }
 
@@ -261,7 +260,7 @@
         state.placed.push({ id, x: point.x, y: point.y, z: nextZ() });
       }
       state.selectedId = id;
-    }, isNew ? `${logoMap.get(id).name} 放置成功` : "");
+    });
     markOverlap(id);
   }
 
@@ -273,7 +272,7 @@
     requestAnimationFrame(() => {
       const el = dom.placedLayer.querySelector(`[data-logo-id="${id}"]`);
       el?.classList.add("is-overlap");
-      toast("此处已有碎片，已将当前 Logo 置于上层");
+      toast("已叠放在上层");
     });
   }
 
@@ -282,14 +281,14 @@
     state.redo.push(clonePlaced());
     state.placed = state.undo.pop();
     if (!state.placed.some(item => item.id === state.selectedId)) state.selectedId = null;
-    renderAll(); scheduleSave(); closePreview(); toast("已撤销上一步");
+    renderAll(); scheduleSave(); closePreview();
   }
 
   function redo() {
     if (!state.redo.length) return;
     state.undo.push(clonePlaced());
     state.placed = state.redo.pop();
-    renderAll(); scheduleSave(); closePreview(); toast("已重做下一步");
+    renderAll(); scheduleSave(); closePreview();
   }
 
   function clearAll() {
@@ -429,7 +428,7 @@
     const inFrame = isPointInRect(event.clientX, event.clientY, frameRect);
     const inReturn = current.source === "placed" && isPointInRect(event.clientX, event.clientY, returnRect);
     cleanupDrag();
-    if (cancelled) { toast("操作已取消"); return; }
+    if (cancelled) { return; }
     if (inReturn) { removePlaced(current.id); return; }
     if (inFrame) {
       movePlaced(current.id, pointToLogical(event.clientX, event.clientY), current.source === "library");
