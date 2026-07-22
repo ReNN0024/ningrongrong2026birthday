@@ -43,7 +43,7 @@
     desktopProgressFill: $("#desktopProgressFill"), completionCard: $("#completionCard"), generateShareBtn: $("#generateShareBtn"),
     guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), previewBackdrop: $("#previewBackdrop"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
     toastStack: $("#toastStack"), live: $("#liveRegion"), empty: $("#emptyState"),
-    shareDialog: $("#shareDialog"), sharePreview: $("#sharePreview"), shareResultName: $("#shareResultName"), downloadShare: $("#downloadShareBtn"), regenerateShare: $("#regenerateShareBtn"), continueEdit: $("#continueEditBtn"), shareClose: $("#shareCloseBtn"),
+    shareDialog: $("#shareDialog"), sharePreview: $("#sharePreview"), downloadShare: $("#downloadShareBtn"), regenerateShare: $("#regenerateShareBtn"), continueEdit: $("#continueEditBtn"), shareClose: $("#shareCloseBtn"),
     clearDialog: $("#clearDialog"), undo: $("#undoBtn"), redo: $("#redoBtn"), clear: $("#clearBtn")
   };
 
@@ -353,8 +353,14 @@
 
   function openDialog(dialog) {
     if (!dialog || dialog.open) return;
-    if (typeof dialog.showModal === "function") dialog.showModal();
-    else { dialog.setAttribute("open", ""); dialog.classList.add("is-fallback-open"); }
+    if (typeof dialog.showModal === "function") {
+      dialog.showModal();
+      dialog.scrollTop = 0;
+    } else {
+      dialog.setAttribute("open", "");
+      dialog.classList.add("is-fallback-open");
+      dialog.scrollTop = 0;
+    }
   }
 
   function closeDialog(dialog) {
@@ -367,24 +373,22 @@
     if (state.placed.length !== logos.length) return toast("放完全部 Logo 后再生成结果图");
     openDialog(dom.shareDialog);
     dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
-    dom.shareResultName.textContent = "正在生成结果图…";
     dom.downloadShare.removeAttribute("href");
     dom.downloadShare.setAttribute("aria-disabled", "true");
     try {
-      const { dataURL, personality } = await window.ShareCard.generateShareImage({
+      const personality = window.ShareCard.calculatePersonality(state.placed);
+      const { dataURL } = await window.ShareCard.generateShareImage({
         placed: state.placed,
         logos,
-        activityTitle: "宁荣荣 · 与我周旋久",
-        subtitle: "我的故事坐标",
-        shareUrl: "snjor-kii.github.io/ningrongrong2026birthday"
+        activityTitle: "宁荣荣·与我周旋久",
+        subtitle: `${personality.result.name}·${personality.key}`,
+        shareUrl: "ningrr.fun"
       });
-      dom.sharePreview.innerHTML = `<img src="${dataURL}" alt="我的故事坐标结果图">`;
-      dom.shareResultName.textContent = `${personality.result.name} · ${personality.key}`;
+      dom.sharePreview.innerHTML = `<img src="${dataURL}" alt="宁荣荣与我周旋久结果图">`;
       dom.downloadShare.href = dataURL;
       dom.downloadShare.setAttribute("aria-disabled", "false");
     } catch (error) {
       dom.sharePreview.innerHTML = "<span>生成失败，请稍后再试</span>";
-      dom.shareResultName.textContent = "结果图生成失败";
       toast("结果图生成失败，请重试", "error");
     }
   }

@@ -79,9 +79,9 @@
   async function buildLogoLayer(placed, logos) {
     const logoMap = new Map(logos.map(logo => [logo.id, logo]));
     const centerX = 540;
-    const centerY = 680;
-    const usable = 318;
-    const logoSize = 54;
+    const centerY = 660;
+    const usable = 358;
+    const logoSize = 58;
     const items = [...placed].sort((left, right) => left.z - right.z);
     const parts = [];
 
@@ -110,6 +110,7 @@
     const escapedSubtitle = escapeXML(subtitle);
     const escapedName = escapeXML(result.name);
     const escapedShareUrl = escapeXML(shareUrl);
+    const linkY = 1246 + descriptionLines.length * 36 + 18;
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
       <g id="share-card-background">
@@ -123,43 +124,31 @@
         <path d="M76 236C150 276 230 278 306 236" fill="none" stroke="#BD9B55" stroke-width="2" opacity="0.55"/>
         <path d="M774 1198C838 1158 922 1160 1000 1208" fill="none" stroke="#BD9B55" stroke-width="2" opacity="0.55"/>
       </g>
-      <g id="share-card-frame">
-        <rect x="54" y="50" width="972" height="1340" rx="58" fill="#FFFBF4" stroke="#B88A3A" stroke-width="3"/>
-        <rect x="84" y="80" width="912" height="1280" rx="42" fill="none" stroke="#E4CC8B" stroke-width="2"/>
-      </g>
       <g id="header-activity-name">
-        <text x="540" y="156" text-anchor="middle" font-family="serif" font-size="54" font-weight="500" fill="#453F3A">${escapedTitle}</text>
-        <text x="540" y="214" text-anchor="middle" font-family="sans-serif" font-size="30" font-weight="400" fill="#8E7137" letter-spacing="5">${escapedSubtitle}</text>
-        <line x1="350" y1="252" x2="730" y2="252" stroke="#BD9B55" stroke-width="2" opacity="0.72"/>
-      </g>
-      <g id="coordinate-card-frame">
-        <rect x="140" y="300" width="800" height="800" rx="56" fill="#F8F4ED" stroke="#B88A3A" stroke-width="3"/>
-        <rect x="172" y="332" width="736" height="736" rx="38" fill="none" stroke="#E4CC8B" stroke-width="2"/>
+        <text x="540" y="116" text-anchor="middle" font-family="serif" font-size="56" font-weight="500" fill="#453F3A">${escapedTitle}</text>
+        <text x="540" y="174" text-anchor="middle" font-family="sans-serif" font-size="30" font-weight="400" fill="#8E7137" letter-spacing="3">${escapedSubtitle}</text>
+        <line x1="350" y1="214" x2="730" y2="214" stroke="#BD9B55" stroke-width="2" opacity="0.72"/>
       </g>
       <g id="coordinate-soft-quadrants">
-        <rect x="190" y="350" width="350" height="350" rx="26" fill="#FBEAF0" opacity="0.82"/>
-        <rect x="540" y="350" width="350" height="350" rx="26" fill="#FAEEDA" opacity="0.84"/>
-        <rect x="190" y="700" width="350" height="350" rx="26" fill="#E6F1FB" opacity="0.82"/>
-        <rect x="540" y="700" width="350" height="350" rx="26" fill="#EAF3DE" opacity="0.84"/>
+        <rect x="140" y="260" width="400" height="400" rx="28" fill="#FBEAF0" opacity="0.82"/>
+        <rect x="540" y="260" width="400" height="400" rx="28" fill="#FAEEDA" opacity="0.84"/>
+        <rect x="140" y="660" width="400" height="400" rx="28" fill="#E6F1FB" opacity="0.82"/>
+        <rect x="540" y="660" width="400" height="400" rx="28" fill="#EAF3DE" opacity="0.84"/>
       </g>
       <g id="coordinate-axis-and-labels">
-        <line x1="220" y1="700" x2="860" y2="700" stroke="#5F5E5A" stroke-width="2" opacity="0.62"/>
-        <line x1="540" y1="380" x2="540" y2="1020" stroke="#5F5E5A" stroke-width="2" opacity="0.62"/>
-        <circle cx="540" cy="700" r="8" fill="#FFFBF4" stroke="#5F5E5A" stroke-width="2"/>
-        <text x="230" y="684" font-family="sans-serif" font-size="28" font-weight="500" fill="#453F3A">荆棘</text>
-        <text x="772" y="684" font-family="sans-serif" font-size="28" font-weight="500" fill="#453F3A">繁花</text>
-        <text x="562" y="420" font-family="sans-serif" font-size="28" font-weight="500" fill="#453F3A">不忘</text>
+        <line x1="180" y1="660" x2="900" y2="660" stroke="#5F5E5A" stroke-width="2" opacity="0.62"/>
+        <line x1="540" y1="300" x2="540" y2="1020" stroke="#5F5E5A" stroke-width="2" opacity="0.62"/>
+        <circle cx="540" cy="660" r="8" fill="#FFFBF4" stroke="#5F5E5A" stroke-width="2"/>
+        <text x="180" y="640" font-family="sans-serif" font-size="28" font-weight="500" fill="#453F3A">荆棘</text>
+        <text x="820" y="640" font-family="sans-serif" font-size="28" font-weight="500" fill="#453F3A">繁花</text>
+        <text x="562" y="340" font-family="sans-serif" font-size="28" font-weight="500" fill="#453F3A">不忘</text>
         <text x="562" y="1004" font-family="sans-serif" font-size="28" font-weight="500" fill="#453F3A">寻常</text>
       </g>
       <g id="placed-logo-result-layer">${logoLayer}</g>
       <g id="personality-result-panel">
-        <rect x="140" y="1134" width="800" height="178" rx="44" fill="#FFF8E7" stroke="#E4CC8B" stroke-width="2"/>
-        <text x="540" y="1198" text-anchor="middle" font-family="serif" font-size="48" font-weight="500" fill="#453F3A">${escapedName}</text>
-        ${descriptionLines.map((line, index) => `<text x="540" y="${1246 + index * 36}" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="400" fill="#5F5E5A">${escapeXML(line)}</text>`).join("")}
-      </g>
-      <g id="footer-share-info">
-        <text x="540" y="1350" text-anchor="middle" font-family="sans-serif" font-size="24" font-weight="400" fill="#857D73">长按保存图片 · 分享你的坐标结果</text>
-        <text x="540" y="1388" text-anchor="middle" font-family="sans-serif" font-size="22" font-weight="400" fill="#8E7137">${escapedShareUrl}</text>
+        <text x="540" y="1168" text-anchor="middle" font-family="serif" font-size="52" font-weight="500" fill="#453F3A">${escapedName}</text>
+        ${descriptionLines.map((line, index) => `<text x="540" y="${1226 + index * 36}" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="400" fill="#5F5E5A">${escapeXML(line)}</text>`).join("")}
+        <text x="540" y="${linkY}" text-anchor="middle" font-family="sans-serif" font-size="28" font-weight="500" fill="#8E7137">${escapedShareUrl}</text>
       </g>
     </svg>`;
   }
