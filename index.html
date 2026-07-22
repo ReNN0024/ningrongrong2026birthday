@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#f8f2e8">
   <meta name="description" content="与我周旋久——宁荣荣2026宁做我生日庆典预热活动">
   <title>宁荣荣·与我周旋久</title>
-  <link rel="stylesheet" href="styles.css?v=20260722-2">
-  <link rel="stylesheet" href="fonts.css?v=20260722-2">
+  <link rel="stylesheet" href="styles.css?v=20260722-3">
+  <link rel="stylesheet" href="fonts.css?v=20260722-3">
 </head>
 <body>
   <div class="paper-noise" aria-hidden="true"></div>
@@ -67,11 +67,18 @@
 
       <section class="coordinate-section" aria-label="人生坐标系">
         <div class="coordinate-main">
-          <div class="mobile-instruction mobile-only">
-            <div class="mobile-guide-step guide-select"><span>1</span><p><b>选 Logo</b><small>从下方开始</small></p></div>
-            <div class="mobile-guide-step guide-place"><span>2</span><p><b>轻触放置</b><small>长按拖动定位</small></p></div>
-            <div class="mobile-guide-step guide-adjust"><span>3</span><p><b>微调位置</b><small>轻触预览图片</small></p></div>
+          <div class="mobile-instruction mobile-only" id="mobileInstruction" data-mode="full">
+            <div class="mobile-guide-full" id="mobileGuideFull">
+              <div class="mobile-guide-step guide-select"><span>1</span><p><b>选 Logo</b><small>从下方开始</small></p></div>
+              <div class="mobile-guide-step guide-place"><span>2</span><p><b>轻触放置</b><small>长按拖动定位</small></p></div>
+              <div class="mobile-guide-step guide-adjust"><span>3</span><p><b>微调位置</b><small>轻触预览图片</small></p></div>
+            </div>
+            <div class="mobile-guide-compact" id="mobileGuideCompact" aria-hidden="true">
+              <span>轻触预览 · 长按拖动</span>
+              <button type="button" id="mobileGuideCollapseBtn">收起</button>
+            </div>
           </div>
+          <button class="mobile-guide-pill mobile-only" id="mobileGuidePill" type="button" hidden>操作提示</button>
           <div class="coordinate-editor">
           <div class="coordinate-frame" id="coordinateFrame">
           <div class="coordinate-world" id="coordinateWorld">
@@ -169,6 +176,6 @@
   </dialog>
 
   <noscript>请启用 JavaScript 后参与活动。</noscript>
-  <script src="app.js?v=20260722-2" defer></script>
+  <script src="app.js?v=20260722-3" defer></script>
 </body>
 </html>

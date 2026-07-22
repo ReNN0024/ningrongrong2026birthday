@@ -2,6 +2,7 @@
   "use strict";
 
   const STORAGE_KEY = "ningrongrong-2026-coordinate-v1";
+  const GUIDE_STORAGE_KEY = "ningrongrong-2026-mobile-guide-collapsed";
   const STORAGE_TTL = 30 * 24 * 60 * 60 * 1000;
   const ACTIVITY_ID = "ningrongrong-2026-birthday";
   const ASSET_ROOT = window.__ASSET_ROOT__ || "assets";
@@ -35,6 +36,7 @@
   const $$ = selector => [...document.querySelectorAll(selector)];
   const dom = {
     frame: $("#coordinateFrame"), world: $("#coordinateWorld"), placedLayer: $("#placedLayer"),
+    mobileInstruction: $("#mobileInstruction"), mobileGuideCompact: $("#mobileGuideCompact"), mobileGuidePill: $("#mobileGuidePill"), mobileGuideCollapseBtn: $("#mobileGuideCollapseBtn"),
     grid: $("#logoGrid"), scroll: $("#logoScroll"), library: $("#libraryPanel"), libraryHead: $("#libraryHead"),
     returnTarget: $("#returnTarget"), immersiveReturn: $("#immersiveReturn"), ghost: $("#dragGhost"),
     toolbar: $("#coordinateToolbar"), toolbarHandle: $("#toolbarHandle"), zoomValue: $("#zoomValue"),
@@ -48,7 +50,7 @@
   const state = {
     placed: [], selectedId: null, filter: "all", guides: false,
     view: { scale: 1, panX: 0, panY: 0 }, toolbar: { x: 20, y: 8 },
-    undo: [], redo: [], previewId: null, immersive: false
+    undo: [], redo: [], previewId: null, immersive: false, mobileGuidePreference: "auto"
   };
   let saveTimer = 0;
   let press = null;
@@ -129,6 +131,7 @@
     updateCounts();
     updateHistoryButtons();
     updateGuides();
+    updateMobileGuide();
   }
 
   function renderLibrary() {
@@ -208,6 +211,31 @@
   function updateHistoryButtons() {
     dom.undo.disabled = state.undo.length === 0;
     dom.redo.disabled = state.redo.length === 0;
+  }
+
+  function updateMobileGuide() {
+    if (!dom.mobileInstruction || !dom.mobileGuidePill) return;
+    const placed = state.placed.length;
+    const mode = state.mobileGuidePreference === "pill" || (state.mobileGuidePreference === "auto" && placed >= 3) ? "pill" : placed > 0 ? "compact" : "full";
+    dom.mobileInstruction.dataset.mode = mode;
+    dom.mobileInstruction.hidden = mode === "pill";
+    dom.mobileGuidePill.hidden = mode !== "pill";
+    if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", String(mode !== "compact"));
+  }
+
+  function setMobileGuidePreference(preference) {
+    state.mobileGuidePreference = preference === "pill" ? "pill" : "auto";
+    try { localStorage.setItem(GUIDE_STORAGE_KEY, state.mobileGuidePreference); } catch (_) { /* storage disabled */ }
+    updateMobileGuide();
+  }
+
+  function restoreMobileGuidePreference() {
+    try {
+      const saved = localStorage.getItem(GUIDE_STORAGE_KEY);
+      state.mobileGuidePreference = saved === "1" || saved === "pill" ? "pill" : "auto";
+    } catch (_) {
+      state.mobileGuidePreference = "auto";
+    }
   }
 
   function selectLogo(id) {
@@ -826,6 +854,8 @@
     }, true);
     dom.previewBackdrop.addEventListener("click", closePreview);
     dom.preview.addEventListener("click", closePreview);
+    dom.mobileGuideCollapseBtn?.addEventListener("click", () => setMobileGuidePreference("pill"));
+    dom.mobileGuidePill?.addEventListener("click", () => setMobileGuidePreference("auto"));
 
     dom.frame.addEventListener("pointerdown", startStageGesture);
     dom.frame.addEventListener("pointermove", moveStageGesture, { passive: false });
@@ -919,6 +949,7 @@
 
   function init() {
     const restored = restore();
+    restoreMobileGuidePreference();
     bindEvents();
     renderAll();
     $$(".filter-btn").forEach(item => { const active = item.dataset.filter === state.filter; item.classList.toggle("is-active", active); item.setAttribute("aria-pressed", String(active)); });
