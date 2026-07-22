@@ -708,7 +708,7 @@
   }
 
   function startStageGesture(event) {
-    if (event.target.closest(".placed-logo, .coordinate-toolbar")) return;
+    if (event.target.closest(".placed-logo, .coordinate-toolbar, .completion-card")) return;
     dom.frame.setPointerCapture?.(event.pointerId);
     stagePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (stagePointers.size === 1) {
