@@ -113,27 +113,42 @@
     const linkY = 1246 + descriptionLines.length * 36 + 18;
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
+      <defs>
+        <linearGradient id="card-base-gradient" x1="80" y1="0" x2="1000" y2="1440" gradientUnits="userSpaceOnUse">
+          <stop offset="0" stop-color="#FFF9EF"/>
+          <stop offset="0.42" stop-color="#F7F0E6"/>
+          <stop offset="1" stop-color="#F3E7D8"/>
+        </linearGradient>
+        <filter id="diffuse-blur" x="-30%" y="-30%" width="160%" height="160%">
+          <feGaussianBlur stdDeviation="62"/>
+        </filter>
+        <clipPath id="coordinate-gradient-clip">
+          <rect x="140" y="260" width="800" height="800" rx="28"/>
+        </clipPath>
+      </defs>
       <g id="share-card-background">
-        <rect width="1080" height="1440" fill="#F7F1E7"/>
-        <circle cx="120" cy="150" r="92" fill="#FBEAF0" opacity="0.78"/>
-        <circle cx="185" cy="118" r="42" fill="#F5C4B3" opacity="0.5"/>
-        <circle cx="945" cy="250" r="86" fill="#FAEEDA" opacity="0.82"/>
-        <circle cx="890" cy="188" r="38" fill="#FAC775" opacity="0.45"/>
-        <circle cx="130" cy="1230" r="82" fill="#E6F1FB" opacity="0.74"/>
-        <circle cx="938" cy="1218" r="96" fill="#EAF3DE" opacity="0.76"/>
-        <path d="M76 236C150 276 230 278 306 236" fill="none" stroke="#BD9B55" stroke-width="2" opacity="0.55"/>
-        <path d="M774 1198C838 1158 922 1160 1000 1208" fill="none" stroke="#BD9B55" stroke-width="2" opacity="0.55"/>
+        <rect width="1080" height="1440" fill="url(#card-base-gradient)"/>
+        <g id="ambient-diffuse-light" filter="url(#diffuse-blur)">
+          <path d="M-80 62C68 -28 230 -20 340 92C450 204 418 354 244 382C70 410 -58 292 -80 62Z" fill="#F4AEBB" opacity="0.36"/>
+          <path d="M780 20C948 -58 1138 52 1160 228C1182 404 1000 502 834 398C668 294 612 98 780 20Z" fill="#F3C963" opacity="0.34"/>
+          <path d="M-104 1034C54 938 252 988 342 1148C432 1308 306 1468 104 1432C-98 1396 -262 1130 -104 1034Z" fill="#9FCBD6" opacity="0.34"/>
+          <path d="M786 980C984 884 1198 1028 1178 1238C1158 1448 916 1502 774 1342C632 1182 588 1076 786 980Z" fill="#B9CF91" opacity="0.38"/>
+          <path d="M292 358C448 236 656 262 774 438C892 614 778 814 540 800C302 786 136 480 292 358Z" fill="#F7D9A5" opacity="0.22"/>
+        </g>
       </g>
       <g id="header-activity-name">
         <text x="540" y="116" text-anchor="middle" font-family="serif" font-size="56" font-weight="500" fill="#453F3A">${escapedTitle}</text>
         <text x="540" y="174" text-anchor="middle" font-family="sans-serif" font-size="30" font-weight="400" fill="#8E7137" letter-spacing="3">${escapedSubtitle}</text>
         <line x1="350" y1="214" x2="730" y2="214" stroke="#BD9B55" stroke-width="2" opacity="0.72"/>
       </g>
-      <g id="coordinate-soft-quadrants">
-        <rect x="140" y="260" width="400" height="400" rx="28" fill="#FBEAF0" opacity="0.82"/>
-        <rect x="540" y="260" width="400" height="400" rx="28" fill="#FAEEDA" opacity="0.84"/>
-        <rect x="140" y="660" width="400" height="400" rx="28" fill="#E6F1FB" opacity="0.82"/>
-        <rect x="540" y="660" width="400" height="400" rx="28" fill="#EAF3DE" opacity="0.84"/>
+      <g id="coordinate-soft-gradient" clip-path="url(#coordinate-gradient-clip)">
+        <rect x="140" y="260" width="800" height="800" fill="#F8F4ED"/>
+        <rect x="140" y="260" width="800" height="800" fill="url(#card-base-gradient)" opacity="0.28"/>
+        <ellipse cx="332" cy="452" rx="310" ry="282" fill="#E19DAC" opacity="0.45"/>
+        <ellipse cx="756" cy="452" rx="316" ry="286" fill="#EACB71" opacity="0.45"/>
+        <ellipse cx="332" cy="852" rx="316" ry="288" fill="#9AC7CD" opacity="0.42"/>
+        <ellipse cx="756" cy="852" rx="320" ry="292" fill="#B3CA95" opacity="0.48"/>
+        <rect x="140" y="260" width="800" height="800" fill="#F8F4ED" opacity="0.22"/>
       </g>
       <g id="coordinate-axis-and-labels">
         <line x1="180" y1="660" x2="900" y2="660" stroke="#5F5E5A" stroke-width="2" opacity="0.62"/>
