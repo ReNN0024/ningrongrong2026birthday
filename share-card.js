@@ -123,28 +123,29 @@
           <feGaussianBlur stdDeviation="76"/>
         </filter>
         <linearGradient id="coordinate-base-gradient" x1="140" y1="260" x2="940" y2="1060" gradientUnits="userSpaceOnUse">
-          <stop offset="0" stop-color="#FAF7F1"/>
-          <stop offset="1" stop-color="#F5F0E8"/>
+          <stop offset="0" stop-color="#F8F1E9"/>
+          <stop offset="0.48" stop-color="#F4EDE3"/>
+          <stop offset="1" stop-color="#EFE8DB"/>
         </linearGradient>
-        <radialGradient id="coordinate-ul-glow" cx="332" cy="452" r="464" gradientUnits="userSpaceOnUse" gradientTransform="translate(332 452) scale(1.08 0.94) translate(-332 -452)">
-          <stop offset="0" stop-color="#E19DAC" stop-opacity="0.45"/>
-          <stop offset="0.23" stop-color="#EABEC5" stop-opacity="0.28"/>
-          <stop offset="0.58" stop-color="#F8F4ED" stop-opacity="0"/>
+        <radialGradient id="coordinate-ul-glow" cx="332" cy="452" r="640" gradientUnits="userSpaceOnUse" gradientTransform="translate(332 452) scale(1.1 0.96) translate(-332 -452)">
+          <stop offset="0" stop-color="#E19DAC" stop-opacity="0.62"/>
+          <stop offset="0.36" stop-color="#EABEC5" stop-opacity="0.44"/>
+          <stop offset="0.78" stop-color="#F8F4ED" stop-opacity="0"/>
         </radialGradient>
-        <radialGradient id="coordinate-ur-glow" cx="756" cy="452" r="464" gradientUnits="userSpaceOnUse" gradientTransform="translate(756 452) scale(1.08 0.94) translate(-756 -452)">
-          <stop offset="0" stop-color="#EACB71" stop-opacity="0.45"/>
-          <stop offset="0.24" stop-color="#F1DEA4" stop-opacity="0.26"/>
-          <stop offset="0.58" stop-color="#F8F4ED" stop-opacity="0"/>
+        <radialGradient id="coordinate-ur-glow" cx="756" cy="452" r="640" gradientUnits="userSpaceOnUse" gradientTransform="translate(756 452) scale(1.1 0.96) translate(-756 -452)">
+          <stop offset="0" stop-color="#EACB71" stop-opacity="0.64"/>
+          <stop offset="0.38" stop-color="#F1DEA4" stop-opacity="0.45"/>
+          <stop offset="0.78" stop-color="#F8F4ED" stop-opacity="0"/>
         </radialGradient>
-        <radialGradient id="coordinate-ll-glow" cx="332" cy="852" r="472" gradientUnits="userSpaceOnUse" gradientTransform="translate(332 852) scale(1.06 0.95) translate(-332 -852)">
-          <stop offset="0" stop-color="#9AC7CD" stop-opacity="0.42"/>
-          <stop offset="0.25" stop-color="#C1DCDA" stop-opacity="0.26"/>
-          <stop offset="0.59" stop-color="#F8F4ED" stop-opacity="0"/>
+        <radialGradient id="coordinate-ll-glow" cx="332" cy="852" r="650" gradientUnits="userSpaceOnUse" gradientTransform="translate(332 852) scale(1.08 0.98) translate(-332 -852)">
+          <stop offset="0" stop-color="#9AC7CD" stop-opacity="0.58"/>
+          <stop offset="0.38" stop-color="#C1DCDA" stop-opacity="0.42"/>
+          <stop offset="0.8" stop-color="#F8F4ED" stop-opacity="0"/>
         </radialGradient>
-        <radialGradient id="coordinate-lr-glow" cx="756" cy="852" r="472" gradientUnits="userSpaceOnUse" gradientTransform="translate(756 852) scale(1.06 0.95) translate(-756 -852)">
-          <stop offset="0" stop-color="#B3CA95" stop-opacity="0.48"/>
-          <stop offset="0.25" stop-color="#D3DEBA" stop-opacity="0.27"/>
-          <stop offset="0.59" stop-color="#F8F4ED" stop-opacity="0"/>
+        <radialGradient id="coordinate-lr-glow" cx="756" cy="852" r="650" gradientUnits="userSpaceOnUse" gradientTransform="translate(756 852) scale(1.08 0.98) translate(-756 -852)">
+          <stop offset="0" stop-color="#B3CA95" stop-opacity="0.64"/>
+          <stop offset="0.38" stop-color="#D3DEBA" stop-opacity="0.46"/>
+          <stop offset="0.8" stop-color="#F8F4ED" stop-opacity="0"/>
         </radialGradient>
         <clipPath id="coordinate-gradient-clip">
           <rect x="140" y="260" width="800" height="800" rx="28"/>
@@ -169,14 +170,14 @@
         <line x1="350" y1="214" x2="730" y2="214" stroke="#BD9B55" stroke-width="2" opacity="0.72"/>
       </g>
       <g id="coordinate-frame-shell">
-        <rect x="140" y="260" width="800" height="800" rx="28" fill="#F8F4ED" stroke="#B88A3A" stroke-width="3"/>
+        <rect x="140" y="260" width="800" height="800" rx="28" fill="#F4EDE3" stroke="#B88A3A" stroke-width="3"/>
         <g id="coordinate-soft-gradient" clip-path="url(#coordinate-gradient-clip)">
           <rect x="140" y="260" width="800" height="800" fill="url(#coordinate-base-gradient)"/>
           <rect x="140" y="260" width="800" height="800" fill="url(#coordinate-ul-glow)"/>
           <rect x="140" y="260" width="800" height="800" fill="url(#coordinate-ur-glow)"/>
           <rect x="140" y="260" width="800" height="800" fill="url(#coordinate-ll-glow)"/>
           <rect x="140" y="260" width="800" height="800" fill="url(#coordinate-lr-glow)"/>
-          <rect x="140" y="260" width="800" height="800" fill="none" stroke="#6B593A" stroke-width="90" opacity="0.03"/>
+          <rect x="140" y="260" width="800" height="800" fill="none" stroke="#6B593A" stroke-width="90" opacity="0.04"/>
         </g>
         <rect x="148" y="268" width="784" height="784" rx="21" fill="none" stroke="#E4CC8B" stroke-width="2"/>
       </g>
