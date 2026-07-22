@@ -4,10 +4,10 @@
   const CARD_WIDTH = 1080;
   const CARD_HEIGHT = 1440;
   const QUADRANTS = {
-    a: { label: "荆棘 × 不忘", order: 0 },
-    b: { label: "繁花 × 不忘", order: 1 },
-    c: { label: "荆棘 × 寻常", order: 2 },
-    d: { label: "繁花 × 寻常", order: 3 }
+    r: { label: "荆棘 × 不忘", order: 0 },
+    o: { label: "繁花 × 不忘", order: 1 },
+    n: { label: "荆棘 × 寻常", order: 2 },
+    g: { label: "繁花 × 寻常", order: 3 }
   };
 
   const imageCache = new Map();
@@ -17,10 +17,10 @@
   }
 
   function quadrantFor(item) {
-    if (item.x < 0 && item.y >= 0) return "a";
-    if (item.x >= 0 && item.y >= 0) return "b";
-    if (item.x < 0 && item.y < 0) return "c";
-    return "d";
+    if (item.x < 0 && item.y >= 0) return "r";
+    if (item.x >= 0 && item.y >= 0) return "o";
+    if (item.x < 0 && item.y < 0) return "n";
+    return "g";
   }
 
   function calculatePersonality(placed) {

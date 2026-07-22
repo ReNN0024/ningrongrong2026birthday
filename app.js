@@ -4,6 +4,7 @@
   const STORAGE_KEY = "ningrongrong-2026-coordinate-v1";
   const STORAGE_TTL = 30 * 24 * 60 * 60 * 1000;
   const ACTIVITY_ID = "ningrongrong-2026-birthday";
+  const MIN_SHARE_PLACED = 7;
   const ASSET_ROOT = window.__ASSET_ROOT__ || "assets";
   const isMobile = () => window.matchMedia("(max-width: 1023px)").matches;
   const isIOS = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
@@ -43,7 +44,7 @@
     desktopProgressFill: $("#desktopProgressFill"), completionCard: $("#completionCard"), generateShareBtn: $("#generateShareBtn"),
     guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), previewBackdrop: $("#previewBackdrop"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
     toastStack: $("#toastStack"), live: $("#liveRegion"), empty: $("#emptyState"),
-    shareDialog: $("#shareDialog"), sharePreview: $("#sharePreview"), downloadShare: $("#downloadShareBtn"), regenerateShare: $("#regenerateShareBtn"), continueEdit: $("#continueEditBtn"), shareClose: $("#shareCloseBtn"),
+    shareDialog: $("#shareDialog"), sharePreview: $("#sharePreview"), shareTrigger: $("#shareTriggerBtn"), downloadShare: $("#downloadShareBtn"), regenerateShare: $("#regenerateShareBtn"), continueEdit: $("#continueEditBtn"), shareClose: $("#shareCloseBtn"),
     clearDialog: $("#clearDialog"), undo: $("#undoBtn"), redo: $("#redoBtn"), clear: $("#clearBtn")
   };
 
@@ -207,6 +208,7 @@
     $("#placedCountMobile").textContent = String(placed).padStart(2, "0");
     if (dom.desktopProgressFill) dom.desktopProgressFill.style.width = `${Math.round((placed / logos.length) * 100)}%`;
     if (dom.completionCard) dom.completionCard.hidden = placed !== logos.length;
+    if (dom.shareTrigger) dom.shareTrigger.hidden = placed < MIN_SHARE_PLACED;
     $("#unplacedCount").textContent = String(logos.length - placed);
     dom.clear.disabled = placed === 0;
   }
@@ -370,7 +372,7 @@
 
   async function generateShareResult() {
     if (!window.ShareCard) return toast("结果图生成器未加载", "error");
-    if (state.placed.length !== logos.length) return toast("放完全部 Logo 后再生成结果图");
+    if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上 Logo 后再生成坐标`);
     openDialog(dom.shareDialog);
     dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
     dom.downloadShare.removeAttribute("href");
@@ -904,6 +906,7 @@
     dom.preview.addEventListener("click", closePreview);
     dom.mobileGuideCollapseBtn?.addEventListener("click", () => setMobileGuidePreference("hidden"));
     dom.generateShareBtn?.addEventListener("click", generateShareResult);
+    dom.shareTrigger?.addEventListener("click", generateShareResult);
     dom.regenerateShare?.addEventListener("click", generateShareResult);
     dom.continueEdit?.addEventListener("click", () => closeDialog(dom.shareDialog));
     dom.shareClose?.addEventListener("click", () => closeDialog(dom.shareDialog));
