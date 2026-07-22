@@ -217,19 +217,24 @@
   function updateMobileGuide() {
     if (!dom.mobileInstruction) return;
     const placed = state.placed.length;
-    const mode = state.mobileGuidePreference === "hidden" ? "hidden" : placed > 0 ? "compact" : "full";
+    const visibleMode = placed > 0 ? "compact" : "full";
     clearTimeout(mobileGuideAutoHideTimer);
     clearTimeout(mobileGuideHideTimer);
-    dom.mobileInstruction.classList.remove("is-hiding");
-    dom.mobileInstruction.dataset.mode = mode;
-    if (mode === "hidden") {
+
+    if (state.mobileGuidePreference === "hidden") {
+      dom.mobileInstruction.hidden = false;
+      dom.mobileInstruction.dataset.mode = visibleMode;
+      if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", String(visibleMode !== "compact"));
       dom.mobileInstruction.classList.add("is-hiding");
-      mobileGuideHideTimer = window.setTimeout(() => { dom.mobileInstruction.hidden = true; }, 360);
+      mobileGuideHideTimer = window.setTimeout(() => { dom.mobileInstruction.hidden = true; }, 460);
       return;
     }
+
+    dom.mobileInstruction.classList.remove("is-hiding");
     dom.mobileInstruction.hidden = false;
-    if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", String(mode !== "compact"));
-    if (mode === "compact" && placed >= 3) mobileGuideAutoHideTimer = window.setTimeout(() => setMobileGuidePreference("hidden"), 3200);
+    dom.mobileInstruction.dataset.mode = visibleMode;
+    if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", String(visibleMode !== "compact"));
+    if (visibleMode === "compact" && placed >= 3) mobileGuideAutoHideTimer = window.setTimeout(() => setMobileGuidePreference("hidden"), 3200);
   }
 
   function setMobileGuidePreference(preference) {

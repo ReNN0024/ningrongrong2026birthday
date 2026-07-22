@@ -483,9 +483,18 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
     box-shadow: 0 10px 26px rgba(103, 75, 31, .07);
     opacity: 1;
     transform: translateY(0);
-    transition: opacity .36s ease, transform .36s ease;
+    transition:
+      opacity .42s ease,
+      transform .42s ease,
+      min-height .42s ease,
+      margin .42s ease,
+      padding .42s ease;
   }
   .mobile-instruction.is-hiding {
+    min-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
     opacity: 0;
     transform: translateY(-4px);
     pointer-events: none;
