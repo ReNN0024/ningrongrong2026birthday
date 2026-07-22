@@ -472,16 +472,16 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
     --frame-radius: 18px;
     width: calc(100% - 24px);
     max-width: 342px;
-    min-height: 46px;
+    min-height: 38px;
     margin: 0 auto 8px;
-    padding: 8px 12px;
+    padding: 4px 8px 4px 12px;
     display: block;
     overflow: hidden;
     background:
       linear-gradient(135deg, rgba(255, 253, 247, .98), rgba(250, 241, 225, .9)),
       rgba(255, 253, 244, .95);
     box-shadow: 0 10px 26px rgba(103, 75, 31, .07);
-    transition: min-height .2s ease, padding .2s ease, opacity .18s ease, transform .18s ease;
+    transition: opacity .18s ease, transform .18s ease;
   }
   .mobile-guide-full {
     display: grid;
@@ -489,11 +489,11 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
     align-items: center;
     gap: 3px;
   }
-  .mobile-guide-step { min-width: 0; display: flex; gap: 6px; align-items: center; }
-  .mobile-guide-step > span { width: 24px; height: 24px; flex: 0 0 24px; display: grid; place-items: center; border-radius: 50%; font: 700 10px var(--sans); }
-  .mobile-guide-step p { min-width: 0; margin: 0; line-height: 1.2; white-space: nowrap; }
-  .mobile-guide-step b { display: block; color: #563d31; font: 700 10px var(--sans); }
-  .mobile-guide-step small { display: block; margin-top: 3px; color: #a0806c; font: 400 7px var(--sans); }
+  .mobile-guide-step { min-width: 0; display: flex; gap: 5px; align-items: center; }
+  .mobile-guide-step > span { width: 22px; height: 22px; flex: 0 0 22px; display: grid; place-items: center; border-radius: 50%; font: 700 9px var(--sans); }
+  .mobile-guide-step p { min-width: 0; margin: 0; line-height: 1.08; white-space: nowrap; }
+  .mobile-guide-step b { display: block; color: #563d31; font: 700 9px var(--sans); }
+  .mobile-guide-step small { display: block; margin-top: 1px; color: #a0806c; font: 400 6px var(--sans); }
   .guide-select > span { color: #8e576d; background: #f1d9e4; }
   .guide-place > span { color: #8e6b25; background: #f6e4a8; }
   .guide-adjust > span { color: #52724c; background: #ddebcf; }
@@ -524,8 +524,6 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
     letter-spacing: .08em;
   }
   .mobile-instruction[data-mode="compact"] {
-    min-height: 38px;
-    padding: 4px 8px 4px 12px;
     border-color: rgba(184, 138, 58, .5);
     border-radius: 999px;
   }
@@ -667,12 +665,12 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
 @media (max-width: 370px) {
   .site-header { margin-inline: 3px; }
   .mobile-credits { display: flex; flex-basis: 43%; font-size: 5.5px; }
-  .mobile-instruction { padding-inline: 10px; }
+  .mobile-instruction { padding-inline: 9px; }
   .mobile-guide-full { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; }
   .mobile-guide-step { gap: 4px; }
-  .mobile-guide-step > span { width: 21px; height: 21px; flex-basis: 21px; }
-  .mobile-guide-step b { font-size: 9px; }
-  .mobile-guide-step small { font-size: 6px; }
+  .mobile-guide-step > span { width: 20px; height: 20px; flex-basis: 20px; font-size: 8px; }
+  .mobile-guide-step b { font-size: 8px; }
+  .mobile-guide-step small { font-size: 5.5px; }
   .mobile-guide-compact span { font-size: 10px; letter-spacing: .04em; }
   .mobile-guide-compact button { padding-inline: 9px; }
   .history-actions { gap: 2px; }
