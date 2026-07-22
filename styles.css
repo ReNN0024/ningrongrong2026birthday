@@ -530,24 +530,6 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   }
   .mobile-instruction[data-mode="compact"] .mobile-guide-full { display: none; }
   .mobile-instruction[data-mode="compact"] .mobile-guide-compact { display: flex; }
-  .mobile-guide-pill {
-    width: max-content;
-    min-height: 30px;
-    margin: 0 auto 8px;
-    padding: 0 14px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid rgba(184, 138, 58, .46);
-    border-radius: 999px;
-    color: #7d632f;
-    background:
-      linear-gradient(135deg, rgba(255, 253, 247, .96), rgba(249, 238, 213, .9));
-    box-shadow: 0 8px 18px rgba(103, 75, 31, .08);
-    font: 600 10px/1 var(--sans);
-    letter-spacing: .1em;
-  }
-  .mobile-guide-pill[hidden] { display: none; }
   .coordinate-frame { width: calc(100% - 24px); max-width: 342px; aspect-ratio: 1; margin-inline: auto; }
   .quadrant-label strong { font-size: 9px; }.quadrant-label span { font-size: 6px; }
   .axis-copy strong { font-size: 11px; }.axis-copy span { font-size: 6px; }

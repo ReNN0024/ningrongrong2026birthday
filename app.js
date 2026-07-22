@@ -36,7 +36,7 @@
   const $$ = selector => [...document.querySelectorAll(selector)];
   const dom = {
     frame: $("#coordinateFrame"), world: $("#coordinateWorld"), placedLayer: $("#placedLayer"),
-    mobileInstruction: $("#mobileInstruction"), mobileGuideCompact: $("#mobileGuideCompact"), mobileGuidePill: $("#mobileGuidePill"), mobileGuideCollapseBtn: $("#mobileGuideCollapseBtn"),
+    mobileInstruction: $("#mobileInstruction"), mobileGuideCompact: $("#mobileGuideCompact"), mobileGuideCollapseBtn: $("#mobileGuideCollapseBtn"),
     grid: $("#logoGrid"), scroll: $("#logoScroll"), library: $("#libraryPanel"), libraryHead: $("#libraryHead"),
     returnTarget: $("#returnTarget"), immersiveReturn: $("#immersiveReturn"), ghost: $("#dragGhost"),
     toolbar: $("#coordinateToolbar"), toolbarHandle: $("#toolbarHandle"), zoomValue: $("#zoomValue"),
@@ -214,17 +214,16 @@
   }
 
   function updateMobileGuide() {
-    if (!dom.mobileInstruction || !dom.mobileGuidePill) return;
+    if (!dom.mobileInstruction) return;
     const placed = state.placed.length;
-    const mode = state.mobileGuidePreference === "pill" || (state.mobileGuidePreference === "auto" && placed >= 3) ? "pill" : placed > 0 ? "compact" : "full";
+    const mode = state.mobileGuidePreference === "hidden" || (state.mobileGuidePreference === "auto" && placed >= 3) ? "hidden" : placed > 0 ? "compact" : "full";
     dom.mobileInstruction.dataset.mode = mode;
-    dom.mobileInstruction.hidden = mode === "pill";
-    dom.mobileGuidePill.hidden = mode !== "pill";
+    dom.mobileInstruction.hidden = mode === "hidden";
     if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", String(mode !== "compact"));
   }
 
   function setMobileGuidePreference(preference) {
-    state.mobileGuidePreference = preference === "pill" ? "pill" : "auto";
+    state.mobileGuidePreference = preference === "hidden" ? "hidden" : "auto";
     try { localStorage.setItem(GUIDE_STORAGE_KEY, state.mobileGuidePreference); } catch (_) { /* storage disabled */ }
     updateMobileGuide();
   }
@@ -232,7 +231,7 @@
   function restoreMobileGuidePreference() {
     try {
       const saved = localStorage.getItem(GUIDE_STORAGE_KEY);
-      state.mobileGuidePreference = saved === "1" || saved === "pill" ? "pill" : "auto";
+      state.mobileGuidePreference = saved === "1" || saved === "pill" || saved === "hidden" ? "hidden" : "auto";
     } catch (_) {
       state.mobileGuidePreference = "auto";
     }
@@ -854,8 +853,7 @@
     }, true);
     dom.previewBackdrop.addEventListener("click", closePreview);
     dom.preview.addEventListener("click", closePreview);
-    dom.mobileGuideCollapseBtn?.addEventListener("click", () => setMobileGuidePreference("pill"));
-    dom.mobileGuidePill?.addEventListener("click", () => setMobileGuidePreference("auto"));
+    dom.mobileGuideCollapseBtn?.addEventListener("click", () => setMobileGuidePreference("hidden"));
 
     dom.frame.addEventListener("pointerdown", startStageGesture);
     dom.frame.addEventListener("pointermove", moveStageGesture, { passive: false });
