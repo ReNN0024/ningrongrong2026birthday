@@ -606,8 +606,8 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .coordinate-frame { padding-bottom: 36px; }
   .axis-y { top: 6%; bottom: 13%; }
   .guide-line-y { top: 4%; bottom: 13%; }
-  .axis-top { top: 5%; }
-  .axis-bottom { bottom: 10%; }
+  .axis-top { top: 8%; }
+  .axis-bottom { bottom: 8%; }
   .desktop-progress {
     position: absolute;
     left: 22px;
