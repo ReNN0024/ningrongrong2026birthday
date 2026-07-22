@@ -467,6 +467,7 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .coordinate-main { height: auto; display: block; }
   .coordinate-editor { display: block; }
   .coordinate-side-tools { display: block; }
+  .mobile-instruction[hidden] { display: none !important; }
   .mobile-instruction {
     --frame-radius: 18px;
     width: calc(100% - 24px);
