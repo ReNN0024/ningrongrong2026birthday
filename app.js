@@ -578,7 +578,7 @@
       ? `<img src="${logo.detail}" alt="${escapeHTML(logo.name)}大图">`
       : `<div class="preview-placeholder" style="background:${logo.color}"></div>`;
     dom.preview.hidden = false;
-    if (isMobile()) dom.previewBackdrop.classList.add("is-visible");
+    dom.previewBackdrop.classList.add("is-visible");
     const anchorEl = anchor?.closest?.(".placed-logo") || dom.placedLayer.querySelector(`[data-logo-id="${id}"]`);
     const previewImage = dom.previewMedia.querySelector("img");
     const showPreview = () => {
@@ -823,7 +823,7 @@
       if (isMobile() && state.previewId && !event.target.closest(".placed-logo, .preview-popover, .preview-backdrop")) closePreview();
     }, true);
     dom.previewBackdrop.addEventListener("click", closePreview);
-    dom.preview.addEventListener("click", () => { if (isMobile()) closePreview(); });
+    dom.preview.addEventListener("click", closePreview);
 
     dom.frame.addEventListener("pointerdown", startStageGesture);
     dom.frame.addEventListener("pointermove", moveStageGesture, { passive: false });
