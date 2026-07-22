@@ -4,6 +4,11 @@
 
 ---
 
+## [1.5.9] - 2026-07-22
+
+### Added — by Snjór
+- 新增 `RESULT_REPLACEMENT_GUIDE.md`，面向协作 AI 说明 16 种结果文案的 key、结果名称、结果分析和替换执行规则
+
 ## [1.5.8] - 2026-07-22
 
 ### Fixed — by Snjór
