@@ -40,9 +40,10 @@
     returnTarget: $("#returnTarget"), immersiveReturn: $("#immersiveReturn"), ghost: $("#dragGhost"),
     toolbar: $("#coordinateToolbar"), toolbarHandle: $("#toolbarHandle"), zoomValue: $("#zoomValue"),
     minimap: $("#viewportMinimap"), minimapViewport: $("#minimapViewport"),
-    desktopProgressFill: $("#desktopProgressFill"),
+    desktopProgressFill: $("#desktopProgressFill"), completionCard: $("#completionCard"), generateShareBtn: $("#generateShareBtn"),
     guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), previewBackdrop: $("#previewBackdrop"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
     toastStack: $("#toastStack"), live: $("#liveRegion"), empty: $("#emptyState"),
+    shareDialog: $("#shareDialog"), sharePreview: $("#sharePreview"), shareResultName: $("#shareResultName"), downloadShare: $("#downloadShareBtn"), regenerateShare: $("#regenerateShareBtn"), continueEdit: $("#continueEditBtn"), shareClose: $("#shareCloseBtn"),
     clearDialog: $("#clearDialog"), undo: $("#undoBtn"), redo: $("#redoBtn"), clear: $("#clearBtn")
   };
 
@@ -205,6 +206,7 @@
     $("#placedCountDesktop").textContent = String(placed).padStart(2, "0");
     $("#placedCountMobile").textContent = String(placed).padStart(2, "0");
     if (dom.desktopProgressFill) dom.desktopProgressFill.style.width = `${Math.round((placed / logos.length) * 100)}%`;
+    if (dom.completionCard) dom.completionCard.hidden = placed !== logos.length;
     $("#unplacedCount").textContent = String(logos.length - placed);
     dom.clear.disabled = placed === 0;
   }
@@ -347,6 +349,44 @@
     el.textContent = message;
     dom.toastStack.append(el);
     window.setTimeout(() => el.remove(), 2200);
+  }
+
+  function openDialog(dialog) {
+    if (!dialog || dialog.open) return;
+    if (typeof dialog.showModal === "function") dialog.showModal();
+    else { dialog.setAttribute("open", ""); dialog.classList.add("is-fallback-open"); }
+  }
+
+  function closeDialog(dialog) {
+    if (typeof dialog.close === "function") dialog.close();
+    else { dialog.removeAttribute("open"); dialog.classList.remove("is-fallback-open"); }
+  }
+
+  async function generateShareResult() {
+    if (!window.ShareCard) return toast("结果图生成器未加载", "error");
+    if (state.placed.length !== logos.length) return toast("放完全部 Logo 后再生成结果图");
+    openDialog(dom.shareDialog);
+    dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
+    dom.shareResultName.textContent = "正在生成结果图…";
+    dom.downloadShare.removeAttribute("href");
+    dom.downloadShare.setAttribute("aria-disabled", "true");
+    try {
+      const { dataURL, personality } = await window.ShareCard.generateShareImage({
+        placed: state.placed,
+        logos,
+        activityTitle: "宁荣荣 · 与我周旋久",
+        subtitle: "我的故事坐标",
+        shareUrl: "snjor-kii.github.io/ningrongrong2026birthday"
+      });
+      dom.sharePreview.innerHTML = `<img src="${dataURL}" alt="我的故事坐标结果图">`;
+      dom.shareResultName.textContent = `${personality.result.name} · ${personality.key}`;
+      dom.downloadShare.href = dataURL;
+      dom.downloadShare.setAttribute("aria-disabled", "false");
+    } catch (error) {
+      dom.sharePreview.innerHTML = "<span>生成失败，请稍后再试</span>";
+      dom.shareResultName.textContent = "结果图生成失败";
+      toast("结果图生成失败，请重试", "error");
+    }
   }
 
   function announce(message) { dom.live.textContent = message; }
@@ -859,6 +899,11 @@
     dom.previewBackdrop.addEventListener("click", closePreview);
     dom.preview.addEventListener("click", closePreview);
     dom.mobileGuideCollapseBtn?.addEventListener("click", () => setMobileGuidePreference("hidden"));
+    dom.generateShareBtn?.addEventListener("click", generateShareResult);
+    dom.regenerateShare?.addEventListener("click", generateShareResult);
+    dom.continueEdit?.addEventListener("click", () => closeDialog(dom.shareDialog));
+    dom.shareClose?.addEventListener("click", () => closeDialog(dom.shareDialog));
+    dom.shareDialog?.addEventListener("click", event => { if (event.target === dom.shareDialog) closeDialog(dom.shareDialog); });
 
     dom.frame.addEventListener("pointerdown", startStageGesture);
     dom.frame.addEventListener("pointermove", moveStageGesture, { passive: false });
