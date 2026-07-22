@@ -81,7 +81,7 @@
     const centerX = 540;
     const centerY = 660;
     const usable = 358;
-    const logoSize = 58;
+    const logoSize = 76;
     const items = [...placed].sort((left, right) => left.z - right.z);
     const parts = [];
 
@@ -119,8 +119,11 @@
           <stop offset="0.42" stop-color="#F7F0E6"/>
           <stop offset="1" stop-color="#F3E7D8"/>
         </linearGradient>
-        <filter id="diffuse-blur" x="-30%" y="-30%" width="160%" height="160%">
-          <feGaussianBlur stdDeviation="62"/>
+        <filter id="diffuse-blur" x="-35%" y="-35%" width="170%" height="170%">
+          <feGaussianBlur stdDeviation="76"/>
+        </filter>
+        <filter id="coordinate-blur" x="-20%" y="-20%" width="140%" height="140%">
+          <feGaussianBlur stdDeviation="34"/>
         </filter>
         <clipPath id="coordinate-gradient-clip">
           <rect x="140" y="260" width="800" height="800" rx="28"/>
@@ -129,11 +132,14 @@
       <g id="share-card-background">
         <rect width="1080" height="1440" fill="url(#card-base-gradient)"/>
         <g id="ambient-diffuse-light" filter="url(#diffuse-blur)">
-          <path d="M-80 62C68 -28 230 -20 340 92C450 204 418 354 244 382C70 410 -58 292 -80 62Z" fill="#F4AEBB" opacity="0.36"/>
-          <path d="M780 20C948 -58 1138 52 1160 228C1182 404 1000 502 834 398C668 294 612 98 780 20Z" fill="#F3C963" opacity="0.34"/>
-          <path d="M-104 1034C54 938 252 988 342 1148C432 1308 306 1468 104 1432C-98 1396 -262 1130 -104 1034Z" fill="#9FCBD6" opacity="0.34"/>
-          <path d="M786 980C984 884 1198 1028 1178 1238C1158 1448 916 1502 774 1342C632 1182 588 1076 786 980Z" fill="#B9CF91" opacity="0.38"/>
-          <path d="M292 358C448 236 656 262 774 438C892 614 778 814 540 800C302 786 136 480 292 358Z" fill="#F7D9A5" opacity="0.22"/>
+          <path d="M-120 36C64 -76 304 -36 414 118C524 272 392 424 164 392C-64 360 -224 172 -120 36Z" fill="#F1AEBB" opacity="0.32"/>
+          <path d="M682 -38C902 -116 1138 38 1186 246C1234 454 968 542 760 410C552 278 462 40 682 -38Z" fill="#F0C765" opacity="0.32"/>
+          <path d="M-156 900C70 770 326 862 406 1072C486 1282 252 1500 24 1416C-204 1332 -382 1030 -156 900Z" fill="#9FCBD6" opacity="0.30"/>
+          <path d="M690 842C932 714 1216 902 1198 1172C1180 1442 858 1538 690 1324C522 1110 448 970 690 842Z" fill="#B9CF91" opacity="0.34"/>
+          <path d="M226 282C422 122 706 184 846 402C986 620 814 858 520 808C226 758 30 442 226 282Z" fill="#F6D5A0" opacity="0.22"/>
+          <path d="M126 610C290 500 486 540 594 676C702 812 578 1014 350 980C122 946 -38 720 126 610Z" fill="#D8B7E3" opacity="0.18"/>
+          <path d="M494 112C646 18 850 72 900 236C950 400 754 500 582 424C410 348 342 206 494 112Z" fill="#F6BFA7" opacity="0.16"/>
+          <path d="M476 1030C664 914 888 1014 920 1200C952 1386 716 1474 520 1368C324 1262 288 1146 476 1030Z" fill="#C9DFAE" opacity="0.18"/>
         </g>
       </g>
       <g id="header-activity-name">
@@ -143,12 +149,14 @@
       </g>
       <g id="coordinate-soft-gradient" clip-path="url(#coordinate-gradient-clip)">
         <rect x="140" y="260" width="800" height="800" fill="#F8F4ED"/>
-        <rect x="140" y="260" width="800" height="800" fill="url(#card-base-gradient)" opacity="0.28"/>
-        <ellipse cx="332" cy="452" rx="310" ry="282" fill="#E19DAC" opacity="0.45"/>
-        <ellipse cx="756" cy="452" rx="316" ry="286" fill="#EACB71" opacity="0.45"/>
-        <ellipse cx="332" cy="852" rx="316" ry="288" fill="#9AC7CD" opacity="0.42"/>
-        <ellipse cx="756" cy="852" rx="320" ry="292" fill="#B3CA95" opacity="0.48"/>
-        <rect x="140" y="260" width="800" height="800" fill="#F8F4ED" opacity="0.22"/>
+        <g filter="url(#coordinate-blur)">
+          <rect x="48" y="168" width="492" height="492" fill="#E19DAC" opacity="0.45"/>
+          <rect x="540" y="168" width="492" height="492" fill="#EACB71" opacity="0.45"/>
+          <rect x="48" y="660" width="492" height="492" fill="#9AC7CD" opacity="0.42"/>
+          <rect x="540" y="660" width="492" height="492" fill="#B3CA95" opacity="0.48"/>
+        </g>
+        <rect x="140" y="260" width="800" height="800" fill="#F8F4ED" opacity="0.18"/>
+        <rect x="140" y="260" width="800" height="800" fill="url(#card-base-gradient)" opacity="0.12"/>
       </g>
       <g id="coordinate-axis-and-labels">
         <line x1="180" y1="660" x2="900" y2="660" stroke="#5F5E5A" stroke-width="2" opacity="0.62"/>
