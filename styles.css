@@ -604,6 +604,10 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .guide-footer { margin: 0; padding: 0; }
   .credits { padding-top: 0; border-top: 1px solid var(--line); }
   .coordinate-frame { padding-bottom: 36px; }
+  .axis-y { top: 6%; bottom: 13%; }
+  .guide-line-y { top: 4%; bottom: 13%; }
+  .axis-top { top: 5%; }
+  .axis-bottom { bottom: 10%; }
   .desktop-progress {
     position: absolute;
     left: 22px;
