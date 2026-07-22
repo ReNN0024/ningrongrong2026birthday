@@ -39,7 +39,7 @@
     returnTarget: $("#returnTarget"), immersiveReturn: $("#immersiveReturn"), ghost: $("#dragGhost"),
     toolbar: $("#coordinateToolbar"), toolbarHandle: $("#toolbarHandle"), zoomValue: $("#zoomValue"),
     minimap: $("#viewportMinimap"), minimapViewport: $("#minimapViewport"),
-    guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
+    guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), previewBackdrop: $("#previewBackdrop"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
     toastStack: $("#toastStack"), live: $("#liveRegion"), empty: $("#emptyState"),
     clearDialog: $("#clearDialog"), undo: $("#undoBtn"), redo: $("#redoBtn"), clear: $("#clearBtn")
   };
@@ -578,6 +578,7 @@
       ? `<img src="${logo.detail}" alt="${escapeHTML(logo.name)}大图">`
       : `<div class="preview-placeholder" style="background:${logo.color}"></div>`;
     dom.preview.hidden = false;
+    if (isMobile()) dom.previewBackdrop.classList.add("is-visible");
     const anchorEl = anchor?.closest?.(".placed-logo") || dom.placedLayer.querySelector(`[data-logo-id="${id}"]`);
     const previewImage = dom.previewMedia.querySelector("img");
     const showPreview = () => {
@@ -610,6 +611,7 @@
   function closePreview() {
     clearTimeout(hoverTimer); clearTimeout(previewHideTimer);
     dom.preview.classList.remove("is-visible");
+    dom.previewBackdrop.classList.remove("is-visible");
     state.previewId = null;
     window.setTimeout(() => { if (!state.previewId) dom.preview.hidden = true; }, 160);
   }
@@ -818,8 +820,10 @@
     document.addEventListener("pointerup", onGlobalPointerUp);
     document.addEventListener("pointercancel", onGlobalPointerCancel);
     document.addEventListener("pointerdown", event => {
-      if (isMobile() && state.previewId && !event.target.closest(".placed-logo, .preview-popover")) closePreview();
+      if (isMobile() && state.previewId && !event.target.closest(".placed-logo, .preview-popover, .preview-backdrop")) closePreview();
     }, true);
+    dom.previewBackdrop.addEventListener("click", closePreview);
+    dom.preview.addEventListener("click", () => { if (isMobile()) closePreview(); });
 
     dom.frame.addEventListener("pointerdown", startStageGesture);
     dom.frame.addEventListener("pointermove", moveStageGesture, { passive: false });

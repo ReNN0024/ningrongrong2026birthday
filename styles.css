@@ -371,6 +371,20 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .logo-card.is-focused .logo-thumb { filter: drop-shadow(0 0 5px rgba(166,124,43,.7)); }
 .empty-state { color: var(--muted); text-align: center; padding: 50px 16px; font: 13px var(--sans); }
 
+.preview-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+  background: rgba(45, 40, 35, .35);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .15s ease;
+}
+.preview-backdrop.is-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
 .preview-popover {
   position: fixed;
   z-index: 200;
@@ -385,7 +399,7 @@ button:disabled { cursor: not-allowed; opacity: .36; }
   transform: translateY(7px) scale(.98);
   transition: opacity .15s ease, transform .15s ease;
 }
-.preview-popover.is-visible { opacity: 1; transform: none; }
+.preview-popover.is-visible { opacity: 1; transform: none; pointer-events: auto; cursor: pointer; }
 .preview-popover > div { width: max-content; max-width: 100%; overflow: hidden; border-radius: 11px; background: #ead9bf; }
 .preview-popover img { display: block; width: auto; height: auto; max-width: min(310px, calc(100vw - 38px)); max-height: min(70vh, 520px); object-fit: contain; }
 .preview-placeholder { width: min(310px, calc(100vw - 38px)); aspect-ratio: 16 / 10; }
