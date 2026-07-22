@@ -424,10 +424,6 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .toast.is-error { background: rgba(145,72,65,.94); }
 @keyframes toastIn { from { opacity: 0; transform: translateY(-6px); } }
 
-.completion-card { position: absolute; left: 50%; bottom: 64px; z-index: 48; width: min(260px, calc(100% - 48px)); padding: 12px 14px; transform: translateX(-50%); border: 1px solid rgba(184,138,58,.58); border-radius: 18px; background: rgba(255,251,244,.94); box-shadow: 0 14px 32px rgba(75,61,41,.13); text-align: center; pointer-events: auto; }
-.completion-card[hidden] { display: none; }
-.completion-card p { margin: 0 0 8px; color: #624d3f; font: 500 12px var(--sans); letter-spacing: .06em; }
-.completion-card button { min-height: 32px; padding: 0 16px; border: 1px solid rgba(184,138,58,.4); border-radius: 999px; color: #fffaf1; background: #8e7137; font: 500 11px var(--sans); letter-spacing: .08em; }
 .share-dialog { border: 0; padding: 0; background: transparent; width: min(430px, calc(100vw - 24px)); max-width: calc(100vw - 24px); max-height: min(94dvh, 860px); overflow: auto; }
 .confirm-dialog { border: 0; padding: 0; background: transparent; max-width: calc(100vw - 32px); }
 .share-dialog::backdrop, .confirm-dialog::backdrop { background: rgba(63,55,47,.32); backdrop-filter: blur(3px); }
@@ -563,9 +559,6 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .mobile-instruction[data-mode="compact"] .mobile-guide-full { display: none; }
   .mobile-instruction[data-mode="compact"] .mobile-guide-compact { display: flex; }
   .coordinate-frame { width: calc(100% - 24px); max-width: 342px; aspect-ratio: 1; margin-inline: auto; }
-  .completion-card { bottom: 12px; width: min(238px, calc(100% - 56px)); padding: 9px 11px; border-radius: 16px; }
-  .completion-card p { margin-bottom: 6px; font-size: 10px; }
-  .completion-card button { min-height: 28px; padding-inline: 12px; font-size: 10px; }
   .quadrant-label strong { font-size: 9px; }.quadrant-label span { font-size: 6px; }
   .axis-copy strong { font-size: 11px; }.axis-copy span { font-size: 6px; }
   .coordinate-toolbar { position: absolute; left: 20px; right: auto; bottom: 8px; width: auto; height: 40px; min-width: 0; min-height: 40px; flex-direction: row; padding: 0 2px; gap: 1px; margin: 0; border-radius: 7px; }

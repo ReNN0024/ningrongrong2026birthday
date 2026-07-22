@@ -41,7 +41,7 @@
     returnTarget: $("#returnTarget"), immersiveReturn: $("#immersiveReturn"), ghost: $("#dragGhost"),
     toolbar: $("#coordinateToolbar"), toolbarHandle: $("#toolbarHandle"), zoomValue: $("#zoomValue"),
     minimap: $("#viewportMinimap"), minimapViewport: $("#minimapViewport"),
-    desktopProgressFill: $("#desktopProgressFill"), completionCard: $("#completionCard"), generateShareBtn: $("#generateShareBtn"),
+    desktopProgressFill: $("#desktopProgressFill"),
     guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), previewBackdrop: $("#previewBackdrop"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
     toastStack: $("#toastStack"), live: $("#liveRegion"), empty: $("#emptyState"),
     shareDialog: $("#shareDialog"), sharePreview: $("#sharePreview"), shareTrigger: $("#shareTriggerBtn"), downloadShare: $("#downloadShareBtn"), regenerateShare: $("#regenerateShareBtn"), continueEdit: $("#continueEditBtn"), shareClose: $("#shareCloseBtn"),
@@ -207,7 +207,6 @@
     $("#placedCountDesktop").textContent = String(placed).padStart(2, "0");
     $("#placedCountMobile").textContent = String(placed).padStart(2, "0");
     if (dom.desktopProgressFill) dom.desktopProgressFill.style.width = `${Math.round((placed / logos.length) * 100)}%`;
-    if (dom.completionCard) dom.completionCard.hidden = placed !== logos.length;
     if (dom.shareTrigger) dom.shareTrigger.hidden = placed < MIN_SHARE_PLACED;
     $("#unplacedCount").textContent = String(logos.length - placed);
     dom.clear.disabled = placed === 0;
@@ -714,7 +713,7 @@
   }
 
   function startStageGesture(event) {
-    if (event.target.closest(".placed-logo, .coordinate-toolbar, .completion-card")) return;
+    if (event.target.closest(".placed-logo, .coordinate-toolbar")) return;
     dom.frame.setPointerCapture?.(event.pointerId);
     stagePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (stagePointers.size === 1) {
@@ -905,7 +904,6 @@
     dom.previewBackdrop.addEventListener("click", closePreview);
     dom.preview.addEventListener("click", closePreview);
     dom.mobileGuideCollapseBtn?.addEventListener("click", () => setMobileGuidePreference("hidden"));
-    dom.generateShareBtn?.addEventListener("click", generateShareResult);
     dom.shareTrigger?.addEventListener("click", generateShareResult);
     dom.regenerateShare?.addEventListener("click", generateShareResult);
     dom.continueEdit?.addEventListener("click", () => closeDialog(dom.shareDialog));
