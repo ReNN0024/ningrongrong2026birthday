@@ -169,10 +169,11 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .tip-card p { margin: 3px 0; color: #eee8e3; font-size: 8.8px; line-height: 1.45;  }
 
 .guide-footer { margin-top: auto; padding-top: 11px; }
-.progress-copy { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.progress-copy > span { font: 500 13px var(--sans); }
-.progress-copy strong { font: 400 13px var(--sans); color: var(--muted); }
-.progress-copy em { color: var(--gold-deep); font: 500 25px var(--sans); font-style: normal; }
+.desktop-progress { display: none; }
+.desktop-progress strong { font: 400 12px var(--sans); color: var(--muted); white-space: nowrap; }
+.desktop-progress em { color: var(--gold-deep); font: 500 18px var(--sans); font-style: normal; }
+.desktop-progress-track { flex: 1; height: 5px; border-radius: 999px; background: rgba(184, 138, 58, .16); overflow: hidden; }
+.desktop-progress-fill { width: 0%; height: 100%; border-radius: inherit; background: var(--gold); transition: width .22s ease; }
 .credits { padding-top: 11px; font-size: 8px; color: #8a8177; line-height: 1.6; }
 .credits > span { display: block; margin-bottom: 5px; color: var(--gold-deep); font: 600 8px var(--sans); letter-spacing: .18em; }
 .credits p { margin: 0; }
@@ -601,6 +602,19 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .steps { margin: 18px 0 0; }
   .axis-legend, .tip-card { margin: 0; }
   .guide-footer { margin: 0; padding: 0; }
+  .credits { padding-top: 0; border-top: 1px solid var(--line); }
+  .coordinate-frame { padding-bottom: 36px; }
+  .desktop-progress {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 16px;
+    z-index: 12;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    pointer-events: none;
+  }
   .drag-ghost > :not(img) { display: none !important; }
 }
 
