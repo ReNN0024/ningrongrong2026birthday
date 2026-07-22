@@ -9,7 +9,7 @@
   const isIOS = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   const placeholderColors = ["#caa7a2", "#cdbb83", "#9bb9bd", "#aabe91", "#c494aa", "#b7a58e", "#d5aa7c"];
-  const officialNames = ["远航", "夜", "心跳", "醇香", "代言", "心意", "昏晓", "幻蝶", "晨曦"];
+  const officialNames = ["远航", "暝夜", "心跳", "醇香", "代言", "心意", "昏晓", "幻蝶", "晨曦"];
   const slotForIndex = index => `${Math.floor(index / 4) + 1}_${index % 4 + 1}`;
   const logos = Array.from({ length: 41 }, (_, index) => {
     const slot = slotForIndex(index);
@@ -35,11 +35,13 @@
   const $$ = selector => [...document.querySelectorAll(selector)];
   const dom = {
     frame: $("#coordinateFrame"), world: $("#coordinateWorld"), placedLayer: $("#placedLayer"),
+    mobileInstruction: $("#mobileInstruction"), mobileGuideCompact: $("#mobileGuideCompact"), mobileGuideCollapseBtn: $("#mobileGuideCollapseBtn"),
     grid: $("#logoGrid"), scroll: $("#logoScroll"), library: $("#libraryPanel"), libraryHead: $("#libraryHead"),
     returnTarget: $("#returnTarget"), immersiveReturn: $("#immersiveReturn"), ghost: $("#dragGhost"),
     toolbar: $("#coordinateToolbar"), toolbarHandle: $("#toolbarHandle"), zoomValue: $("#zoomValue"),
     minimap: $("#viewportMinimap"), minimapViewport: $("#minimapViewport"),
-    guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
+    desktopProgressFill: $("#desktopProgressFill"),
+    guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), previewBackdrop: $("#previewBackdrop"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
     toastStack: $("#toastStack"), live: $("#liveRegion"), empty: $("#emptyState"),
     clearDialog: $("#clearDialog"), undo: $("#undoBtn"), redo: $("#redoBtn"), clear: $("#clearBtn")
   };
@@ -47,7 +49,7 @@
   const state = {
     placed: [], selectedId: null, filter: "all", guides: false,
     view: { scale: 1, panX: 0, panY: 0 }, toolbar: { x: 20, y: 8 },
-    undo: [], redo: [], previewId: null, immersive: false
+    undo: [], redo: [], previewId: null, immersive: false, mobileGuidePreference: "auto"
   };
   let saveTimer = 0;
   let press = null;
@@ -56,6 +58,8 @@
   let previewHideTimer = 0;
   let toolbarDrag = null;
   let minimapDrag = null;
+  let mobileGuideAutoHideTimer = 0;
+  let mobileGuideHideTimer = 0;
   let listMomentumFrame = 0;
   const stagePointers = new Map();
   let stageGesture = null;
@@ -128,20 +132,36 @@
     updateCounts();
     updateHistoryButtons();
     updateGuides();
+    updateMobileGuide();
   }
 
   function renderLibrary() {
     const placedIds = new Set(state.placed.map(item => item.id));
     const visible = logos.filter(item => state.filter === "all" || !placedIds.has(item.id));
-    dom.grid.innerHTML = visible.map((logo, index) => {
-      const placed = placedIds.has(logo.id);
-      const sequence = String(logos.indexOf(logo) + 1).padStart(2, "0");
-      const label = logo.placeholder ? `占位 Logo ${sequence}` : logo.name;
-      return `<button class="logo-card${placed ? " is-placed" : ""}${state.selectedId === logo.id ? " is-focused" : ""}" type="button" data-logo-id="${logo.id}" aria-label="${placed ? "定位已放置" : "放置"}${escapeHTML(label)}" aria-pressed="${state.selectedId === logo.id}">
-        <span class="logo-thumb">${mediaMarkup(logo, "", true)}</span><span>${escapeHTML(logo.name)}</span>
-      </button>`;
-    }).join("");
-    applyLibraryTouchMode();
+    const currentCards = dom.grid.querySelectorAll(".logo-card");
+    if (currentCards.length !== visible.length) {
+      dom.grid.innerHTML = visible.map((logo, index) => {
+        const placed = placedIds.has(logo.id);
+        const sequence = String(logos.indexOf(logo) + 1).padStart(2, "0");
+        const label = logo.placeholder ? `占位 Logo ${sequence}` : logo.name;
+        return `<button class="logo-card${placed ? " is-placed" : ""}${state.selectedId === logo.id ? " is-focused" : ""}" type="button" data-logo-id="${logo.id}" aria-label="${placed ? "定位已放置" : "放置"}${escapeHTML(label)}" aria-pressed="${state.selectedId === logo.id}">
+          <span class="logo-thumb">${mediaMarkup(logo, "", true)}</span><span>${escapeHTML(logo.name)}</span>
+        </button>`;
+      }).join("");
+      applyLibraryTouchMode();
+    } else {
+      currentCards.forEach(card => {
+        const id = card.dataset.logoId;
+        const placed = placedIds.has(id);
+        const logo = logoMap.get(id);
+        const sequence = String(logos.indexOf(logo) + 1).padStart(2, "0");
+        const label = logo.placeholder ? `占位 Logo ${sequence}` : logo.name;
+        card.classList.toggle("is-placed", placed);
+        card.classList.toggle("is-focused", state.selectedId === id);
+        card.setAttribute("aria-pressed", String(state.selectedId === id));
+        card.setAttribute("aria-label", `${placed ? "定位已放置" : "放置"}${escapeHTML(label)}`);
+      });
+    }
     dom.empty.hidden = visible.length > 0;
   }
 
@@ -155,7 +175,7 @@
 
   function getBaseLogoSize(frameSize) {
     if (isMobile()) {
-      return Math.min(54, Math.max(40, window.innerWidth * 0.13));
+      return Math.min(58, Math.max(46, window.innerWidth * 0.14));
     }
     return Math.min(62, Math.max(44, frameSize * 0.072));
   }
@@ -184,6 +204,7 @@
     $$('[data-total]').forEach(el => { el.textContent = String(logos.length); });
     $("#placedCountDesktop").textContent = String(placed).padStart(2, "0");
     $("#placedCountMobile").textContent = String(placed).padStart(2, "0");
+    if (dom.desktopProgressFill) dom.desktopProgressFill.style.width = `${Math.round((placed / logos.length) * 100)}%`;
     $("#unplacedCount").textContent = String(logos.length - placed);
     dom.clear.disabled = placed === 0;
   }
@@ -191,6 +212,34 @@
   function updateHistoryButtons() {
     dom.undo.disabled = state.undo.length === 0;
     dom.redo.disabled = state.redo.length === 0;
+  }
+
+  function updateMobileGuide() {
+    if (!dom.mobileInstruction) return;
+    const placed = state.placed.length;
+    const visibleMode = placed > 0 ? "compact" : "full";
+    clearTimeout(mobileGuideAutoHideTimer);
+    clearTimeout(mobileGuideHideTimer);
+
+    if (state.mobileGuidePreference === "hidden") {
+      dom.mobileInstruction.hidden = false;
+      dom.mobileInstruction.dataset.mode = visibleMode;
+      if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", String(visibleMode !== "compact"));
+      dom.mobileInstruction.classList.add("is-hiding");
+      mobileGuideHideTimer = window.setTimeout(() => { dom.mobileInstruction.hidden = true; }, 460);
+      return;
+    }
+
+    dom.mobileInstruction.classList.remove("is-hiding");
+    dom.mobileInstruction.hidden = false;
+    dom.mobileInstruction.dataset.mode = visibleMode;
+    if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", String(visibleMode !== "compact"));
+    if (visibleMode === "compact" && placed >= 3) mobileGuideAutoHideTimer = window.setTimeout(() => setMobileGuidePreference("hidden"), 3200);
+  }
+
+  function setMobileGuidePreference(preference) {
+    state.mobileGuidePreference = preference === "hidden" ? "hidden" : "auto";
+    updateMobileGuide();
   }
 
   function selectLogo(id) {
@@ -209,7 +258,7 @@
     mutatePlaced(() => {
       state.placed.push({ id, x: 0, y: 0, z: nextZ() });
       state.selectedId = id;
-    }, `${logoMap.get(id).name} 已放到坐标原点`);
+    });
     announce(`${logoMap.get(id).name}已放置`);
     markOverlap(id);
   }
@@ -226,14 +275,13 @@
     clampView();
     applyView();
     renderAll();
-    toast(`已定位 ${logoMap.get(id).name}`);
   }
 
   function removePlaced(id) {
     mutatePlaced(() => {
       state.placed = state.placed.filter(item => item.id !== id);
       if (state.selectedId === id) state.selectedId = null;
-    }, `${logoMap.get(id).name} 已放回待选区`);
+    });
     closePreview();
   }
 
@@ -246,7 +294,7 @@
         state.placed.push({ id, x: point.x, y: point.y, z: nextZ() });
       }
       state.selectedId = id;
-    }, isNew ? `${logoMap.get(id).name} 放置成功` : "");
+    });
     markOverlap(id);
   }
 
@@ -258,7 +306,7 @@
     requestAnimationFrame(() => {
       const el = dom.placedLayer.querySelector(`[data-logo-id="${id}"]`);
       el?.classList.add("is-overlap");
-      toast("此处已有碎片，已将当前 Logo 置于上层");
+      toast("已叠放在上层");
     });
   }
 
@@ -267,14 +315,14 @@
     state.redo.push(clonePlaced());
     state.placed = state.undo.pop();
     if (!state.placed.some(item => item.id === state.selectedId)) state.selectedId = null;
-    renderAll(); scheduleSave(); closePreview(); toast("已撤销上一步");
+    renderAll(); scheduleSave(); closePreview();
   }
 
   function redo() {
     if (!state.redo.length) return;
     state.undo.push(clonePlaced());
     state.placed = state.redo.pop();
-    renderAll(); scheduleSave(); closePreview(); toast("已重做下一步");
+    renderAll(); scheduleSave(); closePreview();
   }
 
   function clearAll() {
@@ -414,7 +462,7 @@
     const inFrame = isPointInRect(event.clientX, event.clientY, frameRect);
     const inReturn = current.source === "placed" && isPointInRect(event.clientX, event.clientY, returnRect);
     cleanupDrag();
-    if (cancelled) { toast("操作已取消"); return; }
+    if (cancelled) { return; }
     if (inReturn) { removePlaced(current.id); return; }
     if (inFrame) {
       movePlaced(current.id, pointToLogical(event.clientX, event.clientY), current.source === "library");
@@ -564,6 +612,7 @@
       ? `<img src="${logo.detail}" alt="${escapeHTML(logo.name)}大图">`
       : `<div class="preview-placeholder" style="background:${logo.color}"></div>`;
     dom.preview.hidden = false;
+    dom.previewBackdrop.classList.add("is-visible");
     const anchorEl = anchor?.closest?.(".placed-logo") || dom.placedLayer.querySelector(`[data-logo-id="${id}"]`);
     const previewImage = dom.previewMedia.querySelector("img");
     const showPreview = () => {
@@ -596,6 +645,7 @@
   function closePreview() {
     clearTimeout(hoverTimer); clearTimeout(previewHideTimer);
     dom.preview.classList.remove("is-visible");
+    dom.previewBackdrop.classList.remove("is-visible");
     state.previewId = null;
     window.setTimeout(() => { if (!state.previewId) dom.preview.hidden = true; }, 160);
   }
@@ -661,8 +711,11 @@
       if (wasBlankTap && state.selectedId) {
         state.selectedId = null;
         closePreview();
-        renderLibrary();
-        renderPlaced();
+        dom.grid.querySelectorAll(".logo-card").forEach(card => {
+          card.classList.remove("is-focused");
+          card.setAttribute("aria-pressed", "false");
+        });
+        dom.placedLayer.querySelectorAll(".placed-logo").forEach(el => el.classList.remove("is-selected"));
         updateGuides();
       }
     } else if (stagePointers.size === 1) {
@@ -801,8 +854,11 @@
     document.addEventListener("pointerup", onGlobalPointerUp);
     document.addEventListener("pointercancel", onGlobalPointerCancel);
     document.addEventListener("pointerdown", event => {
-      if (isMobile() && state.previewId && !event.target.closest(".placed-logo, .preview-popover")) closePreview();
+      if (isMobile() && state.previewId && !event.target.closest(".placed-logo, .preview-popover, .preview-backdrop")) closePreview();
     }, true);
+    dom.previewBackdrop.addEventListener("click", closePreview);
+    dom.preview.addEventListener("click", closePreview);
+    dom.mobileGuideCollapseBtn?.addEventListener("click", () => setMobileGuidePreference("hidden"));
 
     dom.frame.addEventListener("pointerdown", startStageGesture);
     dom.frame.addEventListener("pointermove", moveStageGesture, { passive: false });

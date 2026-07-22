@@ -169,10 +169,11 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .tip-card p { margin: 3px 0; color: #eee8e3; font-size: 8.8px; line-height: 1.45;  }
 
 .guide-footer { margin-top: auto; padding-top: 11px; }
-.progress-copy { display: flex; justify-content: space-between; align-items: baseline; padding: 14px 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
-.progress-copy > span { font: 500 13px var(--sans); }
-.progress-copy strong { font: 400 13px var(--sans); color: var(--muted); }
-.progress-copy em { color: var(--gold-deep); font: 500 25px var(--sans); font-style: normal; }
+.desktop-progress { display: none; }
+.desktop-progress strong { font: 400 12px var(--sans); color: var(--muted); white-space: nowrap; }
+.desktop-progress em { color: var(--gold-deep); font: 500 18px var(--sans); font-style: normal; }
+.desktop-progress-track { flex: 1; height: 5px; border-radius: 999px; background: rgba(184, 138, 58, .16); overflow: hidden; }
+.desktop-progress-fill { width: 0%; height: 100%; border-radius: inherit; background: var(--gold); transition: width .22s ease; }
 .credits { padding-top: 11px; font-size: 8px; color: #8a8177; line-height: 1.6; }
 .credits > span { display: block; margin-bottom: 5px; color: var(--gold-deep); font: 600 8px var(--sans); letter-spacing: .18em; }
 .credits p { margin: 0; }
@@ -371,6 +372,27 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .logo-card.is-focused .logo-thumb { filter: drop-shadow(0 0 5px rgba(166,124,43,.7)); }
 .empty-state { color: var(--muted); text-align: center; padding: 50px 16px; font: 13px var(--sans); }
 
+.preview-backdrop {
+  display: none;
+}
+
+@media (max-width: 1023px) {
+  .preview-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    z-index: 199;
+    background: rgba(45, 40, 35, .4);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .15s ease;
+  }
+  .preview-backdrop.is-visible {
+    opacity: 1;
+    pointer-events: auto;
+  }
+}
+
 .preview-popover {
   position: fixed;
   z-index: 200;
@@ -445,28 +467,85 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .coordinate-main { height: auto; display: block; }
   .coordinate-editor { display: block; }
   .coordinate-side-tools { display: block; }
+  .mobile-instruction[hidden] { display: none !important; }
   .mobile-instruction {
-    --frame-radius: 16px;
+    --frame-radius: 18px;
     width: calc(100% - 24px);
     max-width: 342px;
-    min-height: 46px;
+    min-height: 38px;
     margin: 0 auto 8px;
-    padding: 8px 12px;
+    padding: 4px 8px 4px 12px;
+    display: block;
+    overflow: hidden;
+    background:
+      linear-gradient(135deg, rgba(255, 253, 247, .98), rgba(250, 241, 225, .9)),
+      rgba(255, 253, 244, .95);
+    box-shadow: 0 10px 26px rgba(103, 75, 31, .07);
+    opacity: 1;
+    transform: translateY(0);
+    transition:
+      opacity .42s ease,
+      transform .42s ease,
+      min-height .42s ease,
+      margin .42s ease,
+      padding .42s ease;
+  }
+  .mobile-instruction.is-hiding {
+    min-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    opacity: 0;
+    transform: translateY(-4px);
+    pointer-events: none;
+  }
+  .mobile-guide-full {
+    min-height: 30px;
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     align-items: center;
     gap: 3px;
-    overflow: hidden;
-    background: rgba(255, 253, 244, .95);
   }
-  .mobile-guide-step { min-width: 0; display: flex; gap: 6px; align-items: center; }
-  .mobile-guide-step > span { width: 24px; height: 24px; flex: 0 0 24px; display: grid; place-items: center; border-radius: 50%; font: 700 10px var(--sans); }
-  .mobile-guide-step p { min-width: 0; margin: 0; line-height: 1.2; white-space: nowrap; }
-  .mobile-guide-step b { display: block; color: #563d31; font: 700 10px var(--sans); }
-  .mobile-guide-step small { display: block; margin-top: 3px; color: #a0806c; font: 400 7px var(--sans); }
+  .mobile-guide-step { min-width: 0; min-height: 30px; display: flex; gap: 5px; align-items: center; }
+  .mobile-guide-step > span { width: 22px; height: 22px; flex: 0 0 22px; display: grid; place-items: center; border-radius: 50%; font: 700 9px/1 var(--sans); }
+  .mobile-guide-step p { min-width: 0; margin: 0; line-height: 1.08; white-space: nowrap; transform: translateY(1px); }
+  .mobile-guide-step b { display: block; color: #563d31; font: 700 9px/1.05 var(--sans); }
+  .mobile-guide-step small { display: block; margin-top: 2px; color: #a0806c; font: 400 6px/1 var(--sans); }
   .guide-select > span { color: #8e576d; background: #f1d9e4; }
   .guide-place > span { color: #8e6b25; background: #f6e4a8; }
   .guide-adjust > span { color: #52724c; background: #ddebcf; }
+  .mobile-guide-compact {
+    display: none;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 30px;
+    color: #624d3f;
+  }
+  .mobile-guide-compact span {
+    min-width: 0;
+    padding-left: 4px;
+    font: 600 11px/1.2 var(--sans);
+    letter-spacing: .06em;
+    white-space: nowrap;
+  }
+  .mobile-guide-compact button {
+    flex: 0 0 auto;
+    height: 26px;
+    padding: 0 11px;
+    border: 1px solid rgba(184, 138, 58, .26);
+    border-radius: 999px;
+    color: #8e7137;
+    background: rgba(255, 250, 241, .72);
+    font: 600 10px/1 var(--sans);
+    letter-spacing: .08em;
+  }
+  .mobile-instruction[data-mode="compact"] {
+    border-color: rgba(184, 138, 58, .5);
+    border-radius: 999px;
+  }
+  .mobile-instruction[data-mode="compact"] .mobile-guide-full { display: none; }
+  .mobile-instruction[data-mode="compact"] .mobile-guide-compact { display: flex; }
   .coordinate-frame { width: calc(100% - 24px); max-width: 342px; aspect-ratio: 1; margin-inline: auto; }
   .quadrant-label strong { font-size: 9px; }.quadrant-label span { font-size: 6px; }
   .axis-copy strong { font-size: 11px; }.axis-copy span { font-size: 6px; }
@@ -497,8 +576,17 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .mobile-progress strong { font-weight: 400; color: var(--muted); }
   .mobile-progress em { font: 500 17px var(--sans); color: var(--gold-deep); font-style: normal; }
   .preview-popover { width: max-content; max-width: calc(100vw - 20px); padding: 7px; border-radius: 14px; pointer-events: none; }
+  .preview-popover.is-visible { pointer-events: auto; cursor: pointer; }
   .preview-popover > div { border-radius: 9px; }
   .preview-popover img { max-width: min(64vw, 245px); max-height: min(62vh, 420px); }
+
+  /* 移动端扩大已放置 Logo 的透明点击热区，不改变视觉占位 */
+  .placed-logo::after {
+    content: "";
+    position: absolute;
+    inset: -10px;
+  }
+
   .drag-ghost { width: 54px; height: 54px; }
   body.is-immersive .app-shell { padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); }
   body.is-immersive .workspace { width: 100%; height: calc(100dvh - max(16px, env(safe-area-inset-top) + env(safe-area-inset-bottom))); display: flex; flex-direction: column; justify-content: center; gap: 8px; }
@@ -571,17 +659,37 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .steps { margin: 18px 0 0; }
   .axis-legend, .tip-card { margin: 0; }
   .guide-footer { margin: 0; padding: 0; }
+  .credits { padding-top: 0; border-top: 1px solid var(--line); }
+  .coordinate-frame { padding-bottom: 36px; }
+  .axis-y { top: 13%; bottom: 13%; }
+  .guide-line-y { top: 13%; bottom: 13%; }
+  .axis-top { top: 8%; }
+  .axis-bottom { bottom: 8%; }
+  .desktop-progress {
+    position: absolute;
+    left: 22px;
+    right: 22px;
+    bottom: 16px;
+    z-index: 12;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    pointer-events: none;
+  }
   .drag-ghost > :not(img) { display: none !important; }
 }
 
 @media (max-width: 370px) {
   .site-header { margin-inline: 3px; }
   .mobile-credits { display: flex; flex-basis: 43%; font-size: 5.5px; }
-  .mobile-instruction { grid-template-columns: repeat(3, minmax(0, 1fr)); padding-inline: 10px; gap: 2px; }
+  .mobile-instruction { padding-inline: 9px; }
+  .mobile-guide-full { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 2px; }
   .mobile-guide-step { gap: 4px; }
-  .mobile-guide-step > span { width: 21px; height: 21px; flex-basis: 21px; }
-  .mobile-guide-step b { font-size: 9px; }
-  .mobile-guide-step small { font-size: 6px; }
+  .mobile-guide-step > span { width: 20px; height: 20px; flex-basis: 20px; font-size: 8px; }
+  .mobile-guide-step b { font-size: 8px; }
+  .mobile-guide-step small { font-size: 5.5px; }
+  .mobile-guide-compact span { font-size: 10px; letter-spacing: .04em; }
+  .mobile-guide-compact button { padding-inline: 9px; }
   .history-actions { gap: 2px; }
   .history-actions button { width: 46px; padding-inline: 3px; }
   .history-actions .clear-btn { width: 36px; min-width: 36px; }

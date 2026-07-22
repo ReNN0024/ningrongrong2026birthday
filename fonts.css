@@ -247,7 +247,7 @@
    ========================= */
 
 .steps li::before,
-.progress-copy em,
+.desktop-progress em,
 .mobile-progress em,
 .mobile-guide-step > span,
 .zoom-value {
