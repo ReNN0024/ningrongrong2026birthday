@@ -170,7 +170,7 @@
 
   function getBaseLogoSize(frameSize) {
     if (isMobile()) {
-      return Math.min(54, Math.max(40, window.innerWidth * 0.13));
+      return Math.min(58, Math.max(46, window.innerWidth * 0.14));
     }
     return Math.min(62, Math.max(44, frameSize * 0.072));
   }

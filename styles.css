@@ -521,6 +521,14 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .preview-popover.is-visible { pointer-events: auto; cursor: pointer; }
   .preview-popover > div { border-radius: 9px; }
   .preview-popover img { max-width: min(64vw, 245px); max-height: min(62vh, 420px); }
+
+  /* 移动端扩大已放置 Logo 的透明点击热区，不改变视觉占位 */
+  .placed-logo::after {
+    content: "";
+    position: absolute;
+    inset: -10px;
+  }
+
   .drag-ghost { width: 54px; height: 54px; }
   body.is-immersive .app-shell { padding: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)); }
   body.is-immersive .workspace { width: 100%; height: calc(100dvh - max(16px, env(safe-area-inset-top) + env(safe-area-inset-bottom))); display: flex; flex-direction: column; justify-content: center; gap: 8px; }
