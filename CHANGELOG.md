@@ -4,6 +4,18 @@
 
 ---
 
+## [1.7.0] - 2026-07-23
+
+### Changed — by Snjór
+- 主倾向定义更新：为四个字母赋予完整单词，最终结果输出时大写强调
+  - R = 荆棘 × 寻常｜**R**estrained
+  - O = 荆棘 × 不忘｜**O**bdurate
+  - N = 繁花 × 不忘｜**N**uminous
+  - G = 繁花 × 寻常｜**G**entled
+- 更新 RESULT_REPLACEMENT_GUIDE.md 文档，反映新的主倾向定义
+- 更新 personality-results.js，结果 key 统一使用大写字母（R/O/N/G）
+- 更新 share-card.js，QUADRANTS 和 CARD_STYLES 统一使用大写字母
+
 ## [1.6.3] - 2026-07-23
 
 ### Changed — by Snjór

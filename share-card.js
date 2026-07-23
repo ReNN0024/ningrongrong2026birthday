@@ -5,17 +5,17 @@
   const CARD_HEIGHT = 1440;
   const TEMPLATE_SCALE = 4 / 3;
   const QUADRANTS = {
-    r: { label: "荆棘 × 不忘", order: 0 },
-    o: { label: "繁花 × 不忘", order: 1 },
-    n: { label: "荆棘 × 寻常", order: 2 },
-    g: { label: "繁花 × 寻常", order: 3 }
+    R: { label: "荆棘 × 寻常", order: 0 },
+    O: { label: "荆棘 × 不忘", order: 1 },
+    N: { label: "繁花 × 不忘", order: 2 },
+    G: { label: "繁花 × 寻常", order: 3 }
   };
   const DISPLAY_TENDENCY_KEYS = {
     flower: "BLOOM",
     daily: "HEARTH"
   };
   const CARD_STYLES = {
-    r: {
+    R: {
       base: "#F8EAEC", accent: "#B95F72", axis: "#4A3A40", shadow: "#42242B", glass: 0.28, ruleOpacity: 0.4,
       kicker: "#A86675", title: "#3F3036", desc: "#69565D", footer: "#9E7380", align: "left",
       figure: { src: "assets/share-card-figures/r-figure.png", x: -19, y: -135, size: 1215, opacity: 0.5 },
@@ -27,7 +27,7 @@
         { x: 460, y: 850, rx: 440, ry: 360, color: "#CFE8E7", opacity: 0.55 }
       ]
     },
-    o: {
+    O: {
       base: "#F9F0D4", accent: "#A87425", axis: "#5D4B32", shadow: "#4D381A", glass: 0.27, ruleOpacity: 0.4,
       kicker: "#9E722B", title: "#4B3922", desc: "#6F5A35", footer: "#9C7B36", align: "right",
       figure: { src: "assets/share-card-figures/o-figure.png", x: 0, y: -36, size: 1105, opacity: 0.5 },
@@ -39,7 +39,7 @@
         { x: 578, y: 850, rx: 380, ry: 300, color: "#F6C8B2", opacity: 0.44 }
       ]
     },
-    n: {
+    N: {
       base: "#E7F2F8", accent: "#3D7FA4", axis: "#2F4D63", shadow: "#1F384D", glass: 0.28, ruleOpacity: 0.38,
       kicker: "#407C9A", title: "#253847", desc: "#486170", footer: "#527C94", align: "left-footer-right",
       figure: { src: "assets/share-card-figures/n-figure.png", x: 0, y: -55, size: 1160, opacity: 0.5 },
@@ -51,7 +51,7 @@
         { x: 188, y: 190, rx: 360, ry: 300, color: "#F7D8CE", opacity: 0.42 }
       ]
     },
-    g: {
+    G: {
       base: "#EAF5EA", accent: "#4D8B59", axis: "#34523A", shadow: "#1F3D24", glass: 0.27, ruleOpacity: 0.38,
       kicker: "#4E8758", title: "#253C2B", desc: "#4C624F", footer: "#638C67", align: "left",
       figure: { src: "assets/share-card-figures/g-figure.png", x: -43, y: -108, size: 1247, opacity: 0.5 },
@@ -197,7 +197,7 @@
 
   async function buildSVG({ placed, logos, activityTitle, shareUrl }) {
     const personality = calculatePersonality(placed);
-    const style = CARD_STYLES[personality.main] || CARD_STYLES.r;
+    const style = CARD_STYLES[personality.main] || CARD_STYLES.R;
     const result = personality.result;
     const descLines = wrapText(result.description, 14);
     const footer = `${activityTitle} / ${shareUrl}`;
