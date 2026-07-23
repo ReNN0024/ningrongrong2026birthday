@@ -578,6 +578,7 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .coordinate-toolbar button { position: relative; width: 34px; height: 32px; border-radius: 6px; font-size: 15px; }
   .coordinate-toolbar button:active { opacity: 1; }
   .coordinate-toolbar button::after { content: ""; position: absolute; inset: -2px 0; }
+  .coordinate-toolbar #fullscreenBtn { display: none; }
   .coordinate-toolbar .toolbar-handle { width: 14px; height: 32px; display: grid; grid-template-columns: repeat(2, 2px); grid-auto-rows: 2px; place-content: center; gap: 3px; cursor: grab; border-right: 1px solid var(--line); border-radius: 0; padding: 0 3px 0 0; }
   .toolbar-handle i { width: 2px; height: 2px; }
   .coordinate-toolbar .guide-icon, .coordinate-toolbar .fullscreen-icon { width: 15px; height: 15px; }
