@@ -220,7 +220,7 @@
     const restLetters = mainWord.slice(1);
     const kickerTextPart1 = `${restLetters}-${displayTendency}`;
     // 花体字字体栈：Snell Roundhand (iOS/macOS), Apple Chancery (macOS), Segoe Script (Windows), cursive (通用)
-    const scriptFont = '"Snell Roundhand", "Apple Chancery", "Segoe Script", "Dancing Script", cursive';
+    const scriptFont = 'Snell Roundhand, Apple Chancery, Segoe Script, Dancing Script, cursive';
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
       <defs>
