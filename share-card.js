@@ -10,6 +10,10 @@
     n: { label: "荆棘 × 寻常", order: 2 },
     g: { label: "繁花 × 寻常", order: 3 }
   };
+  const DISPLAY_TENDENCY_KEYS = {
+    flower: "BLOOM",
+    daily: "HEARTH"
+  };
   const CARD_STYLES = {
     r: {
       base: "#F8EAEC", accent: "#B95F72", axis: "#4A3A40", shadow: "#42242B", glass: 0.28, markOpacity: 0.9, ruleOpacity: 0.4,
@@ -218,7 +222,8 @@
     const logoLayer = await buildLogoLayer(placed, logos, style);
     const figureDataURL = await imageToDataURL(style.figure.src);
     const anchor = textAnchorFor(style, "title");
-    const kickerText = personality.key.toUpperCase();
+    const displayTendency = DISPLAY_TENDENCY_KEYS[personality.tendency] || personality.tendency.toUpperCase();
+    const kickerText = `${personality.main.toUpperCase()}-${displayTendency}`;
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
       <defs>
