@@ -61,6 +61,7 @@
   let toolbarDrag = null;
   let minimapDrag = null;
   let mobileGuideAutoHideTimer = 0;
+  let mobileGuideCollapseTimer = 0;
   let listMomentumFrame = 0;
   let toastEl = null;
   let toastTimer = 0;
@@ -225,6 +226,10 @@
     dom.redo.disabled = state.redo.length === 0;
   }
 
+  function isGuideMotionLocked() {
+    return Boolean(drag || press?.longReady || document.body.classList.contains("is-dragging-placed"));
+  }
+
   function updateMobileGuide() {
     if (!dom.mobileInstruction) return;
     const placed = state.placed.length;
@@ -236,11 +241,23 @@
       dom.mobileInstruction.dataset.mode = visibleMode;
       dom.mobileInstruction.setAttribute("aria-hidden", "true");
       if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", "true");
+      const alreadyCollapsed = dom.mobileInstruction.classList.contains("is-collapsed");
+      const locked = isGuideMotionLocked() && !alreadyCollapsed;
       dom.mobileInstruction.classList.add("is-hiding");
+      dom.mobileInstruction.classList.toggle("is-locked", locked);
+      if (!alreadyCollapsed && !locked) {
+        clearTimeout(mobileGuideCollapseTimer);
+        mobileGuideCollapseTimer = window.setTimeout(() => {
+          dom.mobileInstruction?.classList.remove("is-locked");
+          dom.mobileInstruction?.classList.add("is-collapsed");
+          requestAnimationFrame(() => { clampView(); applyView(); resetToolbarIfNeeded(); });
+        }, 260);
+      }
       return;
     }
 
-    dom.mobileInstruction.classList.remove("is-hiding");
+    clearTimeout(mobileGuideCollapseTimer);
+    dom.mobileInstruction.classList.remove("is-hiding", "is-collapsed", "is-locked");
     dom.mobileInstruction.hidden = false;
     dom.mobileInstruction.removeAttribute("aria-hidden");
     dom.mobileInstruction.dataset.mode = visibleMode;
@@ -249,8 +266,20 @@
   }
 
   function setMobileGuidePreference(preference) {
-    state.mobileGuidePreference = preference === "hidden" ? "hidden" : "auto";
+    const nextPreference = preference === "hidden" ? "hidden" : "auto";
+    state.mobileGuidePreference = nextPreference;
+    if (nextPreference !== "hidden") {
+      updateMobileGuide();
+      return;
+    }
     updateMobileGuide();
+    clearTimeout(mobileGuideCollapseTimer);
+    if (isGuideMotionLocked()) return;
+    mobileGuideCollapseTimer = window.setTimeout(() => {
+      dom.mobileInstruction?.classList.remove("is-locked");
+      dom.mobileInstruction?.classList.add("is-collapsed");
+      requestAnimationFrame(() => { clampView(); applyView(); resetToolbarIfNeeded(); });
+    }, 260);
   }
 
   function selectLogo(id) {
@@ -606,6 +635,7 @@
     dom.ghost.innerHTML = mediaMarkup(logo);
     dom.ghost.classList.add("is-active");
     updateDrag(event.clientX, event.clientY);
+    document.body.classList.add("is-logo-dragging");
     if (source === "placed") {
       dom.library.classList.add("is-returning");
       document.body.classList.add("is-dragging-placed");
@@ -655,7 +685,7 @@
     dom.library.classList.remove("is-returning");
     dom.returnTarget.classList.remove("is-over");
     dom.immersiveReturn.classList.remove("is-over");
-    document.body.classList.remove("is-dragging-placed");
+    document.body.classList.remove("is-logo-dragging", "is-dragging-placed");
     drag = null;
   }
 

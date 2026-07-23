@@ -497,12 +497,30 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
     box-shadow: 0 10px 26px rgba(103, 75, 31, .07);
     opacity: 1;
     transform: translateY(0);
-    transition: opacity .24s ease, transform .24s ease;
+    transition: height .42s ease, min-height .42s ease, margin .42s ease, padding .42s ease, border-width .42s ease, opacity .26s ease, transform .26s ease;
   }
   .mobile-instruction.is-hiding {
     opacity: 0;
     transform: translateY(-4px);
     pointer-events: none;
+  }
+  .mobile-instruction.is-collapsed {
+    height: 0;
+    min-height: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    border-width: 0;
+    box-shadow: none;
+  }
+  .mobile-instruction.is-locked {
+    height: 40px;
+    min-height: 40px;
+    margin-bottom: 8px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+    border-width: 1.6px;
+    transition: opacity .18s ease, transform .18s ease;
   }
   .mobile-guide-full {
     min-height: 30px;
