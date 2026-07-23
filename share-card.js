@@ -208,6 +208,25 @@
     });
   }
 
+  function dataURLToBlob(dataURL) {
+    const [header, payload] = dataURL.split(",");
+    const mime = /data:([^;]+)/.exec(header)?.[1] || "image/png";
+    const binary = atob(payload || "");
+    const bytes = new Uint8Array(binary.length);
+    for (let index = 0; index < binary.length; index += 1) bytes[index] = binary.charCodeAt(index);
+    return new Blob([bytes], { type: mime });
+  }
+
+  function canvasToBlob(canvas) {
+    return new Promise(resolve => {
+      if (canvas.toBlob) {
+        canvas.toBlob(blob => resolve(blob || dataURLToBlob(canvas.toDataURL("image/png"))), "image/png");
+        return;
+      }
+      resolve(dataURLToBlob(canvas.toDataURL("image/png")));
+    });
+  }
+
   async function generateShareImage(options) {
     const svg = await buildSVG(options);
     const svgURL = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml;charset=utf-8" }));
@@ -218,7 +237,9 @@
       canvas.height = CARD_HEIGHT;
       const context = canvas.getContext("2d");
       context.drawImage(image, 0, 0);
-      return { dataURL: canvas.toDataURL("image/png"), svg, personality: calculatePersonality(options.placed) };
+      const dataURL = canvas.toDataURL("image/png");
+      const blob = await canvasToBlob(canvas);
+      return { dataURL, blob, svg, personality: calculatePersonality(options.placed) };
     } finally {
       URL.revokeObjectURL(svgURL);
     }

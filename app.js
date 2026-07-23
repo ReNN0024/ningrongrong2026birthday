@@ -69,6 +69,8 @@
   let lastToastMessage = "";
   let lastToastType = "";
   let lastToastAt = 0;
+  let shareResult = null;
+  const shareFileName = "与我周旋久-我的故事坐标.png";
   const stagePointers = new Map();
   let stageGesture = null;
 
@@ -406,27 +408,116 @@
     else { dialog.removeAttribute("open"); dialog.classList.remove("is-fallback-open"); }
   }
 
+  function updateShareSaveButton(ready = false) {
+    if (!dom.downloadShare) return;
+    if (!ready || !shareResult?.dataURL) {
+      dom.downloadShare.removeAttribute("href");
+      dom.downloadShare.setAttribute("aria-disabled", "true");
+      return;
+    }
+    dom.downloadShare.href = shareResult.dataURL;
+    dom.downloadShare.download = shareFileName;
+    dom.downloadShare.setAttribute("aria-disabled", "false");
+  }
+
+  function supportsFileShare(file) {
+    if (!navigator.canShare || !navigator.share || !file) return false;
+    try {
+      return navigator.canShare({ files: [file] });
+    } catch (_) {
+      return false;
+    }
+  }
+
+  function openImageFallback() {
+    if (!shareResult?.dataURL) return;
+    const win = window.open("", "_blank");
+    if (!win) {
+      toast("请长按预览图保存到相册", "", { key: "share-long-press-save", dedupe: 1600, duration: 2600 });
+      return;
+    }
+    const doc = win.document;
+    doc.title = shareFileName;
+    doc.body.style.margin = "0";
+    doc.body.style.minHeight = "100vh";
+    doc.body.style.display = "grid";
+    doc.body.style.placeItems = "center";
+    doc.body.style.background = "#f7f1e7";
+    doc.body.style.color = "#453f3a";
+    doc.body.style.font = "14px -apple-system,BlinkMacSystemFont,sans-serif";
+    const meta = doc.createElement("meta");
+    meta.name = "viewport";
+    meta.content = "width=device-width,initial-scale=1";
+    doc.head.append(meta);
+    const main = doc.createElement("main");
+    main.style.width = "min(100vw, 720px)";
+    main.style.padding = "16px";
+    main.style.textAlign = "center";
+    const image = doc.createElement("img");
+    image.src = shareResult.dataURL;
+    image.alt = "宁荣荣与我周旋久结果图";
+    image.style.display = "block";
+    image.style.width = "100%";
+    image.style.height = "auto";
+    const tip = doc.createElement("p");
+    tip.textContent = "长按图片，选择“保存到照片”。";
+    tip.style.margin = "12px 0 0";
+    tip.style.lineHeight = "1.7";
+    main.append(image, tip);
+    doc.body.append(main);
+  }
+
+  async function handleShareSave(event) {
+    if (!shareResult?.dataURL) {
+      event.preventDefault();
+      return toast("结果图还在生成中", "", { key: "share-not-generated", dedupe: 1200 });
+    }
+
+    if (shareResult.file && supportsFileShare(shareResult.file)) {
+      event.preventDefault();
+      try {
+        await navigator.share({ files: [shareResult.file], title: "宁荣荣·与我周旋久", text: "保存我的故事坐标" });
+        toast("可在分享面板中选择保存到相册", "", { key: "share-sheet-opened", dedupe: 1600, duration: 2400 });
+      } catch (error) {
+        if (error?.name === "AbortError") return;
+        openImageFallback();
+      }
+      return;
+    }
+
+    if (isIOS) {
+      event.preventDefault();
+      openImageFallback();
+      return;
+    }
+
+    dom.downloadShare.href = shareResult.dataURL;
+  }
+
   async function generateShareResult() {
     if (!window.ShareCard) return toast("结果图生成器未加载", "error", { key: "share-generator-missing" });
     if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上 Logo 后再生成坐标`, "", { key: "share-not-ready", dedupe: 1200 });
     openDialog(dom.shareDialog);
+    shareResult = null;
     dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
-    dom.downloadShare.removeAttribute("href");
-    dom.downloadShare.setAttribute("aria-disabled", "true");
+    updateShareSaveButton(false);
     try {
       const personality = window.ShareCard.calculatePersonality(state.placed);
-      const { dataURL } = await window.ShareCard.generateShareImage({
+      const { dataURL, blob } = await window.ShareCard.generateShareImage({
         placed: state.placed,
         logos,
         activityTitle: "宁荣荣·与我周旋久",
         subtitle: `${personality.result.name}·${personality.key}`,
         shareUrl: "ningrr.fun"
       });
+      const file = blob ? new File([blob], shareFileName, { type: "image/png" }) : null;
+      shareResult = { dataURL, blob, file };
       dom.sharePreview.innerHTML = `<img src="${dataURL}" alt="宁荣荣与我周旋久结果图">`;
-      dom.downloadShare.href = dataURL;
-      dom.downloadShare.setAttribute("aria-disabled", "false");
+      updateShareSaveButton(true);
     } catch (error) {
+      shareResult = null;
       dom.sharePreview.innerHTML = "<span>生成失败，请稍后再试</span>";
+      updateShareSaveButton(false);
       toast("结果图生成失败，请重试", "error", { key: "share-generation-failed" });
     }
   }
@@ -997,6 +1088,7 @@
     dom.preview.addEventListener("click", closePreview);
     dom.mobileGuideCollapseBtn?.addEventListener("click", () => setMobileGuidePreference("hidden"));
     dom.shareTrigger?.addEventListener("click", generateShareResult);
+    dom.downloadShare?.addEventListener("click", handleShareSave);
     dom.regenerateShare?.addEventListener("click", generateShareResult);
     dom.continueEdit?.addEventListener("click", () => closeDialog(dom.shareDialog));
     dom.shareClose?.addEventListener("click", () => closeDialog(dom.shareDialog));
