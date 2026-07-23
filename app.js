@@ -620,7 +620,11 @@
 
   function onGlobalPointerUp(event) {
     if (toolbarDrag?.pointerId === event.pointerId) {
-      toolbarDrag = null; scheduleSave(); return;
+      dom.toolbar.classList.remove("is-dragging");
+      toolbarDrag = null;
+      snapToolbarToEdge();
+      scheduleSave();
+      return;
     }
     if (drag?.pointerId === event.pointerId) { finishDrag(event); return; }
     if (!press || press.pointerId !== event.pointerId) return;
@@ -645,7 +649,10 @@
     press?.element?.classList.remove("is-holding", "is-drag-ready");
     if (drag?.pointerId === event.pointerId) finishDrag(event, true);
     if (press?.pointerId === event.pointerId) press = null;
-    if (toolbarDrag?.pointerId === event.pointerId) toolbarDrag = null;
+    if (toolbarDrag?.pointerId === event.pointerId) {
+      dom.toolbar.classList.remove("is-dragging");
+      toolbarDrag = null;
+    }
   }
 
   function openPreview(id, anchor) {
@@ -779,6 +786,53 @@
     state.toolbar.y = Math.max(frameBottomOffset + 6, Math.min(frameBottomOffset + frame.height - tool.height - 6, y));
     dom.toolbar.style.left = `${state.toolbar.x}px`;
     dom.toolbar.style.bottom = `${state.toolbar.y}px`;
+  }
+
+  function snapToolbarToEdge() {
+    if (!isMobile()) return;
+    const frame = dom.frame.getBoundingClientRect();
+    const tool = dom.toolbar.getBoundingClientRect();
+    const host = dom.toolbar.offsetParent?.getBoundingClientRect() || frame;
+    const frameOffsetX = frame.left - host.left;
+    const frameBottomOffset = host.bottom - frame.bottom;
+    const inset = 8;
+    const left = frameOffsetX + inset;
+    const right = frameOffsetX + frame.width - tool.width - inset;
+    const bottom = frameBottomOffset + inset;
+    const top = frameBottomOffset + frame.height - tool.height - inset;
+    const currentCenterX = state.toolbar.x + tool.width / 2;
+    const currentCenterY = state.toolbar.y + tool.height / 2;
+    const clampedX = Math.max(left, Math.min(right, state.toolbar.x));
+    const clampedY = Math.max(bottom, Math.min(top, state.toolbar.y));
+    const edgeTargets = [
+      { x: left, y: clampedY },
+      { x: right, y: clampedY },
+      { x: clampedX, y: bottom },
+      { x: clampedX, y: top }
+    ];
+    const cornerTargets = [
+      { x: left, y: bottom },
+      { x: right, y: bottom },
+      { x: left, y: top },
+      { x: right, y: top }
+    ];
+    const nearestCorner = cornerTargets.reduce((best, target) => {
+      const centerX = target.x + tool.width / 2;
+      const centerY = target.y + tool.height / 2;
+      const distance = Math.hypot(centerX - currentCenterX, centerY - currentCenterY);
+      return distance < best.distance ? { ...target, distance } : best;
+    }, { ...cornerTargets[0], distance: Infinity });
+    const nearestEdge = edgeTargets.reduce((best, target) => {
+      const centerX = target.x + tool.width / 2;
+      const centerY = target.y + tool.height / 2;
+      const distance = Math.hypot(centerX - currentCenterX, centerY - currentCenterY);
+      return distance < best.distance ? { ...target, distance } : best;
+    }, { ...edgeTargets[0], distance: Infinity });
+    const cornerThreshold = Math.min(frame.width, frame.height) * 0.22;
+    const nearest = nearestCorner.distance <= cornerThreshold ? nearestCorner : nearestEdge;
+    dom.toolbar.classList.add("is-snapping");
+    moveToolbar(nearest.x, nearest.y);
+    window.setTimeout(() => dom.toolbar.classList.remove("is-snapping"), 220);
   }
 
   function resetToolbarIfNeeded() {
@@ -922,6 +976,7 @@
       if (!isMobile()) return;
       if (event.button !== 0 && event.pointerType === "mouse") return;
       event.stopPropagation(); dom.toolbarHandle.setPointerCapture?.(event.pointerId);
+      dom.toolbar.classList.add("is-dragging");
       toolbarDrag = { pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, baseX: state.toolbar.x, baseY: state.toolbar.y };
     });
     dom.minimap?.addEventListener("pointerdown", event => {

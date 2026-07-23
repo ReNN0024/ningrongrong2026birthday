@@ -552,8 +552,12 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .coordinate-frame { width: calc(100% - 24px); max-width: 342px; aspect-ratio: 1; margin-inline: auto; }
   .quadrant-label strong { font-size: 9px; }.quadrant-label span { font-size: 6px; }
   .axis-copy strong { font-size: 11px; }.axis-copy span { font-size: 6px; }
-  .coordinate-toolbar { position: absolute; left: 20px; right: auto; bottom: 8px; width: auto; height: 34px; min-width: 0; min-height: 34px; flex-direction: row; padding: 1px 2px; gap: 0; margin: 0; border-radius: 8px; }
+  .coordinate-toolbar { position: absolute; left: 20px; right: auto; bottom: 8px; width: auto; height: 34px; min-width: 0; min-height: 34px; flex-direction: row; padding: 1px 2px; gap: 0; margin: 0; border-radius: 8px; opacity: .76; transition: opacity .16s ease, box-shadow .16s ease, background-color .16s ease, left .2s ease, bottom .2s ease; }
+  .coordinate-toolbar:hover, .coordinate-toolbar:focus-within, .coordinate-toolbar.is-dragging { opacity: 1; background: rgba(255, 252, 247, .96); box-shadow: 0 9px 24px rgba(62, 52, 38, .16); }
+  .coordinate-toolbar.is-dragging { transition: opacity .16s ease, box-shadow .16s ease, background-color .16s ease; }
+  .coordinate-toolbar.is-snapping { opacity: 1; }
   .coordinate-toolbar button { position: relative; width: 34px; height: 32px; border-radius: 6px; font-size: 15px; }
+  .coordinate-toolbar button:active { opacity: 1; }
   .coordinate-toolbar button::after { content: ""; position: absolute; inset: -2px 0; }
   .coordinate-toolbar .toolbar-handle { width: 14px; height: 32px; display: grid; grid-template-columns: repeat(2, 2px); grid-auto-rows: 2px; place-content: center; gap: 3px; cursor: grab; border-right: 1px solid var(--line); border-radius: 0; padding: 0 3px 0 0; }
   .toolbar-handle i { width: 2px; height: 2px; }
