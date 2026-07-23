@@ -335,7 +335,10 @@
 
   function updateGuides() {
     dom.world.classList.toggle("guides-on", state.guides);
-    $("#guideBtn").setAttribute("aria-pressed", String(state.guides));
+    const guideBtn = $("#guideBtn");
+    guideBtn.setAttribute("aria-pressed", String(state.guides));
+    guideBtn.setAttribute("aria-label", state.guides ? "关闭参考线" : "开启参考线");
+    guideBtn.setAttribute("title", state.guides ? "关闭参考线" : "开启参考线");
     const selected = state.placed.find(item => item.id === state.selectedId);
     const x = selected ? 50 + selected.x * 42 : 50;
     const y = selected ? 50 - selected.y * 42 : 50;
@@ -1001,7 +1004,7 @@
     $("#zoomOutBtn").addEventListener("click", () => zoomTo(state.view.scale - .15));
     $("#zoomInBtn").addEventListener("click", () => zoomTo(state.view.scale + .15));
     $("#resetViewBtn").addEventListener("click", resetView);
-    $("#guideBtn").addEventListener("click", () => { state.guides = !state.guides; updateGuides(); scheduleSave(); toast(state.guides ? "辅助线已显示" : "辅助线已隐藏"); });
+    $("#guideBtn").addEventListener("click", () => { state.guides = !state.guides; updateGuides(); scheduleSave(); toast(state.guides ? "参考线已开启" : "参考线已关闭"); });
     $("#fullscreenBtn").addEventListener("click", toggleFullscreen);
     document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement && state.immersive) setImmersive(false); });
 
