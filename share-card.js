@@ -14,6 +14,12 @@
     flower: "BLOOM",
     daily: "HEARTH"
   };
+  const MAIN_TENDENCY_WORDS = {
+    R: "Restrained",
+    O: "Obdurate",
+    N: "Numinous",
+    G: "Gentled"
+  };
   const CARD_STYLES = {
     // R = 荆棘 × 寻常 → 使用原 N 的配置（蓝色 + N图）
     R: {
@@ -209,7 +215,8 @@
     const figureDataURL = await imageToDataURL(style.figure.src);
     const anchor = textAnchorFor(style, "title");
     const displayTendency = DISPLAY_TENDENCY_KEYS[personality.tendency] || personality.tendency.toUpperCase();
-    const kickerText = `${personality.main.toUpperCase()}-${displayTendency}`;
+    const mainWord = MAIN_TENDENCY_WORDS[personality.main] || personality.main;
+    const kickerText = `${mainWord}-${displayTendency}`;
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
       <defs>

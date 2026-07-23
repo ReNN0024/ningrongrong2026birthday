@@ -4,6 +4,15 @@
 
 ---
 
+## [1.7.3] - 2026-07-23
+
+### Changed — by Snjór
+- 结果卡片顶部标签（kicker）主倾向改为完整单词，首字母大写其余小写：
+  - `R-THORN` → `Restrained-THORN`
+  - `O-BLOOM` → `Obdurate-BLOOM`
+  - `N-HEARTH` → `Numinous-HEARTH`
+  - `G-THORN` → `Gentled-THORN`
+
 ## [1.7.2] - 2026-07-23
 
 ### Fixed — by Snjór
