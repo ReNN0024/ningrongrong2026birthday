@@ -218,7 +218,7 @@
     const logoLayer = await buildLogoLayer(placed, logos, style);
     const figureDataURL = await imageToDataURL(style.figure.src);
     const anchor = textAnchorFor(style, "title");
-    const kickerText = personality.key;
+    const kickerText = personality.key.toUpperCase();
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
       <defs>
