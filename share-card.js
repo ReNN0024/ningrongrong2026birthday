@@ -75,9 +75,9 @@
   function scaled(value) { return scale(value).toFixed(2); }
 
   function quadrantFor(item) {
-    if (item.x < 0 && item.y >= 0) return "R";
-    if (item.x >= 0 && item.y >= 0) return "O";
-    if (item.x < 0 && item.y < 0) return "N";
+    if (item.x < 0 && item.y < 0) return "R";
+    if (item.x < 0 && item.y >= 0) return "O";
+    if (item.x >= 0 && item.y >= 0) return "N";
     return "G";
   }
 
