@@ -6,8 +6,8 @@
   <meta name="theme-color" content="#f8f2e8">
   <meta name="description" content="与我周旋久——宁荣荣2026宁做我生日庆典预热活动">
   <title>宁荣荣·与我周旋久</title>
-  <link rel="stylesheet" href="styles.css?v=20260723-10">
-  <link rel="stylesheet" href="fonts.css?v=20260723-10">
+  <link rel="stylesheet" href="styles.css?v=20260723-11">
+  <link rel="stylesheet" href="fonts.css?v=20260723-11">
 </head>
 <body>
   <div class="paper-noise" aria-hidden="true"></div>
@@ -167,12 +167,19 @@
     <div class="share-dialog-card">
       <button class="share-close" id="shareCloseBtn" type="button" aria-label="关闭结果图预览">×</button>
       <div class="share-preview" id="sharePreview"><span>正在生成结果图…</span></div>
+      <div class="share-save-guide" id="shareSaveGuide" hidden aria-live="polite">
+        <div class="share-save-guide-card">
+          <strong>长按图片保存到照片</strong>
+          <p>当前浏览器没有打开系统保存面板。请长按上方结果图，在系统菜单中选择“保存到照片”。</p>
+          <button id="shareSaveGuideCloseBtn" type="button">知道了</button>
+        </div>
+      </div>
       <div class="share-actions">
         <a id="downloadShareBtn" href="#" download="与我周旋久-我的故事坐标.png" aria-disabled="true">保存图片</a>
         <button id="regenerateShareBtn" type="button">重新生成</button>
         <button id="continueEditBtn" type="button">继续调整</button>
       </div>
-      <p class="share-help">iOS Safari 会优先打开系统分享面板，可选择保存到照片；若无法打开，请长按当前预览图保存。</p>
+      <p class="share-help">点击保存会优先打开 iOS 系统面板；若未弹出，请按页面提示长按图片保存。</p>
     </div>
   </dialog>
 
@@ -189,8 +196,8 @@
   </dialog>
 
   <noscript>请启用 JavaScript 后参与活动。</noscript>
-  <script src="personality-results.js?v=20260723-10" defer></script>
-  <script src="share-card.js?v=20260723-10" defer></script>
-  <script src="app.js?v=20260723-10" defer></script>
+  <script src="personality-results.js?v=20260723-11" defer></script>
+  <script src="share-card.js?v=20260723-11" defer></script>
+  <script src="app.js?v=20260723-11" defer></script>
 </body>
 </html>

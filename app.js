@@ -44,7 +44,8 @@
     desktopProgressFill: $("#desktopProgressFill"),
     guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), previewBackdrop: $("#previewBackdrop"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
     toastStack: $("#toastStack"), live: $("#liveRegion"), empty: $("#emptyState"),
-    shareDialog: $("#shareDialog"), sharePreview: $("#sharePreview"), shareTrigger: $("#shareTriggerBtn"), downloadShare: $("#downloadShareBtn"), regenerateShare: $("#regenerateShareBtn"), continueEdit: $("#continueEditBtn"), shareClose: $("#shareCloseBtn"),
+    shareDialog: $("#shareDialog"), sharePreview: $("#sharePreview"), shareSaveGuide: $("#shareSaveGuide"), shareSaveGuideClose: $("#shareSaveGuideCloseBtn"),
+    shareTrigger: $("#shareTriggerBtn"), downloadShare: $("#downloadShareBtn"), regenerateShare: $("#regenerateShareBtn"), continueEdit: $("#continueEditBtn"), shareClose: $("#shareCloseBtn"),
     clearDialog: $("#clearDialog"), undo: $("#undoBtn"), redo: $("#redoBtn"), clear: $("#clearBtn")
   };
 
@@ -458,8 +459,17 @@
     }
   }
 
+  function hideShareSaveGuide() {
+    if (!dom.shareSaveGuide) return;
+    dom.shareSaveGuide.hidden = true;
+    dom.shareSaveGuide.classList.remove("is-visible");
+  }
+
   function showInlineSaveFallback() {
-    toast("当前浏览器无法直接打开保存面板，请长按上方图片保存", "", { key: "share-inline-save-fallback", dedupe: 1600, duration: 3200 });
+    if (!dom.shareSaveGuide) return;
+    dom.shareSaveGuide.hidden = false;
+    requestAnimationFrame(() => dom.shareSaveGuide?.classList.add("is-visible"));
+    dom.shareSaveGuideClose?.focus({ preventScroll: true });
   }
 
   async function handleShareSave(event) {
@@ -472,7 +482,6 @@
       event.preventDefault();
       try {
         await navigator.share({ files: [shareResult.file], title: "宁荣荣·与我周旋久", text: "保存我的故事坐标" });
-        toast("可在分享面板中选择保存到相册", "", { key: "share-sheet-opened", dedupe: 1600, duration: 2400 });
       } catch (error) {
         if (error?.name === "AbortError") return;
         showInlineSaveFallback();
@@ -493,6 +502,7 @@
     if (!window.ShareCard) return toast("结果图生成器未加载", "error", { key: "share-generator-missing" });
     if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上 Logo 后再生成坐标`, "", { key: "share-not-ready", dedupe: 1200 });
     openDialog(dom.shareDialog);
+    hideShareSaveGuide();
     shareResult = null;
     dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
     updateShareSaveButton(false);
@@ -1085,10 +1095,11 @@
     dom.mobileGuideCollapseBtn?.addEventListener("click", () => setMobileGuidePreference("hidden"));
     dom.shareTrigger?.addEventListener("click", generateShareResult);
     dom.downloadShare?.addEventListener("click", handleShareSave);
+    dom.shareSaveGuideClose?.addEventListener("click", hideShareSaveGuide);
     dom.regenerateShare?.addEventListener("click", generateShareResult);
-    dom.continueEdit?.addEventListener("click", () => closeDialog(dom.shareDialog));
-    dom.shareClose?.addEventListener("click", () => closeDialog(dom.shareDialog));
-    dom.shareDialog?.addEventListener("click", event => { if (event.target === dom.shareDialog) closeDialog(dom.shareDialog); });
+    dom.continueEdit?.addEventListener("click", () => { hideShareSaveGuide(); closeDialog(dom.shareDialog); });
+    dom.shareClose?.addEventListener("click", () => { hideShareSaveGuide(); closeDialog(dom.shareDialog); });
+    dom.shareDialog?.addEventListener("click", event => { if (event.target === dom.shareDialog) { hideShareSaveGuide(); closeDialog(dom.shareDialog); } });
 
     dom.frame.addEventListener("pointerdown", startStageGesture);
     dom.frame.addEventListener("pointermove", moveStageGesture, { passive: false });

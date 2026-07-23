@@ -433,6 +433,13 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .share-close { position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(255, 250, 241, .86); color: var(--muted); box-shadow: 0 4px 14px rgba(55,46,34,.16); font-size: 22px; line-height: 1; }
 .share-preview { min-height: 320px; display: grid; place-items: center; background: transparent; overflow: visible; color: var(--muted); font-size: 12px; }
 .share-preview img { display: block; width: 100%; aspect-ratio: 3 / 4; object-fit: contain; border-radius: 0; }
+.share-save-guide { position: absolute; inset: 0; z-index: 4; display: grid; place-items: center; padding: 24px; background: rgba(63, 55, 47, .18); backdrop-filter: blur(2px); opacity: 0; transition: opacity .18s ease; }
+.share-save-guide[hidden] { display: none; }
+.share-save-guide.is-visible { opacity: 1; }
+.share-save-guide-card { width: min(280px, calc(100vw - 72px)); padding: 20px 18px 18px; border: 1px solid rgba(184, 138, 58, .36); border-radius: 18px; background: rgba(255, 250, 241, .97); box-shadow: 0 16px 42px rgba(55, 46, 34, .2); color: var(--ink); text-align: center; }
+.share-save-guide-card strong { display: block; font: 600 16px var(--sans); letter-spacing: .02em; }
+.share-save-guide-card p { margin: 10px 0 16px; color: var(--muted); font-size: 12px; line-height: 1.7; }
+.share-save-guide-card button { min-width: 104px; min-height: 36px; border: 0; border-radius: 999px; background: #8e7137; color: #fffaf1; font: 500 12px var(--sans); }
 .share-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 14px; }
 .share-actions a, .share-actions button { min-height: 42px; display: grid; place-items: center; border: 1px solid rgba(139,117,74,.28); border-radius: 999px; background: rgba(255,250,241,.92); color: var(--ink); text-decoration: none; font: 500 12px var(--sans); }
 .share-actions a:not([aria-disabled="true"]) { color: #fffaf1; background: #8e7137; border-color: #8e7137; }
