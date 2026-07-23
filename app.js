@@ -458,42 +458,8 @@
     }
   }
 
-  function openImageFallback() {
-    if (!shareResult?.dataURL) return;
-    const win = window.open("", "_blank");
-    if (!win) {
-      toast("请长按预览图保存到相册", "", { key: "share-long-press-save", dedupe: 1600, duration: 2600 });
-      return;
-    }
-    const doc = win.document;
-    doc.title = shareFileName;
-    doc.body.style.margin = "0";
-    doc.body.style.minHeight = "100vh";
-    doc.body.style.display = "grid";
-    doc.body.style.placeItems = "center";
-    doc.body.style.background = "#f7f1e7";
-    doc.body.style.color = "#453f3a";
-    doc.body.style.font = "14px -apple-system,BlinkMacSystemFont,sans-serif";
-    const meta = doc.createElement("meta");
-    meta.name = "viewport";
-    meta.content = "width=device-width,initial-scale=1";
-    doc.head.append(meta);
-    const main = doc.createElement("main");
-    main.style.width = "min(100vw, 720px)";
-    main.style.padding = "16px";
-    main.style.textAlign = "center";
-    const image = doc.createElement("img");
-    image.src = shareResult.dataURL;
-    image.alt = "宁荣荣与我周旋久结果图";
-    image.style.display = "block";
-    image.style.width = "100%";
-    image.style.height = "auto";
-    const tip = doc.createElement("p");
-    tip.textContent = "长按图片，选择“保存到照片”。";
-    tip.style.margin = "12px 0 0";
-    tip.style.lineHeight = "1.7";
-    main.append(image, tip);
-    doc.body.append(main);
+  function showInlineSaveFallback() {
+    toast("当前浏览器无法直接打开保存面板，请长按上方图片保存", "", { key: "share-inline-save-fallback", dedupe: 1600, duration: 3200 });
   }
 
   async function handleShareSave(event) {
@@ -509,14 +475,14 @@
         toast("可在分享面板中选择保存到相册", "", { key: "share-sheet-opened", dedupe: 1600, duration: 2400 });
       } catch (error) {
         if (error?.name === "AbortError") return;
-        openImageFallback();
+        showInlineSaveFallback();
       }
       return;
     }
 
     if (isIOS) {
       event.preventDefault();
-      openImageFallback();
+      showInlineSaveFallback();
       return;
     }
 
