@@ -62,6 +62,13 @@
   let minimapDrag = null;
   let mobileGuideAutoHideTimer = 0;
   let listMomentumFrame = 0;
+  let toastEl = null;
+  let toastTimer = 0;
+  let toastHideFrame = 0;
+  let lastToastKey = "";
+  let lastToastMessage = "";
+  let lastToastType = "";
+  let lastToastAt = 0;
   const stagePointers = new Map();
   let stageGesture = null;
 
@@ -124,7 +131,7 @@
     state.selectedId = state.placed.some(item => item.id === state.selectedId) ? state.selectedId : null;
     renderAll();
     scheduleSave();
-    if (message) toast(message);
+    if (message) toast(message, "", { key: `placed-mutation-${message}`, dedupe: 1200 });
   }
 
   function renderAll() {
@@ -308,7 +315,7 @@
     requestAnimationFrame(() => {
       const el = dom.placedLayer.querySelector(`[data-logo-id="${id}"]`);
       el?.classList.add("is-overlap");
-      toast("已叠放在上层");
+      toast("已叠放在上层", "", { key: "overlap", dedupe: 1400, duration: 1400 });
     });
   }
 
@@ -346,12 +353,40 @@
     dom.guideLineX.style.top = `${y}%`;
   }
 
-  function toast(message, type = "") {
-    const el = document.createElement("div");
-    el.className = `toast${type ? ` is-${type}` : ""}`;
-    el.textContent = message;
-    dom.toastStack.append(el);
-    window.setTimeout(() => el.remove(), 2200);
+  function toast(message, type = "", options = {}) {
+    const now = Date.now();
+    const key = options.key || `${type}:${message}`;
+    const dedupe = options.dedupe ?? 800;
+    const sameKeyRecent = key === lastToastKey && now - lastToastAt < dedupe;
+    const sameContent = message === lastToastMessage && type === lastToastType;
+    const shouldUpdateContent = !sameKeyRecent || !sameContent;
+    const duration = options.duration ?? (type === "error" ? 2600 : 1800);
+
+    if (!toastEl) {
+      toastEl = document.createElement("div");
+      toastEl.className = "toast";
+      dom.toastStack.append(toastEl);
+    }
+
+    const currentErrorVisible = lastToastType === "error" && toastEl.classList.contains("is-visible");
+    if (currentErrorVisible && type !== "error" && !options.force && now - lastToastAt < 1200) return;
+
+    clearTimeout(toastTimer);
+    cancelAnimationFrame(toastHideFrame);
+
+    if (shouldUpdateContent) {
+      toastEl.textContent = message;
+      toastEl.className = `toast${type ? ` is-${type}` : ""}`;
+      lastToastMessage = message;
+      lastToastType = type;
+    }
+    lastToastKey = key;
+    lastToastAt = now;
+
+    toastHideFrame = requestAnimationFrame(() => toastEl?.classList.add("is-visible"));
+    toastTimer = window.setTimeout(() => {
+      toastEl?.classList.remove("is-visible");
+    }, duration);
   }
 
   function openDialog(dialog) {
@@ -372,8 +407,8 @@
   }
 
   async function generateShareResult() {
-    if (!window.ShareCard) return toast("结果图生成器未加载", "error");
-    if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上 Logo 后再生成坐标`);
+    if (!window.ShareCard) return toast("结果图生成器未加载", "error", { key: "share-generator-missing" });
+    if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上 Logo 后再生成坐标`, "", { key: "share-not-ready", dedupe: 1200 });
     openDialog(dom.shareDialog);
     dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
     dom.downloadShare.removeAttribute("href");
@@ -392,7 +427,7 @@
       dom.downloadShare.setAttribute("aria-disabled", "false");
     } catch (error) {
       dom.sharePreview.innerHTML = "<span>生成失败，请稍后再试</span>";
-      toast("结果图生成失败，请重试", "error");
+      toast("结果图生成失败，请重试", "error", { key: "share-generation-failed" });
     }
   }
 
@@ -454,7 +489,7 @@
 
   function resetView() {
     state.view = { scale: 1, panX: 0, panY: 0 };
-    applyView(); scheduleSave(); toast("已回到初始视角");
+    applyView(); scheduleSave(); toast("已回到初始视角", "", { key: "reset-view", dedupe: 1200 });
   }
 
   function pointToLogical(clientX, clientY) {
@@ -517,7 +552,8 @@
     }
     dom.frame.classList.add("is-drop-invalid");
     window.setTimeout(() => dom.frame.classList.remove("is-drop-invalid"), 420);
-    toast(current.source === "placed" ? "未进入有效区域，已回到原位置" : "请将 Logo 放入坐标区域", "error");
+    const invalidDropMessage = current.source === "placed" ? "未进入有效区域，已回到原位置" : "请将 Logo 放入坐标区域";
+    toast(invalidDropMessage, "error", { key: `invalid-drop-${current.source}`, dedupe: 1400 });
   }
 
   function cleanupDrag() {
@@ -859,7 +895,7 @@
       try { await document.documentElement.requestFullscreen(); native = true; } catch (_) { native = false; }
     }
     setImmersive(true);
-    toast(native ? "已进入全屏" : "当前浏览器使用沉浸模式");
+    toast(native ? "已进入全屏" : "当前浏览器使用沉浸模式", "", { key: "enter-fullscreen", dedupe: 1200 });
   }
 
   function setImmersive(on) {
@@ -1004,7 +1040,12 @@
     $("#zoomOutBtn").addEventListener("click", () => zoomTo(state.view.scale - .15));
     $("#zoomInBtn").addEventListener("click", () => zoomTo(state.view.scale + .15));
     $("#resetViewBtn").addEventListener("click", resetView);
-    $("#guideBtn").addEventListener("click", () => { state.guides = !state.guides; updateGuides(); scheduleSave(); toast(state.guides ? "参考线已开启" : "参考线已关闭"); });
+    $("#guideBtn").addEventListener("click", () => {
+      state.guides = !state.guides;
+      updateGuides();
+      scheduleSave();
+      toast(state.guides ? "参考线已开启" : "参考线已关闭", "", { key: "guide-toggle", dedupe: 250, duration: 1500 });
+    });
     $("#fullscreenBtn").addEventListener("click", toggleFullscreen);
     document.addEventListener("fullscreenchange", () => { if (!document.fullscreenElement && state.immersive) setImmersive(false); });
 
@@ -1040,7 +1081,7 @@
     window.visualViewport?.addEventListener("resize", () => requestAnimationFrame(resetToolbarIfNeeded));
     window.addEventListener("pagehide", saveNow);
     window.addEventListener("storage", event => {
-      if (event.key === STORAGE_KEY && event.newValue) toast("另一页面已更新本地进度，刷新后可载入");
+      if (event.key === STORAGE_KEY && event.newValue) toast("另一页面已更新本地进度，刷新后可载入", "", { key: "storage-updated", dedupe: 3000, duration: 2200 });
     });
 
     document.addEventListener("error", event => {
@@ -1064,7 +1105,7 @@
     $$(".filter-btn").forEach(item => { const active = item.dataset.filter === state.filter; item.classList.toggle("is-active", active); item.setAttribute("aria-pressed", String(active)); });
     requestAnimationFrame(() => {
       applyRestoredLayout();
-      if (restored) toast("已恢复你上次的放置进度");
+      if (restored) toast("已恢复你上次的放置进度", "", { key: "progress-restored", dedupe: 3000, duration: 1600 });
     });
   }
 

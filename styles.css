@@ -420,10 +420,10 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .drag-ghost.is-active { opacity: .95; transform: translate(-50%,-50%) scale(1.04); }
 .drag-ghost img, .drag-ghost .placeholder-mark { width: 100%; height: 100%; object-fit: contain; display: grid; place-items: center; border-radius: 10px; color: #fff; font: 600 12px var(--sans); }
 
-.toast-stack { position: fixed; left: 50%; top: max(18px, env(safe-area-inset-top)); z-index: 1000; transform: translateX(-50%); display: grid; gap: 8px; pointer-events: none; }
-.toast { animation: toastIn .2s ease both; background: rgba(65,58,51,.91); color: #fff; padding: 9px 15px; border-radius: 20px; box-shadow: 0 8px 22px rgba(44,37,30,.16); font-size: 11px; white-space: nowrap; }
+.toast-stack { position: fixed; left: 50%; top: max(18px, env(safe-area-inset-top)); z-index: 1000; transform: translateX(-50%); display: grid; place-items: center; pointer-events: none; }
+.toast { opacity: 0; transform: translateY(-6px); background: rgba(65,58,51,.91); color: #fff; padding: 9px 15px; border-radius: 20px; box-shadow: 0 8px 22px rgba(44,37,30,.16); font-size: 11px; white-space: nowrap; transition: opacity .18s ease, transform .18s ease, background-color .18s ease; }
+.toast.is-visible { opacity: 1; transform: translateY(0); }
 .toast.is-error { background: rgba(145,72,65,.94); }
-@keyframes toastIn { from { opacity: 0; transform: translateY(-6px); } }
 
 .share-dialog { border: 0; padding: 0; background: transparent; width: min(430px, calc(100vw - 24px)); max-width: calc(100vw - 24px); max-height: min(94dvh, 860px); overflow: auto; }
 .confirm-dialog { border: 0; padding: 0; background: transparent; max-width: calc(100vw - 32px); }
