@@ -484,7 +484,8 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
     --frame-radius: 18px;
     width: calc(100% - 24px);
     max-width: 342px;
-    min-height: 38px;
+    height: 40px;
+    min-height: 40px;
     margin: 0 auto 8px;
     padding: 4px 8px 4px 12px;
     display: block;
@@ -495,18 +496,9 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
     box-shadow: 0 10px 26px rgba(103, 75, 31, .07);
     opacity: 1;
     transform: translateY(0);
-    transition:
-      opacity .42s ease,
-      transform .42s ease,
-      min-height .42s ease,
-      margin .42s ease,
-      padding .42s ease;
+    transition: opacity .24s ease, transform .24s ease;
   }
   .mobile-instruction.is-hiding {
-    min-height: 0;
-    margin-bottom: 0;
-    padding-top: 0;
-    padding-bottom: 0;
     opacity: 0;
     transform: translateY(-4px);
     pointer-events: none;
@@ -554,7 +546,6 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   }
   .mobile-instruction[data-mode="compact"] {
     border-color: rgba(184, 138, 58, .5);
-    border-radius: 999px;
   }
   .mobile-instruction[data-mode="compact"] .mobile-guide-full { display: none; }
   .mobile-instruction[data-mode="compact"] .mobile-guide-compact { display: flex; }

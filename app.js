@@ -61,7 +61,6 @@
   let toolbarDrag = null;
   let minimapDrag = null;
   let mobileGuideAutoHideTimer = 0;
-  let mobileGuideHideTimer = 0;
   let listMomentumFrame = 0;
   const stagePointers = new Map();
   let stageGesture = null;
@@ -222,19 +221,19 @@
     const placed = state.placed.length;
     const visibleMode = placed > 0 ? "compact" : "full";
     clearTimeout(mobileGuideAutoHideTimer);
-    clearTimeout(mobileGuideHideTimer);
 
     if (state.mobileGuidePreference === "hidden") {
       dom.mobileInstruction.hidden = false;
       dom.mobileInstruction.dataset.mode = visibleMode;
-      if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", String(visibleMode !== "compact"));
+      dom.mobileInstruction.setAttribute("aria-hidden", "true");
+      if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", "true");
       dom.mobileInstruction.classList.add("is-hiding");
-      mobileGuideHideTimer = window.setTimeout(() => { dom.mobileInstruction.hidden = true; }, 460);
       return;
     }
 
     dom.mobileInstruction.classList.remove("is-hiding");
     dom.mobileInstruction.hidden = false;
+    dom.mobileInstruction.removeAttribute("aria-hidden");
     dom.mobileInstruction.dataset.mode = visibleMode;
     if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", String(visibleMode !== "compact"));
     if (visibleMode === "compact" && placed >= 3) mobileGuideAutoHideTimer = window.setTimeout(() => setMobileGuidePreference("hidden"), 3200);
