@@ -552,11 +552,12 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .coordinate-frame { width: calc(100% - 24px); max-width: 342px; aspect-ratio: 1; margin-inline: auto; }
   .quadrant-label strong { font-size: 9px; }.quadrant-label span { font-size: 6px; }
   .axis-copy strong { font-size: 11px; }.axis-copy span { font-size: 6px; }
-  .coordinate-toolbar { position: absolute; left: 20px; right: auto; bottom: 8px; width: auto; height: 40px; min-width: 0; min-height: 40px; flex-direction: row; padding: 0 2px; gap: 1px; margin: 0; border-radius: 7px; }
-  .coordinate-toolbar button { position: relative; width: 44px; height: 40px; }
+  .coordinate-toolbar { position: absolute; left: 20px; right: auto; bottom: 8px; width: auto; height: 34px; min-width: 0; min-height: 34px; flex-direction: row; padding: 1px 2px; gap: 0; margin: 0; border-radius: 8px; }
+  .coordinate-toolbar button { position: relative; width: 34px; height: 32px; border-radius: 6px; font-size: 15px; }
   .coordinate-toolbar button::after { content: ""; position: absolute; inset: -2px 0; }
-  .coordinate-toolbar .toolbar-handle { width: 16px; height: 38px; display: grid; grid-template-columns: repeat(2, 2px); grid-auto-rows: 2px; place-content: center; gap: 3px; cursor: grab; border-right: 1px solid var(--line); border-radius: 0; padding: 0 3px 0 0; }
+  .coordinate-toolbar .toolbar-handle { width: 14px; height: 32px; display: grid; grid-template-columns: repeat(2, 2px); grid-auto-rows: 2px; place-content: center; gap: 3px; cursor: grab; border-right: 1px solid var(--line); border-radius: 0; padding: 0 3px 0 0; }
   .toolbar-handle i { width: 2px; height: 2px; }
+  .coordinate-toolbar .guide-icon, .coordinate-toolbar .fullscreen-icon { width: 15px; height: 15px; }
   .library-panel { --frame-radius: 22px; order: 2; width: calc(100% - 24px); max-width: 342px; height: min(340px, 42dvh); min-height: 286px; margin: 0 auto; }
   .library-head { display: grid; grid-template-columns: auto 1fr; grid-template-areas: "title title" "filters history" "share share" "help help"; align-items: center; gap: 5px 6px; padding: 10px 12px 8px; }
   .library-title-row { display: contents; }
