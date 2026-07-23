@@ -216,7 +216,11 @@
     const anchor = textAnchorFor(style, "title");
     const displayTendency = DISPLAY_TENDENCY_KEYS[personality.tendency] || personality.tendency.toUpperCase();
     const mainWord = MAIN_TENDENCY_WORDS[personality.main] || personality.main;
-    const kickerText = `${mainWord}-${displayTendency}`;
+    const firstLetter = mainWord.charAt(0);
+    const restLetters = mainWord.slice(1);
+    const kickerTextPart1 = `${restLetters}-${displayTendency}`;
+    // 花体字字体栈：Snell Roundhand (iOS/macOS), Apple Chancery (macOS), Segoe Script (Windows), cursive (通用)
+    const scriptFont = '"Snell Roundhand", "Apple Chancery", "Segoe Script", "Dancing Script", cursive';
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
       <defs>
@@ -228,7 +232,7 @@
       ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.size)}" height="${scaled(style.figure.size)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMidYMid meet"/>` : ""}
       <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
       <rect x="${scaled(style.rule.x)}" y="${scaled(style.rule.y)}" width="${scaled(style.rule.width)}" height="2.67" fill="${style.accent}" opacity="${style.ruleOpacity}"/>
-      <text x="${textXFor(style, "kicker").toFixed(2)}" y="${scaled(style.copy.kicker[1] + 28)}" text-anchor="${textAnchorFor(style, "kicker")}" font-family="sans-serif" font-size="37.33" font-weight="600" fill="${style.kicker}">${escapeXML(kickerText)}</text>
+      <text x="${textXFor(style, "kicker").toFixed(2)}" y="${scaled(style.copy.kicker[1] + 28)}" text-anchor="${textAnchorFor(style, "kicker")}" fill="${style.kicker}"><tspan font-family="${scriptFont}" font-size="53.33" font-weight="700" font-style="italic">${escapeXML(firstLetter)}</tspan><tspan font-family="sans-serif" font-size="37.33" font-weight="600" dy="-2">${escapeXML(kickerTextPart1)}</tspan></text>
       <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 64)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
       ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 42.67, lineHeight: 61.33, fill: style.desc, weight: 500 })}
       <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>

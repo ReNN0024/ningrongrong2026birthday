@@ -4,6 +4,14 @@
 
 ---
 
+## [1.7.4] - 2026-07-23
+
+### Changed — by Snjór
+- 结果卡片主倾向首字母改为花体字并加大，视觉突出：
+  - 首字母使用花体字字体栈（Snell Roundhand / Apple Chancery / Segoe Script / cursive）
+  - 首字母字号从 37.33 增大到 53.33，加粗斜体
+  - 其余部分保持 sans-serif 样式
+
 ## [1.7.3] - 2026-07-23
 
 ### Changed — by Snjór
