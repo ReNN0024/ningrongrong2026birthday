@@ -1,4 +1,20 @@
 window.PERSONALITY_RESULTS = {
+  "R-thorn": {
+    name: "静海渡棘者",
+    description: "你明白风波会过去，也懂得在低处守住自己的锋芒。"
+  },
+  "R-flower": {
+    name: "晴岸生花者",
+    description: "你能从旧雨里走出，把平凡日子也养成温柔花园。"
+  },
+  "R-memory": {
+    name: "沉忆行舟者",
+    description: "你带着记忆穿过风浪，不急着抵达，却从未停下。"
+  },
+  "R-daily": {
+    name: "寻常守岸者",
+    description: "你偏爱安稳的力量，把复杂心绪慢慢放回生活。"
+  },
   "O-thorn": {
     name: "荆棘守忆者",
     description: "你把风霜认真收藏，也把每一次坚持写进骨血。"
@@ -30,22 +46,6 @@ window.PERSONALITY_RESULTS = {
   "N-daily": {
     name: "花开日常者",
     description: "你擅长把盛景落进生活，让温柔成为每天都在的答案。"
-  },
-  "R-thorn": {
-    name: "静海渡棘者",
-    description: "你明白风波会过去，也懂得在低处守住自己的锋芒。"
-  },
-  "R-flower": {
-    name: "晴岸生花者",
-    description: "你能从旧雨里走出，把平凡日子也养成温柔花园。"
-  },
-  "R-memory": {
-    name: "沉忆行舟者",
-    description: "你带着记忆穿过风浪，不急着抵达，却从未停下。"
-  },
-  "R-daily": {
-    name: "寻常守岸者",
-    description: "你偏爱安稳的力量，把复杂心绪慢慢放回生活。"
   },
   "G-thorn": {
     name: "烟火砺花者",

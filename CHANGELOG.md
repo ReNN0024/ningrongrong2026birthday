@@ -4,6 +4,14 @@
 
 ---
 
+## [1.7.1] - 2026-07-23
+
+### Fixed — by Snjór
+- 修正 RESULT_REPLACEMENT_GUIDE.md 中"三、当前 16 种结果清单"：
+  - 更新结果编号和名称，与 personality-results.js 保持一致
+  - 调整结果顺序为 R01-R16（R01-R04: R倾向, R05-R08: O倾向, R09-R12: N倾向, R13-R16: G倾向）
+- 修正 personality-results.js 中结果顺序，与文档一致
+
 ## [1.7.0] - 2026-07-23
 
 ### Changed — by Snjór
