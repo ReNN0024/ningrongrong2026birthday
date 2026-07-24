@@ -4,7 +4,7 @@
 
 **在线体验**：https://renn0024.github.io/ningrongrong2026birthday/
 
-**当前版本**：1.7.22
+**当前版本**：1.7.23
 
 ## 已实现能力
 
@@ -30,7 +30,7 @@
 ### 4. 视觉与配置能力
 
 - 结果卡按 R / O / N / G 主倾向拆分视觉模板；【测试结果象限、系列名、结果图背景颜色、对应线稿】集中在 `share-card.js` 顶部 `RESULT_CARD_MAPPINGS` 中配置。
-- 结果卡背景色、线稿透明度、英文标签字体与排版分别拆分在 `CARD_PALETTES`、`LINEART_OPACITIES`、`KICKER_FONT_FAMILY` / `TENDENCY_FONT_FAMILY` / `FONT_ASSETS` 和 `CARD_LAYOUTS` 中，便于后续只调整搭配，不误改版式。
+- 结果卡背景色、线稿透明度、英文题签字体与排版分别拆分在 `CARD_PALETTES`、`LINEART_OPACITIES`、`KICKER_FONT_FAMILY` / `LABEL_SUB_FONT_FAMILY` / `FONT_ASSETS`、`LABEL_LAYOUTS` / `LABEL_PALETTES` 和 `CARD_LAYOUTS` 中，便于后续只调整题签，不误改整卡版式。
 - 主页坐标系与小地图的四象限背景色已经抽象为 CSS 变量，常规只换颜色顺序时不需要改渐变位置、透明度或覆盖范围。
 
 ### 5. 资源与性能
