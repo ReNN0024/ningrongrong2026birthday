@@ -216,18 +216,23 @@
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
       <defs>
+        <clipPath id="card-clip">
+          <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" rx="48" ry="48"/>
+        </clipPath>
         <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="27" stdDeviation="24" flood-color="${style.shadow}" flood-opacity="0.08"/></filter>
         ${renderGlow(style)}
       </defs>
-      <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" rx="48" fill="${style.base}"/>
-      ${style.glows.map((_, index) => `<rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" fill="url(#card-glow-${index})"/>`).join("")}
-      ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.size)}" height="${scaled(style.figure.size)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMidYMid meet"/>` : ""}
-      <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
-      <rect x="${scaled(style.rule.x)}" y="${scaled(style.rule.y)}" width="${scaled(style.rule.width)}" height="2.67" fill="${style.accent}" opacity="${style.ruleOpacity}"/>
-      <text x="${textXFor(style, "kicker").toFixed(2)}" y="${scaled(style.copy.kicker[1] + 28)}" text-anchor="${textAnchorFor(style, "kicker")}" font-family="sans-serif" font-size="37.33" font-weight="600" fill="${style.kicker}">${escapeXML(kickerText)}</text>
-      <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 64)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
-      ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 42.67, lineHeight: 61.33, fill: style.desc, weight: 500 })}
-      <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>
+      <g clip-path="url(#card-clip)">
+        <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" rx="48" ry="48" fill="${style.base}"/>
+        ${style.glows.map((_, index) => `<rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" fill="url(#card-glow-${index})"/>`).join("")}
+        ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.size)}" height="${scaled(style.figure.size)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMidYMid meet"/>` : ""}
+        <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
+        <rect x="${scaled(style.rule.x)}" y="${scaled(style.rule.y)}" width="${scaled(style.rule.width)}" height="2.67" fill="${style.accent}" opacity="${style.ruleOpacity}"/>
+        <text x="${textXFor(style, "kicker").toFixed(2)}" y="${scaled(style.copy.kicker[1] + 28)}" text-anchor="${textAnchorFor(style, "kicker")}" font-family="sans-serif" font-size="37.33" font-weight="600" fill="${style.kicker}">${escapeXML(kickerText)}</text>
+        <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 64)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
+        ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 42.67, lineHeight: 61.33, fill: style.desc, weight: 500 })}
+        <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>
+      </g>
     </svg>`;
   }
 
