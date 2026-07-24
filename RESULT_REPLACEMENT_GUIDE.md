@@ -62,12 +62,12 @@ window.PERSONALITY_RESULTS = {
 
 当前正在使用的搭配如下：
 
-| 系列 | 主倾向 | 结果图背景颜色 | 当前对应线稿 |
+| 测试结果象限 | 系列名 | 结果图背景颜色 | 当前对应线稿预览 |
 |---|---|---|---|
-| R 系列 | 荆棘 × 寻常 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
-| O 系列 | 荆棘 × 不忘 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
-| N 系列 | 繁花 × 不忘 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
-| G 系列 | 繁花 × 寻常 | 绿色 `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
+| 第三象限：荆棘 × 寻常（x < 0，y < 0） | **R**estrained | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
+| 第二象限：荆棘 × 不忘（x < 0，y > 0） | **O**bdurate | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
+| 第一象限：繁花 × 不忘（x > 0，y > 0） | **N**uminous | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
+| 第四象限：繁花 × 寻常（x > 0，y < 0） | **G**entled | 绿色 `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
 
 ### 可选线稿资源预览
 
