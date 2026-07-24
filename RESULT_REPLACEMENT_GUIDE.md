@@ -58,12 +58,13 @@ window.PERSONALITY_RESULTS = {
 
 ## 三、结果图背景与线稿搭配
 
-结果图的搭配入口集中在 `share-card.js` 顶部的 `RESULT_CARD_MAPPINGS`。当前线稿图已裁切为 **810×1080**，与设计稿底图尺寸一致；在 SVG 中会按 `TEMPLATE_SCALE = 4 / 3` 放大到 **1080×1440**，并从分享卡片背景原点 `(0, 0)` 重合放置。线稿叠在结果卡背景上时，统一使用 **60% 透明度**（`LINEART_OPACITY = 0.6`）。
+结果图的搭配入口集中在 `share-card.js` 顶部的 `RESULT_CARD_MAPPINGS`。当前线稿图已裁切为 **810×1080**，与设计稿底图尺寸一致；在 SVG 中会按 `TEMPLATE_SCALE = 4 / 3` 放大到 **1080×1440**，并从分享卡片背景原点 `(0, 0)` 重合放置。线稿叠在结果卡背景上时，通过 `LINEART_OPACITIES` 按系列单独配置透明度：R 为 **64%**、O 为 **60%**、N 为 **52%**、G 为 **56%**。
 
 目前【测试结果象限、系列名、结果图背景颜色、对应线稿】已经尽量抽象为单一配置：
 
 - `RESULT_CARD_MAPPINGS`：后续调整搭配时优先只改这里，包括结果象限、系列名、背景颜色、线稿文件。
 - `CARD_PALETTES`：只在需要新增或修改某个背景色的具体色值、光斑、文字色时才改。
+- `LINEART_OPACITIES`：只在需要按 R/O/N/G 单独调整线稿叠加透明度时才改。
 - `CARD_LAYOUTS`：只在需要改变某个系列的坐标系/文字排版位置时才改。
 - `personality-results.js`：只负责 16 个结果文案，不负责结果图背景和线稿搭配。
 
@@ -71,10 +72,10 @@ window.PERSONALITY_RESULTS = {
 
 | 测试结果象限 | 系列名 | 结果图背景颜色 | 当前对应线稿预览 |
 |---|---|---|---|
-| 第三象限：荆棘 × 寻常（x < 0，y < 0） | **R**estrained | 蓝色 `blue` / `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
+| 第三象限：荆棘 × 寻常（x < 0，y < 0） | **R**estrained | 蓝色 `blue` / `#E2F0F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
 | 第二象限：荆棘 × 不忘（x < 0，y > 0） | **O**bdurate | 粉色 `pink` / `#FAE9EF` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
-| 第一象限：繁花 × 不忘（x > 0，y > 0） | **N**uminous | 黄色 `yellow` / `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
-| 第四象限：繁花 × 寻常（x > 0，y < 0） | **G**entled | 绿色 `green` / `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
+| 第一象限：繁花 × 不忘（x > 0，y > 0） | **N**uminous | 黄色 `yellow` / `#F8F0D8` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
+| 第四象限：繁花 × 寻常（x > 0，y < 0） | **G**entled | 绿色 `green` / `#E7F3E7` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
 
 ### 如何更换结果图搭配
 

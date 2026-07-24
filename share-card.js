@@ -4,7 +4,12 @@
   const CARD_WIDTH = 1080;
   const CARD_HEIGHT = 1440;
   const TEMPLATE_SCALE = 4 / 3;
-  const LINEART_OPACITY = 0.6;
+  const LINEART_OPACITIES = {
+    R: 0.64,
+    O: 0.6,
+    N: 0.52,
+    G: 0.56
+  };
   const RESULT_CARD_MAPPINGS = [
     {
       series: "R",
@@ -59,12 +64,12 @@
   };
   const CARD_PALETTES = {
     blue: {
-      base: "#E7F2F8", accent: "#3D7FA4", axis: "#2F4D63", shadow: "#1F384D", glass: 0.28, ruleOpacity: 0.38,
-      kicker: "#407C9A", title: "#253847", desc: "#486170", footer: "#527C94",
+      base: "#E2F0F8", accent: "#327CA7", axis: "#263F56", shadow: "#17314A", glass: 0.3, ruleOpacity: 0.46,
+      kicker: "#347A9F", title: "#1F3548", desc: "#405E70", footer: "#4A7893",
       glows: [
-        { x: 194, y: 784, rx: 430, ry: 350, color: "#8CC7E8", opacity: 0.70 },
-        { x: 652, y: 532, rx: 400, ry: 330, color: "#B8D1E4", opacity: 0.58 },
-        { x: 188, y: 190, rx: 360, ry: 300, color: "#F7D8CE", opacity: 0.42 }
+        { x: 174, y: 744, rx: 500, ry: 390, color: "#74BCE4", opacity: 0.78 },
+        { x: 654, y: 468, rx: 440, ry: 350, color: "#A8CAE4", opacity: 0.62 },
+        { x: 214, y: 180, rx: 360, ry: 280, color: "#F0CFC8", opacity: 0.34 }
       ]
     },
     pink: {
@@ -77,21 +82,21 @@
       ]
     },
     yellow: {
-      base: "#F9F0D4", accent: "#A87425", axis: "#5D4B32", shadow: "#4D381A", glass: 0.27, ruleOpacity: 0.4,
-      kicker: "#9E722B", title: "#4B3922", desc: "#6F5A35", footer: "#9C7B36",
+      base: "#F8F0D8", accent: "#9A6A22", axis: "#574832", shadow: "#473516", glass: 0.28, ruleOpacity: 0.36,
+      kicker: "#936C2A", title: "#463721", desc: "#685736", footer: "#917537",
       glows: [
-        { x: 640, y: 132, rx: 470, ry: 340, color: "#F2C35B", opacity: 0.68 },
-        { x: 138, y: 472, rx: 430, ry: 360, color: "#FFE8A8", opacity: 0.84 },
-        { x: 578, y: 850, rx: 380, ry: 300, color: "#F6C8B2", opacity: 0.44 }
+        { x: 640, y: 150, rx: 430, ry: 320, color: "#E5B94F", opacity: 0.5 },
+        { x: 150, y: 468, rx: 400, ry: 340, color: "#F8E2A1", opacity: 0.56 },
+        { x: 586, y: 866, rx: 360, ry: 290, color: "#EFC0A7", opacity: 0.3 }
       ]
     },
     green: {
-      base: "#EAF5EA", accent: "#4D8B59", axis: "#34523A", shadow: "#1F3D24", glass: 0.27, ruleOpacity: 0.38,
-      kicker: "#4E8758", title: "#253C2B", desc: "#4C624F", footer: "#638C67",
+      base: "#E7F3E7", accent: "#438350", axis: "#2C4D33", shadow: "#18381F", glass: 0.3, ruleOpacity: 0.44,
+      kicker: "#467F50", title: "#203929", desc: "#465F4B", footer: "#5A875F",
       glows: [
-        { x: 624, y: 806, rx: 420, ry: 340, color: "#A7D8A8", opacity: 0.76 },
-        { x: 158, y: 328, rx: 440, ry: 360, color: "#D9EAB9", opacity: 0.74 },
-        { x: 646, y: 138, rx: 340, ry: 280, color: "#F6D2B6", opacity: 0.42 }
+        { x: 604, y: 780, rx: 470, ry: 360, color: "#96D39D", opacity: 0.72 },
+        { x: 168, y: 342, rx: 420, ry: 340, color: "#CFE7AE", opacity: 0.62 },
+        { x: 666, y: 134, rx: 300, ry: 250, color: "#F0CDB5", opacity: 0.32 }
       ]
     }
   };
@@ -131,7 +136,7 @@
         y: 0,
         width: 810,
         height: 1080,
-        opacity: LINEART_OPACITY
+        opacity: LINEART_OPACITIES[mapping.series] ?? 0.6
       }
     }];
   }));
