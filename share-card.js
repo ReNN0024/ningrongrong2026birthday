@@ -22,8 +22,8 @@
       quadrant: "third",
       quadrantLabel: "荆棘 × 寻常",
       background: "blue",
-      lineart: "r-lineart-blue.webp",
-      lineartLabel: "R线稿裁切-蓝色"
+      lineart: "r-lineart-green.webp",
+      lineartLabel: "R线稿裁切-绿色"
     },
     {
       series: "O",
@@ -31,8 +31,8 @@
       quadrant: "second",
       quadrantLabel: "荆棘 × 不忘",
       background: "pink",
-      lineart: "o-lineart-pink.webp",
-      lineartLabel: "O线稿裁切-粉色"
+      lineart: "n-lineart-blue.webp",
+      lineartLabel: "N线稿裁切-蓝色"
     },
     {
       series: "N",
@@ -40,8 +40,8 @@
       quadrant: "first",
       quadrantLabel: "繁花 × 不忘",
       background: "yellow",
-      lineart: "n-lineart-yellow.webp",
-      lineartLabel: "N线稿裁切-黄色"
+      lineart: "o-lineart-yellow.webp",
+      lineartLabel: "O线稿裁切-黄色"
     },
     {
       series: "G",
@@ -49,8 +49,8 @@
       quadrant: "fourth",
       quadrantLabel: "繁花 × 寻常",
       background: "green",
-      lineart: "g-lineart-green.webp",
-      lineartLabel: "G线稿裁切-绿色"
+      lineart: "g-lineart-pink.webp",
+      lineartLabel: "G线稿裁切-粉色"
     }
   ];
   const QUADRANT_TESTS = {

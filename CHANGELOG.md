@@ -6,6 +6,16 @@
 
 ---
 
+## [1.7.27] - 2026-07-24
+
+### Changed — by coze
+- 修改四主倾向对应的底图（线稿）：
+  - R (Restrained)：r-lineart-blue.webp → r-lineart-green.webp
+  - O (Orthodox)：o-lineart-pink.webp → n-lineart-blue.webp
+  - N (Numinous)：n-lineart-yellow.webp → o-lineart-yellow.webp
+  - G (Gentle)：g-lineart-green.webp → g-lineart-pink.webp
+- 更新 RESULT_REPLACEMENT_GUIDE.md 中的搭配表
+
 ## [1.7.26] - 2026-07-24
 
 ### Changed — by coze
