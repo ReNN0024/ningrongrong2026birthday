@@ -72,7 +72,7 @@ window.PERSONALITY_RESULTS = {
 | 测试结果象限 | 系列名 | 结果图背景颜色 | 当前对应线稿预览 |
 |---|---|---|---|
 | 第三象限：荆棘 × 寻常（x < 0，y < 0） | **R**estrained | 蓝色 `blue` / `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
-| 第二象限：荆棘 × 不忘（x < 0，y > 0） | **O**bdurate | 粉色 `pink` / `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
+| 第二象限：荆棘 × 不忘（x < 0，y > 0） | **O**bdurate | 粉色 `pink` / `#FAE9EF` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
 | 第一象限：繁花 × 不忘（x > 0，y > 0） | **N**uminous | 黄色 `yellow` / `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
 | 第四象限：繁花 × 寻常（x > 0，y < 0） | **G**entled | 绿色 `green` / `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
 

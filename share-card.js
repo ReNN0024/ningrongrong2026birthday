@@ -68,12 +68,12 @@
       ]
     },
     pink: {
-      base: "#F8EAEC", accent: "#B95F72", axis: "#4A3A40", shadow: "#42242B", glass: 0.28, ruleOpacity: 0.4,
+      base: "#FAE9EF", accent: "#B95F72", axis: "#4A3A40", shadow: "#42242B", glass: 0.28, ruleOpacity: 0.4,
       kicker: "#A86675", title: "#3F3036", desc: "#69565D", footer: "#9E7380",
       glows: [
-        { x: 132, y: 156, rx: 420, ry: 320, color: "#F5A9B8", opacity: 0.78 },
-        { x: 632, y: 236, rx: 360, ry: 300, color: "#FFE5A7", opacity: 0.58 },
-        { x: 460, y: 850, rx: 440, ry: 360, color: "#CFE8E7", opacity: 0.55 }
+        { x: 132, y: 156, rx: 420, ry: 320, color: "#F58CA8", opacity: 0.72 },
+        { x: 632, y: 236, rx: 360, ry: 300, color: "#FFB8C4", opacity: 0.48 },
+        { x: 460, y: 850, rx: 440, ry: 360, color: "#EDADC7", opacity: 0.38 }
       ]
     },
     yellow: {
