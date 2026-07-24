@@ -10,7 +10,7 @@
     N: 0.52,
     G: 0.56
   };
-  const KICKER_FONT_FAMILY = "Bodoni 72, Didot, Baskerville, Times New Roman, serif";
+  const KICKER_FONT_FAMILY = "Bodoni 72 Smallcaps, Bodoni 72, Didot, Baskerville, Times New Roman, serif";
   const RESULT_CARD_MAPPINGS = [
     {
       series: "R",
@@ -104,22 +104,22 @@
   const CARD_LAYOUTS = {
     R: {
       align: "left-footer-right",
-      coord: { x: 42, y: 450 }, rule: { x: 72, y: 142, width: 180 },
+      coord: { x: 42, y: 450 }, rule: { x: 72, y: 142, width: 460 },
       copy: { kicker: [72, 74, 390], title: [72, 166, 460], desc: [72, 256, 430], footer: [42, 982, 440] }
     },
     O: {
       align: "left",
-      coord: { x: 57, y: 245 }, rule: { x: 72, y: 786, width: 180 },
+      coord: { x: 57, y: 245 }, rule: { x: 72, y: 786, width: 560 },
       copy: { kicker: [72, 74, 420], title: [72, 810, 560], desc: [74, 898, 586], footer: [72, 1008, 520] }
     },
     N: {
       align: "right",
-      coord: { x: 23, y: 432 }, rule: { x: 558, y: 124, width: 182 },
+      coord: { x: 23, y: 432 }, rule: { x: 338, y: 124, width: 410 },
       copy: { kicker: [360, 74, 360], title: [338, 142, 410], desc: [338, 232, 402], footer: [300, 982, 440] }
     },
     G: {
       align: "left",
-      coord: { x: 72, y: 194 }, rule: { x: 72, y: 798, width: 180 },
+      coord: { x: 72, y: 194 }, rule: { x: 72, y: 798, width: 520 },
       copy: { kicker: [72, 756, 410], title: [72, 810, 520], desc: [74, 896, 586], footer: [72, 1008, 520] }
     }
   };
@@ -223,27 +223,35 @@
     return lines.map((line, index) => `<text x="${x.toFixed(2)}" y="${(y + index * lineHeight).toFixed(2)}" text-anchor="${anchor}" font-family="sans-serif" font-size="${size}" font-weight="${weight}" fill="${fill}">${escapeXML(line)}</text>`).join("");
   }
 
-  function renderKickerText({ text, x, y, anchor, fill }) {
+  function renderKickerText({ text, x, y, anchor, fill, width }) {
     const [seriesName, tendency = ""] = String(text).split("-");
-    const letterSpacing = 1.8;
-    const tendencyLetterSpacing = 4.6;
-    const seriesFontSize = 43.33;
-    const tendencyFontSize = 33.33;
-    const separatorGap = 13.33;
+    const initial = seriesName.slice(0, 1);
+    const rest = seriesName.slice(1).toUpperCase();
+    const letterSpacing = 2.3;
+    const restLetterSpacing = 4.2;
+    const tendencyLetterSpacing = 5.2;
+    const initialFontSize = 62;
+    const seriesFontSize = 34.67;
+    const tendencyFontSize = 30.67;
+    const separatorGap = 16;
     const tendencyGap = 13.33;
-    const separatorWidth = 20;
+    const separatorWidth = 24;
     const baseline = Number(y);
-    const seriesWidth = seriesName.length * seriesFontSize * 0.54 + Math.max(0, seriesName.length - 1) * letterSpacing;
+    const titleWidth = scale(width || 390);
+    const titleStartX = anchor === "end" ? x - titleWidth : x;
+    const initialWidth = initialFontSize * 0.58;
+    const restWidth = rest.length * seriesFontSize * 0.56 + Math.max(0, rest.length - 1) * restLetterSpacing;
     const tendencyWidth = tendency.length * tendencyFontSize * 0.58 + Math.max(0, tendency.length - 1) * tendencyLetterSpacing;
-    const groupWidth = seriesWidth + separatorGap + separatorWidth + tendencyGap + tendencyWidth;
-    const startX = anchor === "end" ? x - groupWidth : x;
-    const separatorX = startX + seriesWidth + separatorGap;
+    const labelWidth = initialWidth + restWidth + separatorGap + separatorWidth + tendencyGap + tendencyWidth;
+    const textStartX = anchor === "end" ? x - labelWidth : titleStartX;
+    const separatorX = textStartX + initialWidth + restWidth + separatorGap;
     const tendencyX = separatorX + separatorWidth + tendencyGap;
 
     const parts = [];
-    parts.push(`<text x="${startX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${seriesFontSize}" font-weight="600" font-style="italic" letter-spacing="${letterSpacing}" fill="${fill}">${escapeXML(seriesName)}</text>`);
-    parts.push(`<line x1="${separatorX.toFixed(2)}" y1="${(baseline - 13.33).toFixed(2)}" x2="${(separatorX + separatorWidth).toFixed(2)}" y2="${(baseline - 13.33).toFixed(2)}" stroke="${fill}" stroke-width="2" stroke-linecap="round" opacity="0.58"/>`);
-    parts.push(`<text x="${tendencyX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="Avenir Next, Helvetica Neue, sans-serif" font-size="${tendencyFontSize}" font-weight="700" letter-spacing="${tendencyLetterSpacing}" fill="${fill}" opacity="0.86">${escapeXML(tendency)}</text>`);
+    parts.push(`<text x="${textStartX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${initialFontSize}" font-weight="900" font-style="italic" letter-spacing="${letterSpacing}" fill="${fill}">${escapeXML(initial)}</text>`);
+    parts.push(`<text x="${(textStartX + initialWidth).toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${seriesFontSize}" font-weight="650" font-style="italic" letter-spacing="${restLetterSpacing}" fill="${fill}" opacity="0.9">${escapeXML(rest)}</text>`);
+    parts.push(`<line x1="${separatorX.toFixed(2)}" y1="${(baseline - 12).toFixed(2)}" x2="${(separatorX + separatorWidth).toFixed(2)}" y2="${(baseline - 12).toFixed(2)}" stroke="${fill}" stroke-width="2" stroke-linecap="round" opacity="0.55"/>`);
+    parts.push(`<text x="${tendencyX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="Avenir Next, Helvetica Neue, sans-serif" font-size="${tendencyFontSize}" font-weight="800" letter-spacing="${tendencyLetterSpacing}" fill="${fill}" opacity="0.82">${escapeXML(tendency)}</text>`);
     return `<g id="result-kicker">${parts.join("")}</g>`;
   }
 
@@ -316,7 +324,7 @@
         ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.width)}" height="${scaled(style.figure.height)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMinYMin meet"/>` : ""}
         <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
         <rect x="${scaled(style.rule.x)}" y="${scaled(style.rule.y)}" width="${scaled(style.rule.width)}" height="2.67" fill="${style.accent}" opacity="${style.ruleOpacity}"/>
-        ${renderKickerText({ text: kickerText, x: textXFor(style, "kicker"), y: scale(style.copy.kicker[1] + 30), anchor: textAnchorFor(style, "kicker"), fill: style.kicker })}
+        ${renderKickerText({ text: kickerText, x: textXFor(style, "kicker"), y: scale(style.copy.kicker[1] + 36), anchor: textAnchorFor(style, "kicker"), fill: style.kicker, width: style.copy.title[2] })}
         <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 64)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
         ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 42.67, lineHeight: 61.33, fill: style.desc, weight: 500 })}
         <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>

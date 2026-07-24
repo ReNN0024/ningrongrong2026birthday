@@ -4,7 +4,7 @@
 
 **在线体验**：https://renn0024.github.io/ningrongrong2026birthday/
 
-**当前版本**：1.7.18
+**当前版本**：1.7.19
 
 ## 已实现能力
 
