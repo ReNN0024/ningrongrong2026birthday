@@ -4,6 +4,13 @@
 
 ---
 
+## [1.7.6] - 2026-07-24
+
+### Changed — by Snjór
+- 进一步压缩 Logo 缩略图资源：将超过 50KB 的 Logo WebP 重新压缩，确保 `assets/logos/` 下 41 个 Logo 均低于 50KB
+- 更新素材替换说明：所有用户提供的 PNG 格式 Logo 必须转换为 WebP，并压缩到 50KB 以下后再替换
+- 更新静态资源版本号，确保 Logo 资源优化及时生效
+
 ## [1.7.5] - 2026-07-24
 
 ### Changed — by Snjór

@@ -4,7 +4,7 @@
 
 **在线体验**：https://renn0024.github.io/ningrongrong2026birthday/
 
-**当前版本**：1.7.5
+**当前版本**：1.7.6
 
 ## 已实现能力
 
@@ -29,7 +29,7 @@
 - Logo 图层独立于 coordinate-world，按缩放比例实时渲染
 - 待选 Logo 列表采用增量更新，减少预览、放置、撤销、重做时的图片重载闪烁
 - Toast 采用单例原地更新机制，并对无效拖放、参考线切换、复位视角等高频反馈做去重限流
-- 图片素材统一使用 WebP，并对待选素材启用原生懒加载（`loading="lazy"`）
+- 图片素材统一使用 WebP，并对待选素材启用原生懒加载（`loading="lazy"`）；Logo 缩略图均控制在 50KB 以下
 - iOS Safari / 微信内置浏览器 / Android WebView 沉浸模式
 - `localStorage` 自动保存与 30 天内自动恢复，支持旧版 Logo ID 数据迁移，并提示多页面本地进度更新
 - 键盘焦点、无障碍按钮名称、最小触控热区、减少动态效果适配
@@ -56,7 +56,7 @@ RESULT_REPLACEMENT_GUIDE.md   结果文案替换指南
 
 ## 素材替换
 
-41 组素材均采用"行_列"命名规则，覆盖 `assets/logos/` 和 `assets/detail-images/` 中对应 WebP 即可，无需修改代码；如果拿到的是 PNG，请先转换为同名 WebP 再替换。详见 [`ASSET_REPLACEMENT_GUIDE.md`](./ASSET_REPLACEMENT_GUIDE.md)。
+41 组素材均采用"行_列"命名规则，覆盖 `assets/logos/` 和 `assets/detail-images/` 中对应 WebP 即可，无需修改代码；如果拿到的是 PNG Logo，请先转换为同名 WebP，并确保 `assets/logos/` 中最终文件小于 50KB 再替换。详见 [`ASSET_REPLACEMENT_GUIDE.md`](./ASSET_REPLACEMENT_GUIDE.md)。
 
 ## 字体替换
 

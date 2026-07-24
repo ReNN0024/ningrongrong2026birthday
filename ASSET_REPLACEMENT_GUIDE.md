@@ -32,8 +32,9 @@ assets/detail-images/{行}_{列}.webp  ← 预览大图（悬停/轻触预览时
    - 如果用户分别提供了两张图 → 一张用于 Logo，一张用于预览图。
 
 3. **处理 Logo 缩略图**：
+   - 所有用户提供的 PNG 格式 Logo 都必须转换为 WebP，不允许直接保留或提交 PNG Logo。
    - 将 PNG 缩放到 **512×512 像素**（保持透明通道）。
-   - 转换为 WebP 格式（quality=85）。
+   - 转换为 WebP 格式，并将最终文件压缩到 **50KB 以下**；可从 quality=85 开始，若超过 50KB，则逐步降低 quality，必要时再降低最大尺寸（如 448、384、320px）。
    - 输出路径：`assets/logos/{行}_{列}.webp`（覆盖原文件）。
 
 4. **处理预览大图**：
@@ -56,16 +57,21 @@ assets/detail-images/{行}_{列}.webp  ← 预览大图（悬停/轻触预览时
 ### 代码示例（Python + Pillow）
 
 ```python
+from pathlib import Path
 from PIL import Image
 
 # 假设用户提供的文件为 input.png，位置为 2_3
 slot = "2_3"
 img = Image.open("input.png")
 
-# Logo 缩略图：缩放到 512x512
+# Logo 缩略图：缩放到 512x512，并压缩到 50KB 以下
 logo = img.copy()
 logo.thumbnail((512, 512), Image.LANCZOS)
-logo.save(f"assets/logos/{slot}.webp", "WEBP", quality=85)
+for quality in (85, 80, 75, 70, 65, 60, 55, 50, 45, 40):
+    output = f"assets/logos/{slot}.webp"
+    logo.save(output, "WEBP", quality=quality, method=6)
+    if Path(output).stat().st_size <= 50 * 1024:
+        break
 
 # 预览大图：宽度限制 1200px，保持比例
 detail = img.copy()
@@ -78,6 +84,7 @@ detail.save(f"assets/detail-images/{slot}.webp", "WEBP", quality=85)
 ## 三、重要约束
 
 - **文件格式必须为 WebP**，扩展名为 `.webp`。不要保存为 PNG。
+- **所有用户提供的 PNG 格式 Logo 都必须转换为 WebP，并压缩到 50KB 以下**；推送前必须检查 `assets/logos/*.webp`，不得存在大于 50KB 的 Logo 文件。
 - **文件名必须严格匹配编号**（如 `2_3.webp`），不能有空格、大写或其他变体。
 - **不需要修改任何代码**（app.js、HTML、CSS 均不需要改动），替换图片文件即可。
 - **Logo 缩略图建议保持正方形**（512×512），主体居中并保留安全边距。
@@ -100,7 +107,7 @@ detail.save(f"assets/detail-images/{slot}.webp", "WEBP", quality=85)
 
 ## 五、建议规格（给用户参考）
 
-- **Logo 原图**：透明背景 PNG，建议 1024×1024 或 2048×2048，主体居中。
+- **Logo 原图**：透明背景 PNG，建议 1024×1024 或 2048×2048，主体居中；进入项目资源后必须由 AI 转为 WebP，并压缩到 50KB 以下。
 - **预览图原图**：PNG，建议 1200×750 或更大，页面使用 `object-fit: cover` 展示。
 - 用户不需要自己压缩或转格式，AI 负责处理。
 
