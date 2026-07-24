@@ -212,7 +212,8 @@ button:disabled { cursor: not-allowed; opacity: .36; }
     radial-gradient(ellipse at 77% 24%, rgba(234, 203, 113, .45) 0%, rgba(241, 222, 164, .26) 24%, rgba(248, 244, 237, 0) 58%),
     /* 荆棘 × 寻常：蓝色 */
     radial-gradient(ellipse at 24% 77%, rgba(154, 199, 205, .42) 0%, rgba(193, 220, 218, .26) 25%, rgba(248, 244, 237, 0) 59%),
-    /* 繁花 × 寻常：保留绿色 */
+    /* 繁花 × 寻常：绿色 */
+    /* 如需修改，复制替换rgba值就可以 */
     radial-gradient(ellipse at 77% 77%, rgba(179, 202, 149, .48) 0%, rgba(211, 222, 186, .27) 25%, rgba(248, 244, 237, 0) 59%),
     linear-gradient(135deg, #faf7f1, #f5f0e8);
 }
