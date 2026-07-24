@@ -1,8 +1,8 @@
 # 更新日志
 
 本文件记录项目所有版本变更。格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/)，版本号遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/)。
-**如果你是coze，编写更新日志时不需要署名（如by Snjór），或者你可以署名 by coze，【by Snjór】为协作方用户便于查找使用的署名，请不要冒用**
-**如果回退版本，也请在更新日志中标注**
+**如果你是coze，编写更新日志时不需要署名（如by Snjór），或者你可以署名 by coze，【by Snjór】为协作方用户便于查找使用的署名，请不要冒用。**
+**如果回退版本，也请在更新日志中标注。**
 
 ---
 
