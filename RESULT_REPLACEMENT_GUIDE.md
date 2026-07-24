@@ -56,24 +56,24 @@ window.PERSONALITY_RESULTS = {
 
 ## 三、结果图背景与线稿搭配
 
-结果图的视觉由 `share-card.js` 中的 `CARD_STYLES` 控制。当前线稿图已裁切为 **810×1080**，与设计稿底图尺寸一致；在 SVG 中会按 `TEMPLATE_SCALE = 4 / 3` 放大到 **1080×1440**，并从分享卡片背景原点 `(0, 0)` 重合放置。
+结果图的视觉由 `share-card.js` 中的 `CARD_STYLES` 控制。当前线稿图已裁切为 **810×1080**，与设计稿底图尺寸一致；在 SVG 中会按 `TEMPLATE_SCALE = 4 / 3` 放大到 **1080×1440**，并从分享卡片背景原点 `(0, 0)` 重合放置。线稿叠在结果卡背景上时，统一使用 **60% 透明度**（`opacity: 0.6`）。
 
 当前正在使用的搭配如下：
 
 | 英文 key | 主倾向 | 副倾向 | 结果图背景颜色 | 当前对应线稿 |
 |---|---|---|---|---|
-| `R-thorn` | R：荆棘 × 寻常 | thorn：荆棘 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-pink.webp" width="90" alt="R线稿裁切-粉色"> |
-| `R-flower` | R：荆棘 × 寻常 | flower：繁花 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-pink.webp" width="90" alt="R线稿裁切-粉色"> |
-| `R-memory` | R：荆棘 × 寻常 | memory：不忘 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-pink.webp" width="90" alt="R线稿裁切-粉色"> |
-| `R-daily` | R：荆棘 × 寻常 | daily：寻常 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-pink.webp" width="90" alt="R线稿裁切-粉色"> |
-| `O-thorn` | O：荆棘 × 不忘 | thorn：荆棘 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-yellow.webp" width="90" alt="O线稿裁切-黄色"> |
-| `O-flower` | O：荆棘 × 不忘 | flower：繁花 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-yellow.webp" width="90" alt="O线稿裁切-黄色"> |
-| `O-memory` | O：荆棘 × 不忘 | memory：不忘 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-yellow.webp" width="90" alt="O线稿裁切-黄色"> |
-| `O-daily` | O：荆棘 × 不忘 | daily：寻常 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-yellow.webp" width="90" alt="O线稿裁切-黄色"> |
-| `N-thorn` | N：繁花 × 不忘 | thorn：荆棘 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-blue.webp" width="90" alt="N线稿裁切-蓝色"> |
-| `N-flower` | N：繁花 × 不忘 | flower：繁花 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-blue.webp" width="90" alt="N线稿裁切-蓝色"> |
-| `N-memory` | N：繁花 × 不忘 | memory：不忘 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-blue.webp" width="90" alt="N线稿裁切-蓝色"> |
-| `N-daily` | N：繁花 × 不忘 | daily：寻常 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-blue.webp" width="90" alt="N线稿裁切-蓝色"> |
+| `R-thorn` | R：荆棘 × 寻常 | thorn：荆棘 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
+| `R-flower` | R：荆棘 × 寻常 | flower：繁花 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
+| `R-memory` | R：荆棘 × 寻常 | memory：不忘 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
+| `R-daily` | R：荆棘 × 寻常 | daily：寻常 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
+| `O-thorn` | O：荆棘 × 不忘 | thorn：荆棘 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
+| `O-flower` | O：荆棘 × 不忘 | flower：繁花 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
+| `O-memory` | O：荆棘 × 不忘 | memory：不忘 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
+| `O-daily` | O：荆棘 × 不忘 | daily：寻常 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
+| `N-thorn` | N：繁花 × 不忘 | thorn：荆棘 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
+| `N-flower` | N：繁花 × 不忘 | flower：繁花 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
+| `N-memory` | N：繁花 × 不忘 | memory：不忘 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
+| `N-daily` | N：繁花 × 不忘 | daily：寻常 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
 | `G-thorn` | G：繁花 × 寻常 | thorn：荆棘 | 绿色 `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
 | `G-flower` | G：繁花 × 寻常 | flower：繁花 | 绿色 `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
 | `G-memory` | G：繁花 × 寻常 | memory：不忘 | 绿色 `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
