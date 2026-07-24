@@ -6,6 +6,15 @@
 
 ---
 
+## [1.7.28] - 2026-07-24
+
+### Changed — by coze
+- 重命名线稿文件，交换 n 和 o 前缀：
+  - 原 n-lineart-* → o-lineart-*
+  - 原 o-lineart-* → n-lineart-*
+- 更新 share-card.js 中的 lineart 引用
+- 更新 RESULT_REPLACEMENT_GUIDE.md 中的搭配表
+
 ## [1.7.27] - 2026-07-24
 
 ### Changed — by coze

@@ -31,8 +31,8 @@
       quadrant: "second",
       quadrantLabel: "荆棘 × 不忘",
       background: "pink",
-      lineart: "n-lineart-blue.webp",
-      lineartLabel: "N线稿裁切-蓝色"
+      lineart: "o-lineart-blue.webp",
+      lineartLabel: "O线稿裁切-蓝色"
     },
     {
       series: "N",
@@ -40,8 +40,8 @@
       quadrant: "first",
       quadrantLabel: "繁花 × 不忘",
       background: "yellow",
-      lineart: "o-lineart-yellow.webp",
-      lineartLabel: "O线稿裁切-黄色"
+      lineart: "n-lineart-yellow.webp",
+      lineartLabel: "N线稿裁切-黄色"
     },
     {
       series: "G",
