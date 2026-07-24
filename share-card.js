@@ -21,7 +21,7 @@
       seriesName: "Restrained",
       quadrant: "third",
       quadrantLabel: "荆棘 × 寻常",
-      background: "blue",
+      background: "green",
       lineart: "r-lineart-green.webp",
       lineartLabel: "R线稿裁切-绿色"
     },
@@ -30,7 +30,7 @@
       seriesName: "Orthodox",
       quadrant: "second",
       quadrantLabel: "荆棘 × 不忘",
-      background: "pink",
+      background: "blue",
       lineart: "o-lineart-blue.webp",
       lineartLabel: "O线稿裁切-蓝色"
     },
@@ -48,7 +48,7 @@
       seriesName: "Gentle",
       quadrant: "fourth",
       quadrantLabel: "繁花 × 寻常",
-      background: "green",
+      background: "pink",
       lineart: "g-lineart-pink.webp",
       lineartLabel: "G线稿裁切-粉色"
     }

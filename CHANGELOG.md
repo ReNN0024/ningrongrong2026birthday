@@ -6,6 +6,19 @@
 
 ---
 
+## [1.7.29] - 2026-07-24
+
+### Changed — by coze
+- 更新结果图背景颜色与线稿文件名后缀一致：
+  - R (Restrained)：蓝色 → 绿色
+  - O (Orthodox)：粉色 → 蓝色
+  - N (Numinous)：黄色（不变）
+  - G (Gentle)：绿色 → 粉色
+- 更新 share-card.js 中的 background 配置
+- 更新 RESULT_REPLACEMENT_GUIDE.md 中的搭配表
+
+---
+
 ## [1.7.28] - 2026-07-24
 
 ### Changed — by coze
