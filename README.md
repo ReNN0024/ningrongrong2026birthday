@@ -4,7 +4,7 @@
 
 **在线体验**：https://renn0024.github.io/ningrongrong2026birthday/
 
-**当前版本**：1.7.7
+**当前版本**：1.7.8
 
 ## 已实现能力
 
@@ -47,7 +47,7 @@ share-card.js           3:4结果图生成逻辑（R/O/N/G 四款结果卡模板
 assets/
   logos/                Logo 缩略图（41组）
   detail-images/        预览大图（41组）
-  share-card-figures/   四款结果卡人物线稿资源
+  share-card-figures/   16 张结果卡线稿裁切资源
   fonts/                自定义字体文件（按需添加）
 ASSET_REPLACEMENT_GUIDE.md    素材替换指南
 FONT_REPLACEMENT_GUIDE.md     字体替换指南

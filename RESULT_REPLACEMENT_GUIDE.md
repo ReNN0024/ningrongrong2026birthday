@@ -54,7 +54,55 @@ window.PERSONALITY_RESULTS = {
 | `memory` | 更靠近不忘倾向 |
 | `daily` | 更靠近寻常倾向 |
 
-## 三、当前 16 种结果清单
+## 三、结果图背景与线稿搭配
+
+结果图的视觉由 `share-card.js` 中的 `CARD_STYLES` 控制。当前线稿图已裁切为 **810×1080**，与设计稿底图尺寸一致；在 SVG 中会按 `TEMPLATE_SCALE = 4 / 3` 放大到 **1080×1440**，并从分享卡片背景原点 `(0, 0)` 重合放置。
+
+当前正在使用的搭配如下：
+
+| 英文 key | 主倾向 | 副倾向 | 结果图背景颜色 | 当前对应线稿 |
+|---|---|---|---|---|
+| `R-thorn` | R：荆棘 × 寻常 | thorn：荆棘 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-pink.webp" width="90" alt="R线稿裁切-粉色"> |
+| `R-flower` | R：荆棘 × 寻常 | flower：繁花 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-pink.webp" width="90" alt="R线稿裁切-粉色"> |
+| `R-memory` | R：荆棘 × 寻常 | memory：不忘 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-pink.webp" width="90" alt="R线稿裁切-粉色"> |
+| `R-daily` | R：荆棘 × 寻常 | daily：寻常 | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-pink.webp" width="90" alt="R线稿裁切-粉色"> |
+| `O-thorn` | O：荆棘 × 不忘 | thorn：荆棘 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-yellow.webp" width="90" alt="O线稿裁切-黄色"> |
+| `O-flower` | O：荆棘 × 不忘 | flower：繁花 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-yellow.webp" width="90" alt="O线稿裁切-黄色"> |
+| `O-memory` | O：荆棘 × 不忘 | memory：不忘 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-yellow.webp" width="90" alt="O线稿裁切-黄色"> |
+| `O-daily` | O：荆棘 × 不忘 | daily：寻常 | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-yellow.webp" width="90" alt="O线稿裁切-黄色"> |
+| `N-thorn` | N：繁花 × 不忘 | thorn：荆棘 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-blue.webp" width="90" alt="N线稿裁切-蓝色"> |
+| `N-flower` | N：繁花 × 不忘 | flower：繁花 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-blue.webp" width="90" alt="N线稿裁切-蓝色"> |
+| `N-memory` | N：繁花 × 不忘 | memory：不忘 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-blue.webp" width="90" alt="N线稿裁切-蓝色"> |
+| `N-daily` | N：繁花 × 不忘 | daily：寻常 | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-blue.webp" width="90" alt="N线稿裁切-蓝色"> |
+| `G-thorn` | G：繁花 × 寻常 | thorn：荆棘 | 绿色 `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
+| `G-flower` | G：繁花 × 寻常 | flower：繁花 | 绿色 `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
+| `G-memory` | G：繁花 × 寻常 | memory：不忘 | 绿色 `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
+| `G-daily` | G：繁花 × 寻常 | daily：寻常 | 绿色 `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
+
+### 可选线稿资源预览
+
+16 张线稿都存放在 `assets/share-card-figures/`。如果后续要更换背景色与线稿搭配，只需要在 `share-card.js` 中调整对应主倾向的 `figure.src`。
+
+| 线稿名称 | 文件名 | 预览图 |
+|---|---|---|
+| G线稿裁切-粉色 | `g-lineart-pink.webp` | <img src="assets/share-card-figures/g-lineart-pink.webp" width="90" alt="G线稿裁切-粉色"> |
+| G线稿裁切-黄色 | `g-lineart-yellow.webp` | <img src="assets/share-card-figures/g-lineart-yellow.webp" width="90" alt="G线稿裁切-黄色"> |
+| G线稿裁切-蓝色 | `g-lineart-blue.webp` | <img src="assets/share-card-figures/g-lineart-blue.webp" width="90" alt="G线稿裁切-蓝色"> |
+| G线稿裁切-绿色 | `g-lineart-green.webp` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
+| N线稿裁切-粉色 | `n-lineart-pink.webp` | <img src="assets/share-card-figures/n-lineart-pink.webp" width="90" alt="N线稿裁切-粉色"> |
+| N线稿裁切-黄色 | `n-lineart-yellow.webp` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
+| N线稿裁切-蓝色 | `n-lineart-blue.webp` | <img src="assets/share-card-figures/n-lineart-blue.webp" width="90" alt="N线稿裁切-蓝色"> |
+| N线稿裁切-绿色 | `n-lineart-green.webp` | <img src="assets/share-card-figures/n-lineart-green.webp" width="90" alt="N线稿裁切-绿色"> |
+| O线稿裁切-粉色 | `o-lineart-pink.webp` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
+| O线稿裁切-黄色 | `o-lineart-yellow.webp` | <img src="assets/share-card-figures/o-lineart-yellow.webp" width="90" alt="O线稿裁切-黄色"> |
+| O线稿裁切-蓝色 | `o-lineart-blue.webp` | <img src="assets/share-card-figures/o-lineart-blue.webp" width="90" alt="O线稿裁切-蓝色"> |
+| O线稿裁切-绿色 | `o-lineart-green.webp` | <img src="assets/share-card-figures/o-lineart-green.webp" width="90" alt="O线稿裁切-绿色"> |
+| R线稿裁切-粉色 | `r-lineart-pink.webp` | <img src="assets/share-card-figures/r-lineart-pink.webp" width="90" alt="R线稿裁切-粉色"> |
+| R线稿裁切-黄色 | `r-lineart-yellow.webp` | <img src="assets/share-card-figures/r-lineart-yellow.webp" width="90" alt="R线稿裁切-黄色"> |
+| R线稿裁切-蓝色 | `r-lineart-blue.webp` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
+| R线稿裁切-绿色 | `r-lineart-green.webp` | <img src="assets/share-card-figures/r-lineart-green.webp" width="90" alt="R线稿裁切-绿色"> |
+
+## 四、当前 16 种结果清单
 
 | 结果编号 | 英文 key | 结果名称 | 结果分析 |
 |---|---|---|---|
@@ -75,7 +123,7 @@ window.PERSONALITY_RESULTS = {
 | R15 | `G-memory` | 暖忆织梦者 | 你把美好的记忆织进日常，让普通时刻也闪着光。 |
 | R16 | `G-daily` | 盛景归常者 | 你能把圆满稳稳接住，让盛大的爱落成踏实生活。 |
 
-## 四、用户提交替换文案时的推荐格式
+## 五、用户提交替换文案时的推荐格式
 
 要求用户只提交需要修改的结果，未提交的结果保持不变。
 
@@ -93,7 +141,7 @@ window.PERSONALITY_RESULTS = {
 | R06 | 新名称 | 新的一句话结果分析。 |
 | R16 | 新名称 | 新的一句话结果分析。 |
 
-## 五、替换规则
+## 六、替换规则
 
 收到用户提交的新结果文案后，严格执行以下规则：
 
@@ -115,7 +163,7 @@ window.PERSONALITY_RESULTS = {
 
 10. 如本次修改需要上线，更新 `CHANGELOG.md` 和 `index.html` 中的静态资源版本号，提交并推送。
 
-## 六、AI 执行 Prompt
+## 七、AI 执行 Prompt
 
 收到用户提交的「英文 key / 结果编号｜新结果名称｜新结果分析」后，按以下流程执行：
 

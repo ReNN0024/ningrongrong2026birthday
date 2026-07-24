@@ -21,11 +21,11 @@
     G: "Gentled"
   };
   const CARD_STYLES = {
-    // R = 荆棘 × 寻常 → 使用原 N 的配置（蓝色 + N图）
+    // R = 荆棘 × 寻常 → 粉色线稿覆盖整张结果卡
     R: {
       base: "#E7F2F8", accent: "#3D7FA4", axis: "#2F4D63", shadow: "#1F384D", glass: 0.28, ruleOpacity: 0.38,
       kicker: "#407C9A", title: "#253847", desc: "#486170", footer: "#527C94", align: "left-footer-right",
-      figure: { src: "assets/share-card-figures/n-figure.webp", x: 0, y: -55, size: 1160, opacity: 0.5 },
+      figure: { src: "assets/share-card-figures/r-lineart-pink.webp", x: 0, y: 0, width: 810, height: 1080, opacity: 1 },
       coord: { x: 42, y: 450 }, rule: { x: 72, y: 142, width: 180 },
       copy: { kicker: [72, 74, 390], title: [72, 166, 460], desc: [72, 256, 430], footer: [42, 982, 440] },
       glows: [
@@ -34,11 +34,11 @@
         { x: 188, y: 190, rx: 360, ry: 300, color: "#F7D8CE", opacity: 0.42 }
       ]
     },
-    // O = 荆棘 × 不忘 → 使用原 R 的配置（粉色 + R图）
+    // O = 荆棘 × 不忘 → 黄色线稿覆盖整张结果卡
     O: {
       base: "#F8EAEC", accent: "#B95F72", axis: "#4A3A40", shadow: "#42242B", glass: 0.28, ruleOpacity: 0.4,
       kicker: "#A86675", title: "#3F3036", desc: "#69565D", footer: "#9E7380", align: "left",
-      figure: { src: "assets/share-card-figures/r-figure.webp", x: -19, y: -135, size: 1215, opacity: 0.5 },
+      figure: { src: "assets/share-card-figures/o-lineart-yellow.webp", x: 0, y: 0, width: 810, height: 1080, opacity: 1 },
       coord: { x: 57, y: 245 }, rule: { x: 72, y: 786, width: 180 },
       copy: { kicker: [72, 74, 420], title: [72, 810, 560], desc: [74, 898, 586], footer: [72, 1008, 520] },
       glows: [
@@ -47,11 +47,11 @@
         { x: 460, y: 850, rx: 440, ry: 360, color: "#CFE8E7", opacity: 0.55 }
       ]
     },
-    // N = 繁花 × 不忘 → 使用原 O 的配置（黄色 + O图）
+    // N = 繁花 × 不忘 → 蓝色线稿覆盖整张结果卡
     N: {
       base: "#F9F0D4", accent: "#A87425", axis: "#5D4B32", shadow: "#4D381A", glass: 0.27, ruleOpacity: 0.4,
       kicker: "#9E722B", title: "#4B3922", desc: "#6F5A35", footer: "#9C7B36", align: "right",
-      figure: { src: "assets/share-card-figures/o-figure.webp", x: 0, y: -36, size: 1105, opacity: 0.5 },
+      figure: { src: "assets/share-card-figures/n-lineart-blue.webp", x: 0, y: 0, width: 810, height: 1080, opacity: 1 },
       coord: { x: 23, y: 432 }, rule: { x: 558, y: 124, width: 182 },
       copy: { kicker: [360, 74, 360], title: [338, 142, 410], desc: [338, 232, 402], footer: [300, 982, 440] },
       glows: [
@@ -60,11 +60,11 @@
         { x: 578, y: 850, rx: 380, ry: 300, color: "#F6C8B2", opacity: 0.44 }
       ]
     },
-    // G = 繁花 × 寻常 → 保持原 G 的配置（绿色 + G图）
+    // G = 繁花 × 寻常 → 绿色线稿覆盖整张结果卡
     G: {
       base: "#EAF5EA", accent: "#4D8B59", axis: "#34523A", shadow: "#1F3D24", glass: 0.27, ruleOpacity: 0.38,
       kicker: "#4E8758", title: "#253C2B", desc: "#4C624F", footer: "#638C67", align: "left",
-      figure: { src: "assets/share-card-figures/g-figure.webp", x: -43, y: -108, size: 1247, opacity: 0.5 },
+      figure: { src: "assets/share-card-figures/g-lineart-green.webp", x: 0, y: 0, width: 810, height: 1080, opacity: 1 },
       coord: { x: 72, y: 194 }, rule: { x: 72, y: 798, width: 180 },
       copy: { kicker: [72, 756, 410], title: [72, 810, 520], desc: [74, 896, 586], footer: [72, 1008, 520] },
       glows: [
@@ -225,7 +225,7 @@
       <g clip-path="url(#card-clip)">
         <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" rx="48" ry="48" fill="${style.base}"/>
         ${style.glows.map((_, index) => `<rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" fill="url(#card-glow-${index})"/>`).join("")}
-        ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.size)}" height="${scaled(style.figure.size)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMidYMid meet"/>` : ""}
+        ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.width)}" height="${scaled(style.figure.height)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMinYMin meet"/>` : ""}
         <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
         <rect x="${scaled(style.rule.x)}" y="${scaled(style.rule.y)}" width="${scaled(style.rule.width)}" height="2.67" fill="${style.accent}" opacity="${style.ruleOpacity}"/>
         <text x="${textXFor(style, "kicker").toFixed(2)}" y="${scaled(style.copy.kicker[1] + 28)}" text-anchor="${textAnchorFor(style, "kicker")}" font-family="sans-serif" font-size="37.33" font-weight="600" fill="${style.kicker}">${escapeXML(kickerText)}</text>
