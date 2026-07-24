@@ -27,7 +27,7 @@
     },
     {
       series: "O",
-      seriesName: "Obdurate",
+      seriesName: "Orthodox",
       quadrant: "second",
       quadrantLabel: "荆棘 × 不忘",
       background: "pink",
@@ -45,7 +45,7 @@
     },
     {
       series: "G",
-      seriesName: "Gentled",
+      seriesName: "Gentle",
       quadrant: "fourth",
       quadrantLabel: "繁花 × 寻常",
       background: "green",

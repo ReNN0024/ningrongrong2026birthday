@@ -6,6 +6,15 @@
 
 ---
 
+## [1.7.26] - 2026-07-24
+
+### Changed — by coze
+- 修改主倾向系列名：
+  - O: Obdurate → **Orthodox**
+  - G: Gentled → **Gentle**
+- 更新 share-card.js 中 RESULT_CARD_MAPPINGS 的 seriesName
+- 更新 RESULT_REPLACEMENT_GUIDE.md 中的主倾向定义表和搭配表
+
 ## [1.7.25] - 2026-07-24
 
 ### Changed — by Snjór
