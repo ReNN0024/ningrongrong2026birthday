@@ -123,7 +123,7 @@
     },
     G: {
       align: "left",
-      coord: { x: 72, y: 194 },
+      coord: { x: 72, y: 104 },
       copy: { kicker: [72, 756, 410], title: [72, 810, 520], desc: [74, 896, 586], footer: [72, 1008, 520] }
     }
   };
@@ -131,7 +131,7 @@
     R: { dropcap: [70, 42, 106], main: [154, 66, 42], sub: [158, 114, 18], slash: [151, 112, 27], hairline: [232, 126, 96] },
     O: { dropcap: [382, 42, 106], main: [464, 66, 42], sub: [468, 114, 18], slash: [460, 112, 27], hairline: [546, 126, 104] },
     N: { dropcap: [70, 42, 106], main: [154, 66, 42], sub: [158, 114, 18], slash: [151, 112, 27], hairline: [232, 126, 96] },
-    G: { dropcap: [70, 734, 106], main: [154, 758, 42], sub: [158, 806, 18], slash: [151, 804, 27], hairline: [232, 818, 104] }
+    G: { dropcap: [70, 682, 106], main: [154, 706, 42], sub: [158, 754, 18], slash: [151, 752, 27], hairline: [232, 766, 104] }
   };
   const LABEL_PALETTES = {
     blue: { drop: "#315F78", main: "#407C9A", sub: "#315F78", line: "#3D7FA4" },
