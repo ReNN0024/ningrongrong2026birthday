@@ -4,59 +4,90 @@
   const CARD_WIDTH = 1080;
   const CARD_HEIGHT = 1440;
   const TEMPLATE_SCALE = 4 / 3;
-  const QUADRANTS = {
-    r: { label: "荆棘 × 不忘", order: 0 },
-    o: { label: "繁花 × 不忘", order: 1 },
-    n: { label: "荆棘 × 寻常", order: 2 },
-    g: { label: "繁花 × 寻常", order: 3 }
+  const LINEART_OPACITY = 0.6;
+  const RESULT_CARD_MAPPINGS = [
+    {
+      series: "R",
+      seriesName: "Restrained",
+      quadrant: "third",
+      quadrantLabel: "荆棘 × 寻常",
+      background: "blue",
+      lineart: "r-lineart-blue.webp",
+      lineartLabel: "R线稿裁切-蓝色"
+    },
+    {
+      series: "O",
+      seriesName: "Obdurate",
+      quadrant: "second",
+      quadrantLabel: "荆棘 × 不忘",
+      background: "pink",
+      lineart: "o-lineart-pink.webp",
+      lineartLabel: "O线稿裁切-粉色"
+    },
+    {
+      series: "N",
+      seriesName: "Numinous",
+      quadrant: "first",
+      quadrantLabel: "繁花 × 不忘",
+      background: "yellow",
+      lineart: "n-lineart-yellow.webp",
+      lineartLabel: "N线稿裁切-黄色"
+    },
+    {
+      series: "G",
+      seriesName: "Gentled",
+      quadrant: "fourth",
+      quadrantLabel: "繁花 × 寻常",
+      background: "green",
+      lineart: "g-lineart-green.webp",
+      lineartLabel: "G线稿裁切-绿色"
+    }
+  ];
+  const QUADRANT_TESTS = {
+    first: item => item.x >= 0 && item.y >= 0,
+    second: item => item.x < 0 && item.y >= 0,
+    third: item => item.x < 0 && item.y < 0,
+    fourth: item => item.x >= 0 && item.y < 0
   };
+  const QUADRANTS = Object.fromEntries(RESULT_CARD_MAPPINGS.map((mapping, index) => [
+    mapping.series,
+    { label: mapping.quadrantLabel, order: index }
+  ]));
   const DISPLAY_TENDENCY_KEYS = {
     flower: "BLOOM",
     daily: "HEARTH"
   };
-  const CARD_STYLES = {
-    r: {
-      base: "#F8EAEC", accent: "#B95F72", axis: "#4A3A40", shadow: "#42242B", glass: 0.28, ruleOpacity: 0.4,
-      kicker: "#A86675", title: "#3F3036", desc: "#69565D", footer: "#9E7380", align: "left",
-      figure: { src: "assets/share-card-figures/r-figure.png", x: -19, y: -135, size: 1215, opacity: 0.5 },
-      coord: { x: 57, y: 245 }, rule: { x: 72, y: 786, width: 180 },
-      copy: { kicker: [72, 74, 420], title: [72, 810, 560], desc: [74, 898, 586], footer: [72, 1008, 520] },
-      glows: [
-        { x: 132, y: 156, rx: 420, ry: 320, color: "#F5A9B8", opacity: 0.78 },
-        { x: 632, y: 236, rx: 360, ry: 300, color: "#FFE5A7", opacity: 0.58 },
-        { x: 460, y: 850, rx: 440, ry: 360, color: "#CFE8E7", opacity: 0.55 }
-      ]
-    },
-    o: {
-      base: "#F9F0D4", accent: "#A87425", axis: "#5D4B32", shadow: "#4D381A", glass: 0.27, ruleOpacity: 0.4,
-      kicker: "#9E722B", title: "#4B3922", desc: "#6F5A35", footer: "#9C7B36", align: "right",
-      figure: { src: "assets/share-card-figures/o-figure.png", x: 0, y: -36, size: 1105, opacity: 0.5 },
-      coord: { x: 23, y: 432 }, rule: { x: 558, y: 124, width: 182 },
-      copy: { kicker: [360, 74, 360], title: [338, 142, 410], desc: [338, 232, 402], footer: [300, 982, 440] },
-      glows: [
-        { x: 640, y: 132, rx: 470, ry: 340, color: "#F2C35B", opacity: 0.68 },
-        { x: 138, y: 472, rx: 430, ry: 360, color: "#FFE8A8", opacity: 0.84 },
-        { x: 578, y: 850, rx: 380, ry: 300, color: "#F6C8B2", opacity: 0.44 }
-      ]
-    },
-    n: {
+  const CARD_PALETTES = {
+    blue: {
       base: "#E7F2F8", accent: "#3D7FA4", axis: "#2F4D63", shadow: "#1F384D", glass: 0.28, ruleOpacity: 0.38,
-      kicker: "#407C9A", title: "#253847", desc: "#486170", footer: "#527C94", align: "left-footer-right",
-      figure: { src: "assets/share-card-figures/n-figure.png", x: 0, y: -55, size: 1160, opacity: 0.5 },
-      coord: { x: 42, y: 450 }, rule: { x: 72, y: 142, width: 180 },
-      copy: { kicker: [72, 74, 390], title: [72, 166, 460], desc: [72, 256, 430], footer: [42, 982, 440] },
+      kicker: "#407C9A", title: "#253847", desc: "#486170", footer: "#527C94",
       glows: [
         { x: 194, y: 784, rx: 430, ry: 350, color: "#8CC7E8", opacity: 0.70 },
         { x: 652, y: 532, rx: 400, ry: 330, color: "#B8D1E4", opacity: 0.58 },
         { x: 188, y: 190, rx: 360, ry: 300, color: "#F7D8CE", opacity: 0.42 }
       ]
     },
-    g: {
+    pink: {
+      base: "#FAE9EF", accent: "#B95F72", axis: "#4A3A40", shadow: "#42242B", glass: 0.28, ruleOpacity: 0.4,
+      kicker: "#A86675", title: "#3F3036", desc: "#69565D", footer: "#9E7380",
+      glows: [
+        { x: 132, y: 156, rx: 420, ry: 320, color: "#F58CA8", opacity: 0.72 },
+        { x: 632, y: 236, rx: 360, ry: 300, color: "#FFB8C4", opacity: 0.48 },
+        { x: 460, y: 850, rx: 440, ry: 360, color: "#EDADC7", opacity: 0.38 }
+      ]
+    },
+    yellow: {
+      base: "#F9F0D4", accent: "#A87425", axis: "#5D4B32", shadow: "#4D381A", glass: 0.27, ruleOpacity: 0.4,
+      kicker: "#9E722B", title: "#4B3922", desc: "#6F5A35", footer: "#9C7B36",
+      glows: [
+        { x: 640, y: 132, rx: 470, ry: 340, color: "#F2C35B", opacity: 0.68 },
+        { x: 138, y: 472, rx: 430, ry: 360, color: "#FFE8A8", opacity: 0.84 },
+        { x: 578, y: 850, rx: 380, ry: 300, color: "#F6C8B2", opacity: 0.44 }
+      ]
+    },
+    green: {
       base: "#EAF5EA", accent: "#4D8B59", axis: "#34523A", shadow: "#1F3D24", glass: 0.27, ruleOpacity: 0.38,
-      kicker: "#4E8758", title: "#253C2B", desc: "#4C624F", footer: "#638C67", align: "left",
-      figure: { src: "assets/share-card-figures/g-figure.png", x: -43, y: -108, size: 1247, opacity: 0.5 },
-      coord: { x: 72, y: 194 }, rule: { x: 72, y: 798, width: 180 },
-      copy: { kicker: [72, 756, 410], title: [72, 810, 520], desc: [74, 896, 586], footer: [72, 1008, 520] },
+      kicker: "#4E8758", title: "#253C2B", desc: "#4C624F", footer: "#638C67",
       glows: [
         { x: 624, y: 806, rx: 420, ry: 340, color: "#A7D8A8", opacity: 0.76 },
         { x: 158, y: 328, rx: 440, ry: 360, color: "#D9EAB9", opacity: 0.74 },
@@ -64,6 +95,46 @@
       ]
     }
   };
+  const CARD_LAYOUTS = {
+    R: {
+      align: "left-footer-right",
+      coord: { x: 42, y: 450 }, rule: { x: 72, y: 142, width: 180 },
+      copy: { kicker: [72, 74, 390], title: [72, 166, 460], desc: [72, 256, 430], footer: [42, 982, 440] }
+    },
+    O: {
+      align: "left",
+      coord: { x: 57, y: 245 }, rule: { x: 72, y: 786, width: 180 },
+      copy: { kicker: [72, 74, 420], title: [72, 810, 560], desc: [74, 898, 586], footer: [72, 1008, 520] }
+    },
+    N: {
+      align: "right",
+      coord: { x: 23, y: 432 }, rule: { x: 558, y: 124, width: 182 },
+      copy: { kicker: [360, 74, 360], title: [338, 142, 410], desc: [338, 232, 402], footer: [300, 982, 440] }
+    },
+    G: {
+      align: "left",
+      coord: { x: 72, y: 194 }, rule: { x: 72, y: 798, width: 180 },
+      copy: { kicker: [72, 756, 410], title: [72, 810, 520], desc: [74, 896, 586], footer: [72, 1008, 520] }
+    }
+  };
+  const CARD_STYLES = Object.fromEntries(RESULT_CARD_MAPPINGS.map(mapping => {
+    const palette = CARD_PALETTES[mapping.background] || CARD_PALETTES.blue;
+    const layout = CARD_LAYOUTS[mapping.series] || CARD_LAYOUTS.R;
+    return [mapping.series, {
+      ...palette,
+      ...layout,
+      mapping,
+      seriesName: mapping.seriesName,
+      figure: {
+        src: `assets/share-card-figures/${mapping.lineart}`,
+        x: 0,
+        y: 0,
+        width: 810,
+        height: 1080,
+        opacity: LINEART_OPACITY
+      }
+    }];
+  }));
 
   const imageCache = new Map();
 
@@ -75,10 +146,8 @@
   function scaled(value) { return scale(value).toFixed(2); }
 
   function quadrantFor(item) {
-    if (item.x < 0 && item.y >= 0) return "r";
-    if (item.x >= 0 && item.y >= 0) return "o";
-    if (item.x < 0 && item.y < 0) return "n";
-    return "g";
+    const mapping = RESULT_CARD_MAPPINGS.find(candidate => QUADRANT_TESTS[candidate.quadrant]?.(item));
+    return mapping?.series || "R";
   }
 
   function calculatePersonality(placed) {
@@ -156,21 +225,17 @@
     const usable = scale(208);
     const logoSize = scale(58);
     const items = [...placed].sort((left, right) => left.z - right.z);
-    const parts = [];
-
-    for (const item of items) {
+    const parts = await Promise.all(items.map(async item => {
       const logo = logoMap.get(item.id);
-      if (!logo) continue;
+      if (!logo) return "";
       const x = cardX + center + item.x * usable - logoSize / 2;
       const y = cardY + center - item.y * usable - logoSize / 2;
       const dataURL = await imageToDataURL(logo.src);
       if (dataURL) {
-        parts.push(`<image x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${logoSize.toFixed(1)}" height="${logoSize.toFixed(1)}" href="${dataURL}" preserveAspectRatio="xMidYMid meet"/>`);
-      } else {
-        parts.push(`<circle cx="${(x + logoSize / 2).toFixed(1)}" cy="${(y + logoSize / 2).toFixed(1)}" r="20" fill="#D8CAB4"/><text x="${(x + logoSize / 2).toFixed(1)}" y="${(y + logoSize / 2 + 5).toFixed(1)}" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#756C62">${escapeXML(logo.slot)}</text>`);
+        return `<image x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${logoSize.toFixed(1)}" height="${logoSize.toFixed(1)}" href="${dataURL}" preserveAspectRatio="xMidYMid meet"/>`;
       }
-    }
-
+      return `<circle cx="${(x + logoSize / 2).toFixed(1)}" cy="${(y + logoSize / 2).toFixed(1)}" r="20" fill="#D8CAB4"/><text x="${(x + logoSize / 2).toFixed(1)}" y="${(y + logoSize / 2 + 5).toFixed(1)}" text-anchor="middle" font-family="sans-serif" font-size="16" fill="#756C62">${escapeXML(logo.slot)}</text>`;
+    }));
     return parts.join("");
   }
 
@@ -197,7 +262,7 @@
 
   async function buildSVG({ placed, logos, activityTitle, shareUrl }) {
     const personality = calculatePersonality(placed);
-    const style = CARD_STYLES[personality.main] || CARD_STYLES.r;
+    const style = CARD_STYLES[personality.main] || CARD_STYLES.R;
     const result = personality.result;
     const descLines = wrapText(result.description, 14);
     const footer = `${activityTitle} / ${shareUrl}`;
@@ -205,22 +270,27 @@
     const figureDataURL = await imageToDataURL(style.figure.src);
     const anchor = textAnchorFor(style, "title");
     const displayTendency = DISPLAY_TENDENCY_KEYS[personality.tendency] || personality.tendency.toUpperCase();
-    const kickerText = `${personality.main.toUpperCase()}-${displayTendency}`;
+    const kickerText = `${style.seriesName || personality.main}-${displayTendency}`;
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
       <defs>
+        <clipPath id="card-clip">
+          <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" rx="48" ry="48"/>
+        </clipPath>
         <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="27" stdDeviation="24" flood-color="${style.shadow}" flood-opacity="0.08"/></filter>
         ${renderGlow(style)}
       </defs>
-      <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" rx="48" fill="${style.base}"/>
-      ${style.glows.map((_, index) => `<rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" fill="url(#card-glow-${index})"/>`).join("")}
-      ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.size)}" height="${scaled(style.figure.size)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMidYMid meet"/>` : ""}
-      <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
-      <rect x="${scaled(style.rule.x)}" y="${scaled(style.rule.y)}" width="${scaled(style.rule.width)}" height="2.67" fill="${style.accent}" opacity="${style.ruleOpacity}"/>
-      <text x="${textXFor(style, "kicker").toFixed(2)}" y="${scaled(style.copy.kicker[1] + 28)}" text-anchor="${textAnchorFor(style, "kicker")}" font-family="sans-serif" font-size="37.33" font-weight="600" fill="${style.kicker}">${escapeXML(kickerText)}</text>
-      <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 64)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
-      ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 42.67, lineHeight: 61.33, fill: style.desc, weight: 500 })}
-      <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>
+      <g clip-path="url(#card-clip)">
+        <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" rx="48" ry="48" fill="${style.base}"/>
+        ${style.glows.map((_, index) => `<rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" fill="url(#card-glow-${index})"/>`).join("")}
+        ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.width)}" height="${scaled(style.figure.height)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMinYMin meet"/>` : ""}
+        <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
+        <rect x="${scaled(style.rule.x)}" y="${scaled(style.rule.y)}" width="${scaled(style.rule.width)}" height="2.67" fill="${style.accent}" opacity="${style.ruleOpacity}"/>
+        <text x="${textXFor(style, "kicker").toFixed(2)}" y="${scaled(style.copy.kicker[1] + 28)}" text-anchor="${textAnchorFor(style, "kicker")}" font-family="sans-serif" font-size="37.33" font-weight="600" fill="${style.kicker}">${escapeXML(kickerText)}</text>
+        <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 64)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
+        ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 42.67, lineHeight: 61.33, fill: style.desc, weight: 500 })}
+        <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>
+      </g>
     </svg>`;
   }
 
@@ -262,13 +332,17 @@
       canvas.height = CARD_HEIGHT;
       const context = canvas.getContext("2d");
       context.drawImage(image, 0, 0);
-      const dataURL = canvas.toDataURL("image/png");
       const blob = await canvasToBlob(canvas);
-      return { dataURL, blob, svg, personality: calculatePersonality(options.placed) };
+      const objectURL = URL.createObjectURL(blob);
+      return { objectURL, blob, svg, personality: calculatePersonality(options.placed) };
     } finally {
       URL.revokeObjectURL(svgURL);
     }
   }
 
-  window.ShareCard = { generateShareImage, calculatePersonality };
+  function warmupShareAssets() {
+    Object.values(CARD_STYLES).forEach(style => imageToDataURL(style.figure.src));
+  }
+
+  window.ShareCard = { generateShareImage, calculatePersonality, warmupShareAssets };
 })();

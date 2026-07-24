@@ -16,9 +16,9 @@ personality-results.js
 
 ```js
 window.PERSONALITY_RESULTS = {
-  "o-thorn": {
-    name: "繁花砺心者",
-    description: "你相信美好并不脆弱，它也能从艰难里开出坚定。"
+  "O-thorn": {
+    name: "荆棘守忆者",
+    description: "你把风霜认真收藏，也把每一次坚持写进骨血。"
   }
 };
 ```
@@ -38,44 +38,121 @@ window.PERSONALITY_RESULTS = {
 
 ### 主倾向
 
-| 主倾向 | 对应象限 | 含义 |
-|---|---|---|
-| `r` | 荆棘 × 不忘 | 偏向痛楚、坚持、记忆深处的刺 |
-| `o` | 繁花 × 不忘 | 偏向美好、圆满、值得珍藏的光 |
-| `n` | 荆棘 × 寻常 | 偏向风波、低处、归于平静的力量 |
-| `g` | 繁花 × 寻常 | 偏向日常、烟火、把美好落进生活 |
+| 主倾向 | 对应象限 | 英文定义 | 含义 |
+|---|---|---|---|
+| `R` | 荆棘 × 寻常 | **R**estrained | 偏向痛楚、日常、归于平静的力量 |
+| `O` | 荆棘 × 不忘 | **O**bdurate | 偏向痛楚、坚持、记忆深处的刺 |
+| `N` | 繁花 × 不忘 | **N**uminous | 偏向美好、圆满、值得珍藏的光 |
+| `G` | 繁花 × 寻常 | **G**entled | 偏向日常、烟火、把美好落进生活 |
 
 ### 副倾向
 
-| 副倾向 | 含义 |
-|---|---|
-| `thorn` | 更靠近荆棘倾向 |
-| `flower` | 更靠近繁花倾向 |
-| `memory` | 更靠近不忘倾向 |
-| `daily` | 更靠近寻常倾向 |
+副倾向在 `personality-results.js` 中仍使用内部 key；结果卡顶部展示时会转换为当前展示英文。
 
-## 三、当前 16 种结果清单
+| 副倾向内部 key | 结果卡展示英文 | 含义 |
+|---|---|---|
+| `thorn` | `THORN` | 更靠近荆棘倾向 |
+| `flower` | `BLOOM` | 更靠近繁花倾向 |
+| `memory` | `MEMORY` | 更靠近不忘倾向 |
+| `daily` | `HEARTH` | 更靠近寻常倾向 |
+
+## 三、结果图背景与线稿搭配
+
+结果图的搭配入口集中在 `share-card.js` 顶部的 `RESULT_CARD_MAPPINGS`。当前线稿图已裁切为 **810×1080**，与设计稿底图尺寸一致；在 SVG 中会按 `TEMPLATE_SCALE = 4 / 3` 放大到 **1080×1440**，并从分享卡片背景原点 `(0, 0)` 重合放置。线稿叠在结果卡背景上时，统一使用 **60% 透明度**（`LINEART_OPACITY = 0.6`）。
+
+目前【测试结果象限、系列名、结果图背景颜色、对应线稿】已经尽量抽象为单一配置：
+
+- `RESULT_CARD_MAPPINGS`：后续调整搭配时优先只改这里，包括结果象限、系列名、背景颜色、线稿文件。
+- `CARD_PALETTES`：只在需要新增或修改某个背景色的具体色值、光斑、文字色时才改。
+- `CARD_LAYOUTS`：只在需要改变某个系列的坐标系/文字排版位置时才改。
+- `personality-results.js`：只负责 16 个结果文案，不负责结果图背景和线稿搭配。
+
+当前正在使用的搭配如下：
+
+| 测试结果象限 | 系列名 | 结果图背景颜色 | 当前对应线稿预览 |
+|---|---|---|---|
+| 第三象限：荆棘 × 寻常（x < 0，y < 0） | **R**estrained | 蓝色 `blue` / `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
+| 第二象限：荆棘 × 不忘（x < 0，y > 0） | **O**bdurate | 粉色 `pink` / `#FAE9EF` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
+| 第一象限：繁花 × 不忘（x > 0，y > 0） | **N**uminous | 黄色 `yellow` / `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
+| 第四象限：繁花 × 寻常（x > 0，y < 0） | **G**entled | 绿色 `green` / `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
+
+### 如何更换结果图搭配
+
+#### 用户需要提供什么
+
+如果只想更换结果图搭配，建议直接提供一张四列表格，字段如下：
+
+| 测试结果象限 | 系列名 | 结果图背景颜色 | 对应线稿预览 |
+|---|---|---|---|
+| 例如：第三象限：荆棘 × 寻常（x < 0，y < 0） | 例如：**R**estrained | 例如：蓝色 / 粉色 / 黄色 / 绿色 | 例如：R线稿裁切-蓝色，或直接贴预览图 |
+
+注意：
+
+1. **测试结果象限**决定用户坐标落在哪个象限时，最终会归入哪个系列。
+2. **系列名**必须是 R、O、N、G 开头的英文单词，用于结果卡顶部英文展示。
+3. **结果图背景颜色**建议使用现有颜色名：`blue`、`pink`、`yellow`、`green`。如果要新增颜色，需要同时给出具体色值或设计稿。
+4. **对应线稿预览**可以写文件名，也可以贴图；如果贴的是 PNG 新图，AI 需要先转换为 WebP 后放入 `assets/share-card-figures/`。
+
+#### AI 收到上述指示后怎么改
+
+AI 应优先只修改 `share-card.js` 顶部的 `RESULT_CARD_MAPPINGS`，不要改 16 个结果文案：
+
+1. 根据用户提供的“测试结果象限”，调整对应对象的 `quadrant` 和 `quadrantLabel`：
+   - 第一象限：`quadrant: "first"`，通常对应 `x >= 0 && y >= 0`
+   - 第二象限：`quadrant: "second"`，通常对应 `x < 0 && y >= 0`
+   - 第三象限：`quadrant: "third"`，通常对应 `x < 0 && y < 0`
+   - 第四象限：`quadrant: "fourth"`，通常对应 `x >= 0 && y < 0`
+2. 根据“系列名”，调整对应对象的 `seriesName`，但 `series` 仍保持为内部主倾向 key：`R` / `O` / `N` / `G`。除非用户明确要求改变内部 key，否则不要改 `personality-results.js` 的 `R-thorn` 等 key。
+3. 根据“结果图背景颜色”，调整对应对象的 `background`：优先使用已有 `CARD_PALETTES` 中的 `blue` / `pink` / `yellow` / `green`。
+4. 根据“对应线稿预览”，调整对应对象的 `lineart` 和 `lineartLabel`。如果用户提供新图，先把新图转成 WebP，放入 `assets/share-card-figures/`，再把 `lineart` 指向新文件名。
+5. 一般不要改 `CARD_PALETTES` 和 `CARD_LAYOUTS`；只有当用户明确要求改变背景色具体色值、光斑、文字色或排版位置时才改。
+6. 修改完成后，同步更新本文件的“当前正在使用的搭配”表、`README.md` 当前版本、`CHANGELOG.md`，并检查 `share-card.js` 语法。
+
+### 可选线稿资源预览
+
+16 张线稿都存放在 `assets/share-card-figures/`。如果后续要更换背景色与线稿搭配，优先只修改 `share-card.js` 顶部的 `RESULT_CARD_MAPPINGS`。
+
+| 线稿名称 | 文件名 | 预览图 |
+|---|---|---|
+| G线稿裁切-粉色 | `g-lineart-pink.webp` | <img src="assets/share-card-figures/g-lineart-pink.webp" width="90" alt="G线稿裁切-粉色"> |
+| G线稿裁切-黄色 | `g-lineart-yellow.webp` | <img src="assets/share-card-figures/g-lineart-yellow.webp" width="90" alt="G线稿裁切-黄色"> |
+| G线稿裁切-蓝色 | `g-lineart-blue.webp` | <img src="assets/share-card-figures/g-lineart-blue.webp" width="90" alt="G线稿裁切-蓝色"> |
+| G线稿裁切-绿色 | `g-lineart-green.webp` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
+| N线稿裁切-粉色 | `n-lineart-pink.webp` | <img src="assets/share-card-figures/n-lineart-pink.webp" width="90" alt="N线稿裁切-粉色"> |
+| N线稿裁切-黄色 | `n-lineart-yellow.webp` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
+| N线稿裁切-蓝色 | `n-lineart-blue.webp` | <img src="assets/share-card-figures/n-lineart-blue.webp" width="90" alt="N线稿裁切-蓝色"> |
+| N线稿裁切-绿色 | `n-lineart-green.webp` | <img src="assets/share-card-figures/n-lineart-green.webp" width="90" alt="N线稿裁切-绿色"> |
+| O线稿裁切-粉色 | `o-lineart-pink.webp` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
+| O线稿裁切-黄色 | `o-lineart-yellow.webp` | <img src="assets/share-card-figures/o-lineart-yellow.webp" width="90" alt="O线稿裁切-黄色"> |
+| O线稿裁切-蓝色 | `o-lineart-blue.webp` | <img src="assets/share-card-figures/o-lineart-blue.webp" width="90" alt="O线稿裁切-蓝色"> |
+| O线稿裁切-绿色 | `o-lineart-green.webp` | <img src="assets/share-card-figures/o-lineart-green.webp" width="90" alt="O线稿裁切-绿色"> |
+| R线稿裁切-粉色 | `r-lineart-pink.webp` | <img src="assets/share-card-figures/r-lineart-pink.webp" width="90" alt="R线稿裁切-粉色"> |
+| R线稿裁切-黄色 | `r-lineart-yellow.webp` | <img src="assets/share-card-figures/r-lineart-yellow.webp" width="90" alt="R线稿裁切-黄色"> |
+| R线稿裁切-蓝色 | `r-lineart-blue.webp` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
+| R线稿裁切-绿色 | `r-lineart-green.webp` | <img src="assets/share-card-figures/r-lineart-green.webp" width="90" alt="R线稿裁切-绿色"> |
+
+## 四、当前 16 种结果清单
 
 | 结果编号 | 英文 key | 结果名称 | 结果分析 |
 |---|---|---|---|
-| R01 | `r-thorn` | 荆棘守忆者 | 你把风霜认真收藏，也把每一次坚持写进骨血。 |
-| R02 | `r-flower` | 荆棘照花人 | 你见过刺痛，却仍愿意向美好伸手，让光慢慢生长。 |
-| R03 | `r-memory` | 旧梦铭记者 | 你珍重来路，把重要的悲喜都安放成不褪色的星。 |
-| R04 | `r-daily` | 淬火归常者 | 你能把锋利过成日常，在平静里保留不认输的心。 |
-| R05 | `o-thorn` | 繁花砺心者 | 你相信美好并不脆弱，它也能从艰难里开出坚定。 |
-| R06 | `o-flower` | 繁花守光者 | 你靠近圆满与明亮，愿把值得珍藏的瞬间分享给世界。 |
-| R07 | `o-memory` | 荣光铭记者 | 你记得那些发亮的时刻，并让它们成为继续前行的理由。 |
-| R08 | `o-daily` | 花开日常者 | 你擅长把盛景落进生活，让温柔成为每天都在的答案。 |
-| R09 | `n-thorn` | 静海渡棘者 | 你明白风波会过去，也懂得在低处守住自己的锋芒。 |
-| R10 | `n-flower` | 晴岸生花者 | 你能从旧雨里走出，把平凡日子也养成温柔花园。 |
-| R11 | `n-memory` | 沉忆行舟者 | 你带着记忆穿过风浪，不急着抵达，却从未停下。 |
-| R12 | `n-daily` | 寻常守岸者 | 你偏爱安稳的力量，把复杂心绪慢慢放回生活。 |
-| R13 | `g-thorn` | 烟火砺花者 | 你在日常里看见不易，也让每一份努力开出回响。 |
-| R14 | `g-flower` | 繁花栖日者 | 你相信幸福可以很具体，藏在一次次认真生活里。 |
-| R15 | `g-memory` | 暖忆织梦者 | 你把美好的记忆织进日常，让普通时刻也闪着光。 |
-| R16 | `g-daily` | 盛景归常者 | 你能把圆满稳稳接住，让盛大的爱落成踏实生活。 |
+| R01 | `R-thorn` | 静海渡棘者 | 你明白风波会过去，也懂得在低处守住自己的锋芒。 |
+| R02 | `R-flower` | 晴岸生花者 | 你能从旧雨里走出，把平凡日子也养成温柔花园。 |
+| R03 | `R-memory` | 沉忆行舟者 | 你带着记忆穿过风浪，不急着抵达，却从未停下。 |
+| R04 | `R-daily` | 寻常守岸者 | 你偏爱安稳的力量，把复杂心绪慢慢放回生活。 |
+| R05 | `O-thorn` | 荆棘守忆者 | 你把风霜认真收藏，也把每一次坚持写进骨血。 |
+| R06 | `O-flower` | 荆棘照花人 | 你见过刺痛，却仍愿意向美好伸手，让光慢慢生长。 |
+| R07 | `O-memory` | 旧梦铭记者 | 你珍重来路，把重要的悲喜都安放成不褪色的星。 |
+| R08 | `O-daily` | 淬火归常者 | 你能把锋利过成日常，在平静里保留不认输的心。 |
+| R09 | `N-thorn` | 繁花砺心者 | 你相信美好并不脆弱，它也能从艰难里开出坚定。 |
+| R10 | `N-flower` | 繁花守光者 | 你靠近圆满与明亮，愿把值得珍藏的瞬间分享给世界。 |
+| R11 | `N-memory` | 荣光铭记者 | 你记得那些发亮的时刻，并让它们成为继续前行的理由。 |
+| R12 | `N-daily` | 花开日常者 | 你擅长把盛景落进生活，让温柔成为每天都在的答案。 |
+| R13 | `G-thorn` | 烟火砺花者 | 你在日常里看见不易，也让每一份努力开出回响。 |
+| R14 | `G-flower` | 繁花栖日者 | 你相信幸福可以很具体，藏在一次次认真生活里。 |
+| R15 | `G-memory` | 暖忆织梦者 | 你把美好的记忆织进日常，让普通时刻也闪着光。 |
+| R16 | `G-daily` | 盛景归常者 | 你能把圆满稳稳接住，让盛大的爱落成踏实生活。 |
 
-## 四、用户提交替换文案时的推荐格式
+## 五、用户提交替换文案时的推荐格式
 
 要求用户只提交需要修改的结果，未提交的结果保持不变。
 
@@ -83,8 +160,8 @@ window.PERSONALITY_RESULTS = {
 
 | 英文 key | 新结果名称 | 新结果分析 |
 |---|---|---|
-| `o-flower` | 新名称 | 新的一句话结果分析。 |
-| `g-daily` | 新名称 | 新的一句话结果分析。 |
+| `O-flower` | 新名称 | 新的一句话结果分析。 |
+| `G-daily` | 新名称 | 新的一句话结果分析。 |
 
 也可以使用结果编号提交：
 
@@ -93,7 +170,7 @@ window.PERSONALITY_RESULTS = {
 | R06 | 新名称 | 新的一句话结果分析。 |
 | R16 | 新名称 | 新的一句话结果分析。 |
 
-## 五、替换规则
+## 六、替换规则
 
 收到用户提交的新结果文案后，严格执行以下规则：
 
@@ -115,7 +192,7 @@ window.PERSONALITY_RESULTS = {
 
 10. 如本次修改需要上线，更新 `CHANGELOG.md` 和 `index.html` 中的静态资源版本号，提交并推送。
 
-## 六、AI 执行 Prompt
+## 七、AI 执行 Prompt
 
 收到用户提交的「英文 key / 结果编号｜新结果名称｜新结果分析」后，按以下流程执行：
 

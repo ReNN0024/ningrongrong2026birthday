@@ -8,6 +8,28 @@
   --line: rgba(117, 102, 76, .3);
   --danger: #b85f55;
   --shadow: 0 18px 44px rgba(68, 57, 42, .14);
+
+  /* 主页坐标系象限色配置：只换颜色顺序时，优先调整下面 8 个 --coord-q-* 变量。 */
+  --coord-pink-main: 225 157 172;
+  --coord-pink-soft: 234 190 197;
+  --coord-yellow-main: 234 203 113;
+  --coord-yellow-soft: 241 222 164;
+  --coord-blue-main: 154 199 205;
+  --coord-blue-soft: 193 220 218;
+  --coord-green-main: 179 202 149;
+  --coord-green-soft: 211 222 186;
+  /* 左上：荆棘 × 不忘 */
+  --coord-q-ul-main: var(--coord-pink-main);
+  --coord-q-ul-soft: var(--coord-pink-soft);
+  /* 右上：繁花 × 不忘 */
+  --coord-q-ur-main: var(--coord-yellow-main);
+  --coord-q-ur-soft: var(--coord-yellow-soft);
+  /* 左下：荆棘 × 寻常 */
+  --coord-q-ll-main: var(--coord-blue-main);
+  --coord-q-ll-soft: var(--coord-blue-soft);
+  /* 右下：繁花 × 寻常 */
+  --coord-q-lr-main: var(--coord-green-main);
+  --coord-q-lr-soft: var(--coord-green-soft);
 }
 
 * { box-sizing: border-box; }
@@ -206,10 +228,14 @@ button:disabled { cursor: not-allowed; opacity: .36; }
   will-change: transform;
   overflow: visible;
   background:
-    radial-gradient(ellipse at 24% 24%, rgba(225, 157, 172, .45) 0%, rgba(234, 190, 197, .28) 23%, rgba(248, 244, 237, 0) 58%),
-    radial-gradient(ellipse at 77% 24%, rgba(234, 203, 113, .45) 0%, rgba(241, 222, 164, .26) 24%, rgba(248, 244, 237, 0) 58%),
-    radial-gradient(ellipse at 24% 77%, rgba(154, 199, 205, .42) 0%, rgba(193, 220, 218, .26) 25%, rgba(248, 244, 237, 0) 59%),
-    radial-gradient(ellipse at 77% 77%, rgba(179, 202, 149, .48) 0%, rgba(211, 222, 186, .27) 25%, rgba(248, 244, 237, 0) 59%),
+    /* 左上：荆棘 × 不忘 */
+    radial-gradient(ellipse at 24% 24%, rgb(var(--coord-q-ul-main) / .45) 0%, rgb(var(--coord-q-ul-soft) / .28) 23%, rgba(248, 244, 237, 0) 58%),
+    /* 右上：繁花 × 不忘 */
+    radial-gradient(ellipse at 77% 24%, rgb(var(--coord-q-ur-main) / .45) 0%, rgb(var(--coord-q-ur-soft) / .26) 24%, rgba(248, 244, 237, 0) 58%),
+    /* 左下：荆棘 × 寻常 */
+    radial-gradient(ellipse at 24% 77%, rgb(var(--coord-q-ll-main) / .42) 0%, rgb(var(--coord-q-ll-soft) / .26) 25%, rgba(248, 244, 237, 0) 59%),
+    /* 右下：繁花 × 寻常 */
+    radial-gradient(ellipse at 77% 77%, rgb(var(--coord-q-lr-main) / .48) 0%, rgb(var(--coord-q-lr-soft) / .27) 25%, rgba(248, 244, 237, 0) 59%),
     linear-gradient(135deg, #faf7f1, #f5f0e8);
 }
 
@@ -307,10 +333,14 @@ button:disabled { cursor: not-allowed; opacity: .36; }
   border: 1px solid rgba(184, 138, 58, .58);
   border-radius: 15px;
   background:
-    radial-gradient(circle at 24% 24%, rgba(225,157,172,.34), transparent 58%),
-    radial-gradient(circle at 77% 24%, rgba(234,203,113,.34), transparent 58%),
-    radial-gradient(circle at 24% 77%, rgba(154,199,205,.31), transparent 59%),
-    radial-gradient(circle at 77% 77%, rgba(179,202,149,.35), transparent 59%),
+    /* 左上：荆棘 × 不忘 */
+    radial-gradient(circle at 24% 24%, rgb(var(--coord-q-ul-main) / .34), transparent 58%),
+    /* 右上：繁花 × 不忘 */
+    radial-gradient(circle at 77% 24%, rgb(var(--coord-q-ur-main) / .34), transparent 58%),
+    /* 左下：荆棘 × 寻常 */
+    radial-gradient(circle at 24% 77%, rgb(var(--coord-q-ll-main) / .31), transparent 59%),
+    /* 右下：繁花 × 寻常 */
+    radial-gradient(circle at 77% 77%, rgb(var(--coord-q-lr-main) / .35), transparent 59%),
     rgba(255,252,246,.92);
   box-shadow: 0 8px 20px rgba(62,52,38,.12);
   cursor: crosshair;
