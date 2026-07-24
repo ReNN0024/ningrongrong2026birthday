@@ -1,6 +1,8 @@
 # 更新日志
 
 本文件记录项目所有版本变更。格式遵循 [Keep a Changelog](https://keepachangelog.com/zh-CN/)，版本号遵循 [Semantic Versioning](https://semver.org/lang/zh-CN/)。
+**如果你是coze，编写更新日志时不需要署名（如by Snjór），或者你可以署名 by coze，【by Snjór】为协作方便于查找使用的署名，请不要冒用**
+**如果回退版本，也请在更新日志中标注**
 
 ---
 
@@ -64,7 +66,7 @@
 
 ## [1.7.4] - 2026-07-23
 
-### Changed — by Snjór
+### Changed
 - 结果卡片主倾向首字母改为花体字并加大，视觉突出：
   - 首字母使用花体字字体栈（Snell Roundhand / Apple Chancery / Segoe Script / cursive）
   - 首字母字号从 37.33 增大到 53.33，加粗斜体
@@ -72,7 +74,7 @@
 
 ## [1.7.3] - 2026-07-23
 
-### Changed — by Snjór
+### Changed
 - 结果卡片顶部标签（kicker）主倾向改为完整单词，首字母大写其余小写：
   - `R-THORN` → `Restrained-THORN`
   - `O-BLOOM` → `Obdurate-BLOOM`
@@ -81,7 +83,7 @@
 
 ## [1.7.2] - 2026-07-23
 
-### Fixed — by Snjór
+### Fixed
 - 更新 share-card.js 中 CARD_STYLES 配置，使底图（颜色+图片）与新的主倾向定义一致：
   - R（荆棘 × 寻常）→ 蓝色 + N图（原 N 配置）
   - O（荆棘 × 不忘）→ 粉色 + R图（原 R 配置）
@@ -90,7 +92,7 @@
 
 ## [1.7.1] - 2026-07-23
 
-### Fixed — by Snjór
+### Fixed
 - 修正 RESULT_REPLACEMENT_GUIDE.md 中"三、当前 16 种结果清单"：
   - 更新结果编号和名称，与 personality-results.js 保持一致
   - 调整结果顺序为 R01-R16（R01-R04: R倾向, R05-R08: O倾向, R09-R12: N倾向, R13-R16: G倾向）
@@ -98,7 +100,7 @@
 
 ## [1.7.0] - 2026-07-23
 
-### Changed — by Snjór
+### Changed
 - 主倾向定义更新：为四个字母赋予完整单词，最终结果输出时大写强调
   - R = 荆棘 × 寻常｜**R**estrained
   - O = 荆棘 × 不忘｜**O**bdurate
