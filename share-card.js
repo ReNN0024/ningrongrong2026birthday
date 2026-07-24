@@ -257,12 +257,15 @@
     const restX = textStartX + initialWidth + initialGap;
     const separatorX = restX + restWidth + separatorGap;
     const tendencyX = separatorX + separatorWidth + tendencyGap;
+    const underlineY = baseline + 25.33;
+    const underlineInset = 4;
 
     const parts = [];
     parts.push(`<text x="${textStartX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${initialFontSize}" font-weight="400" font-style="italic" fill="${fill}">${escapeXML(initial)}</text>`);
     parts.push(`<text x="${restX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${seriesFontSize}" font-weight="400" font-style="italic" letter-spacing="${restLetterSpacing}" fill="${fill}" opacity="0.92">${escapeXML(rest)}</text>`);
     parts.push(`<text x="${separatorX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${seriesFontSize}" font-weight="400" font-style="italic" fill="${fill}" opacity="0.72">/</text>`);
     parts.push(`<text x="${tendencyX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${TENDENCY_FONT_FAMILY}" font-size="${tendencyFontSize}" font-weight="400" font-style="italic" letter-spacing="${tendencyLetterSpacing}" fill="${fill}" opacity="0.86">${escapeXML(tendency)}</text>`);
+    parts.push(`<line x1="${(textStartX + underlineInset).toFixed(2)}" y1="${underlineY.toFixed(2)}" x2="${(textStartX + labelWidth - underlineInset).toFixed(2)}" y2="${underlineY.toFixed(2)}" stroke="${fill}" stroke-width="1.6" stroke-linecap="round" opacity="0.38"/>`);
     return `<g id="result-kicker">${parts.join("")}</g>`;
   }
 
@@ -337,7 +340,6 @@
         ${style.glows.map((_, index) => `<rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" fill="url(#card-glow-${index})"/>`).join("")}
         ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.width)}" height="${scaled(style.figure.height)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMinYMin meet"/>` : ""}
         <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
-        <rect x="${scaled(style.rule.x)}" y="${scaled(style.rule.y)}" width="${scaled(style.rule.width)}" height="2.67" fill="${style.accent}" opacity="${style.ruleOpacity}"/>
         ${renderKickerText({ text: kickerText, x: textXFor(style, "kicker"), y: scale(style.copy.kicker[1] + 36), anchor: textAnchorFor(style, "kicker"), fill: style.kicker, width: style.copy.title[2] })}
         <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 64)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
         ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 42.67, lineHeight: 61.33, fill: style.desc, weight: 500 })}
