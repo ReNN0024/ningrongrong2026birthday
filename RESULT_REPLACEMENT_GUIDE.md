@@ -65,7 +65,7 @@ window.PERSONALITY_RESULTS = {
 - `RESULT_CARD_MAPPINGS`：后续调整搭配时优先只改这里，包括结果象限、系列名、背景颜色、线稿文件。
 - `CARD_PALETTES`：只在需要新增或修改某个背景色的具体色值、光斑、文字色时才改。
 - `LINEART_OPACITIES`：只在需要按 R/O/N/G 单独调整线稿叠加透明度时才改。
-- `KICKER_FONT_FAMILY`：只在需要调整结果卡顶部英文标签（如 `Restrained-THORN`）的系列名字体时才改。
+- `KICKER_FONT_FAMILY` / `FONT_ASSETS`：只在需要调整结果卡顶部英文标签（如 `Restrained-THORN`）的系列名字体或本地字体文件时才改；当前使用本地内嵌的 Instrument Serif Italic。
 - `CARD_LAYOUTS`：只在需要改变某个系列的坐标系/文字排版位置时才改。
 - `personality-results.js`：只负责 16 个结果文案，不负责结果图背景和线稿搭配。
 

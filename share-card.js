@@ -10,7 +10,10 @@
     N: 0.52,
     G: 0.56
   };
-  const KICKER_FONT_FAMILY = "Bodoni 72 Smallcaps, Bodoni 72, Didot, Baskerville, Times New Roman, serif";
+  const KICKER_FONT_FAMILY = "'Instrument Serif', Georgia, Times New Roman, serif";
+  const FONT_ASSETS = {
+    kickerItalic: "assets/fonts/InstrumentSerif-Italic.woff2"
+  };
   const RESULT_CARD_MAPPINGS = [
     {
       series: "R",
@@ -143,6 +146,7 @@
   }));
 
   const imageCache = new Map();
+  const assetCache = new Map();
 
   function escapeXML(value) {
     return String(value).replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&apos;", '"': "&quot;" }[char]));
@@ -191,11 +195,11 @@
     return lines.slice(0, 3);
   }
 
-  async function imageToDataURL(src) {
-    if (imageCache.has(src)) return imageCache.get(src);
+  async function assetToDataURL(src, cache = assetCache) {
+    if (cache.has(src)) return cache.get(src);
     const promise = fetch(src)
       .then(response => {
-        if (!response.ok) throw new Error("image request failed");
+        if (!response.ok) throw new Error("asset request failed");
         return response.blob();
       })
       .then(blob => new Promise((resolve, reject) => {
@@ -205,8 +209,12 @@
         reader.readAsDataURL(blob);
       }))
       .catch(() => "");
-    imageCache.set(src, promise);
+    cache.set(src, promise);
     return promise;
+  }
+
+  async function imageToDataURL(src) {
+    return assetToDataURL(src, imageCache);
   }
 
   function textAnchorFor(style, layer) {
@@ -226,30 +234,31 @@
   function renderKickerText({ text, x, y, anchor, fill, width }) {
     const [seriesName, tendency = ""] = String(text).split("-");
     const initial = seriesName.slice(0, 1);
-    const rest = seriesName.slice(1).toUpperCase();
-    const letterSpacing = 2.3;
-    const restLetterSpacing = 4.2;
-    const tendencyLetterSpacing = 5.2;
-    const initialFontSize = 62;
-    const seriesFontSize = 34.67;
+    const rest = seriesName.slice(1);
+    const initialFontSize = 61.33;
+    const seriesFontSize = 40;
     const tendencyFontSize = 30.67;
-    const separatorGap = 16;
-    const tendencyGap = 13.33;
+    const restLetterSpacing = 1.6;
+    const tendencyLetterSpacing = 5.2;
+    const initialGap = 8;
+    const separatorGap = 18.67;
+    const tendencyGap = 14.67;
     const separatorWidth = 24;
     const baseline = Number(y);
     const titleWidth = scale(width || 390);
     const titleStartX = anchor === "end" ? x - titleWidth : x;
-    const initialWidth = initialFontSize * 0.58;
-    const restWidth = rest.length * seriesFontSize * 0.56 + Math.max(0, rest.length - 1) * restLetterSpacing;
+    const initialWidth = initialFontSize * 0.54;
+    const restWidth = rest.length * seriesFontSize * 0.48 + Math.max(0, rest.length - 1) * restLetterSpacing;
     const tendencyWidth = tendency.length * tendencyFontSize * 0.58 + Math.max(0, tendency.length - 1) * tendencyLetterSpacing;
-    const labelWidth = initialWidth + restWidth + separatorGap + separatorWidth + tendencyGap + tendencyWidth;
+    const labelWidth = initialWidth + initialGap + restWidth + separatorGap + separatorWidth + tendencyGap + tendencyWidth;
     const textStartX = anchor === "end" ? x - labelWidth : titleStartX;
-    const separatorX = textStartX + initialWidth + restWidth + separatorGap;
+    const restX = textStartX + initialWidth + initialGap;
+    const separatorX = restX + restWidth + separatorGap;
     const tendencyX = separatorX + separatorWidth + tendencyGap;
 
     const parts = [];
-    parts.push(`<text x="${textStartX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${initialFontSize}" font-weight="900" font-style="italic" letter-spacing="${letterSpacing}" fill="${fill}">${escapeXML(initial)}</text>`);
-    parts.push(`<text x="${(textStartX + initialWidth).toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${seriesFontSize}" font-weight="650" font-style="italic" letter-spacing="${restLetterSpacing}" fill="${fill}" opacity="0.9">${escapeXML(rest)}</text>`);
+    parts.push(`<text x="${textStartX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${initialFontSize}" font-weight="400" font-style="italic" fill="${fill}">${escapeXML(initial)}</text>`);
+    parts.push(`<text x="${restX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${seriesFontSize}" font-weight="400" font-style="italic" letter-spacing="${restLetterSpacing}" fill="${fill}" opacity="0.92">${escapeXML(rest)}</text>`);
     parts.push(`<line x1="${separatorX.toFixed(2)}" y1="${(baseline - 12).toFixed(2)}" x2="${(separatorX + separatorWidth).toFixed(2)}" y2="${(baseline - 12).toFixed(2)}" stroke="${fill}" stroke-width="2" stroke-linecap="round" opacity="0.55"/>`);
     parts.push(`<text x="${tendencyX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="Avenir Next, Helvetica Neue, sans-serif" font-size="${tendencyFontSize}" font-weight="800" letter-spacing="${tendencyLetterSpacing}" fill="${fill}" opacity="0.82">${escapeXML(tendency)}</text>`);
     return `<g id="result-kicker">${parts.join("")}</g>`;
@@ -306,6 +315,7 @@
     const footer = `${activityTitle} / ${shareUrl}`;
     const logoLayer = await buildLogoLayer(placed, logos, style);
     const figureDataURL = await imageToDataURL(style.figure.src);
+    const kickerFontDataURL = await assetToDataURL(FONT_ASSETS.kickerItalic);
     const anchor = textAnchorFor(style, "title");
     const displayTendency = DISPLAY_TENDENCY_KEYS[personality.tendency] || personality.tendency.toUpperCase();
     const kickerText = `${style.seriesName || personality.main}-${displayTendency}`;
@@ -316,6 +326,7 @@
           <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" rx="48" ry="48"/>
         </clipPath>
         <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="27" stdDeviation="24" flood-color="${style.shadow}" flood-opacity="0.08"/></filter>
+        ${kickerFontDataURL ? `<style>@font-face{font-family:'Instrument Serif';src:url('${kickerFontDataURL}') format('woff2');font-style:italic;font-weight:400;font-display:block;}</style>` : ""}
         ${renderGlow(style)}
       </defs>
       <g clip-path="url(#card-clip)">
