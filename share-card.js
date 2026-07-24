@@ -4,7 +4,17 @@
   const CARD_WIDTH = 1080;
   const CARD_HEIGHT = 1440;
   const TEMPLATE_SCALE = 4 / 3;
-  const LINEART_OPACITY = 0.6;
+  const LINEART_OPACITIES = {
+    R: 0.64,
+    O: 0.6,
+    N: 0.52,
+    G: 0.56
+  };
+  const KICKER_FONT_FAMILY = "'DM Serif Display', Georgia, Times New Roman, serif";
+  const LABEL_SUB_FONT_FAMILY = "Avenir Next, Helvetica Neue, PingFang SC, sans-serif";
+  const FONT_ASSETS = {
+    kickerItalic: "assets/fonts/DMSerifDisplay-Italic.ttf"
+  };
   const RESULT_CARD_MAPPINGS = [
     {
       series: "R",
@@ -59,12 +69,12 @@
   };
   const CARD_PALETTES = {
     blue: {
-      base: "#E7F2F8", accent: "#3D7FA4", axis: "#2F4D63", shadow: "#1F384D", glass: 0.28, ruleOpacity: 0.38,
-      kicker: "#407C9A", title: "#253847", desc: "#486170", footer: "#527C94",
+      base: "#E2F0F8", accent: "#327CA7", axis: "#263F56", shadow: "#17314A", glass: 0.3, ruleOpacity: 0.46,
+      kicker: "#347A9F", title: "#1F3548", desc: "#405E70", footer: "#4A7893",
       glows: [
-        { x: 194, y: 784, rx: 430, ry: 350, color: "#8CC7E8", opacity: 0.70 },
-        { x: 652, y: 532, rx: 400, ry: 330, color: "#B8D1E4", opacity: 0.58 },
-        { x: 188, y: 190, rx: 360, ry: 300, color: "#F7D8CE", opacity: 0.42 }
+        { x: 174, y: 744, rx: 500, ry: 390, color: "#74BCE4", opacity: 0.78 },
+        { x: 654, y: 468, rx: 440, ry: 350, color: "#A8CAE4", opacity: 0.62 },
+        { x: 214, y: 180, rx: 360, ry: 280, color: "#F0CFC8", opacity: 0.34 }
       ]
     },
     pink: {
@@ -77,45 +87,57 @@
       ]
     },
     yellow: {
-      base: "#F9F0D4", accent: "#A87425", axis: "#5D4B32", shadow: "#4D381A", glass: 0.27, ruleOpacity: 0.4,
-      kicker: "#9E722B", title: "#4B3922", desc: "#6F5A35", footer: "#9C7B36",
+      base: "#F8F0D8", accent: "#9A6A22", axis: "#574832", shadow: "#473516", glass: 0.28, ruleOpacity: 0.36,
+      kicker: "#936C2A", title: "#463721", desc: "#685736", footer: "#917537",
       glows: [
-        { x: 640, y: 132, rx: 470, ry: 340, color: "#F2C35B", opacity: 0.68 },
-        { x: 138, y: 472, rx: 430, ry: 360, color: "#FFE8A8", opacity: 0.84 },
-        { x: 578, y: 850, rx: 380, ry: 300, color: "#F6C8B2", opacity: 0.44 }
+        { x: 640, y: 150, rx: 430, ry: 320, color: "#E5B94F", opacity: 0.5 },
+        { x: 150, y: 468, rx: 400, ry: 340, color: "#F8E2A1", opacity: 0.56 },
+        { x: 586, y: 866, rx: 360, ry: 290, color: "#EFC0A7", opacity: 0.3 }
       ]
     },
     green: {
-      base: "#EAF5EA", accent: "#4D8B59", axis: "#34523A", shadow: "#1F3D24", glass: 0.27, ruleOpacity: 0.38,
-      kicker: "#4E8758", title: "#253C2B", desc: "#4C624F", footer: "#638C67",
+      base: "#E7F3E7", accent: "#438350", axis: "#2C4D33", shadow: "#18381F", glass: 0.3, ruleOpacity: 0.44,
+      kicker: "#467F50", title: "#203929", desc: "#465F4B", footer: "#5A875F",
       glows: [
-        { x: 624, y: 806, rx: 420, ry: 340, color: "#A7D8A8", opacity: 0.76 },
-        { x: 158, y: 328, rx: 440, ry: 360, color: "#D9EAB9", opacity: 0.74 },
-        { x: 646, y: 138, rx: 340, ry: 280, color: "#F6D2B6", opacity: 0.42 }
+        { x: 604, y: 780, rx: 470, ry: 360, color: "#96D39D", opacity: 0.72 },
+        { x: 168, y: 342, rx: 420, ry: 340, color: "#CFE7AE", opacity: 0.62 },
+        { x: 666, y: 134, rx: 300, ry: 250, color: "#F0CDB5", opacity: 0.32 }
       ]
     }
   };
   const CARD_LAYOUTS = {
     R: {
       align: "left-footer-right",
-      coord: { x: 42, y: 450 }, rule: { x: 72, y: 142, width: 180 },
+      coord: { x: 42, y: 450 },
       copy: { kicker: [72, 74, 390], title: [72, 166, 460], desc: [72, 256, 430], footer: [42, 982, 440] }
     },
     O: {
       align: "left",
-      coord: { x: 57, y: 245 }, rule: { x: 72, y: 786, width: 180 },
+      coord: { x: 57, y: 245 },
       copy: { kicker: [72, 74, 420], title: [72, 810, 560], desc: [74, 898, 586], footer: [72, 1008, 520] }
     },
     N: {
       align: "right",
-      coord: { x: 23, y: 432 }, rule: { x: 558, y: 124, width: 182 },
+      coord: { x: 23, y: 432 },
       copy: { kicker: [360, 74, 360], title: [338, 142, 410], desc: [338, 232, 402], footer: [300, 982, 440] }
     },
     G: {
       align: "left",
-      coord: { x: 72, y: 194 }, rule: { x: 72, y: 798, width: 180 },
+      coord: { x: 72, y: 104 },
       copy: { kicker: [72, 756, 410], title: [72, 810, 520], desc: [74, 896, 586], footer: [72, 1008, 520] }
     }
+  };
+  const LABEL_LAYOUTS = {
+    R: { dropcap: [70, 42, 106], main: [154, 66, 42], sub: [158, 114, 18], slash: [151, 112, 27], hairline: [232, 126, 96] },
+    O: { dropcap: [57, 42, 106], main: [139, 66, 42], sub: [143, 114, 18], slash: [135, 112, 27], hairline: [221, 126, 104] },
+    N: { dropcap: [70, 42, 106], main: [154, 66, 42], sub: [158, 114, 18], slash: [151, 112, 27], hairline: [232, 126, 96] },
+    G: { dropcap: [70, 682, 106], main: [154, 706, 42], sub: [158, 754, 18], slash: [151, 752, 27], hairline: [232, 766, 104] }
+  };
+  const LABEL_PALETTES = {
+    blue: { drop: "#315F78", main: "#407C9A", sub: "#315F78", line: "#3D7FA4" },
+    pink: { drop: "#9B5D6B", main: "#A86675", sub: "#9B5D6B", line: "#B95F72" },
+    yellow: { drop: "#8E692B", main: "#9E722B", sub: "#8E692B", line: "#A87425" },
+    green: { drop: "#3E7449", main: "#4E8758", sub: "#3E7449", line: "#4D8B59" }
   };
   const CARD_STYLES = Object.fromEntries(RESULT_CARD_MAPPINGS.map(mapping => {
     const palette = CARD_PALETTES[mapping.background] || CARD_PALETTES.blue;
@@ -131,12 +153,13 @@
         y: 0,
         width: 810,
         height: 1080,
-        opacity: LINEART_OPACITY
+        opacity: LINEART_OPACITIES[mapping.series] ?? 0.6
       }
     }];
   }));
 
   const imageCache = new Map();
+  const assetCache = new Map();
 
   function escapeXML(value) {
     return String(value).replace(/[&<>'"]/g, char => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "'": "&apos;", '"': "&quot;" }[char]));
@@ -185,11 +208,11 @@
     return lines.slice(0, 3);
   }
 
-  async function imageToDataURL(src) {
-    if (imageCache.has(src)) return imageCache.get(src);
+  async function assetToDataURL(src, cache = assetCache) {
+    if (cache.has(src)) return cache.get(src);
     const promise = fetch(src)
       .then(response => {
-        if (!response.ok) throw new Error("image request failed");
+        if (!response.ok) throw new Error("asset request failed");
         return response.blob();
       })
       .then(blob => new Promise((resolve, reject) => {
@@ -199,8 +222,12 @@
         reader.readAsDataURL(blob);
       }))
       .catch(() => "");
-    imageCache.set(src, promise);
+    cache.set(src, promise);
     return promise;
+  }
+
+  async function imageToDataURL(src) {
+    return assetToDataURL(src, imageCache);
   }
 
   function textAnchorFor(style, layer) {
@@ -215,6 +242,28 @@
 
   function renderTextBlock({ x, y, lines, anchor, size, lineHeight, fill, weight = 500 }) {
     return lines.map((line, index) => `<text x="${x.toFixed(2)}" y="${(y + index * lineHeight).toFixed(2)}" text-anchor="${anchor}" font-family="sans-serif" font-size="${size}" font-weight="${weight}" fill="${fill}">${escapeXML(line)}</text>`).join("");
+  }
+
+  function renderKickerText({ style, text }) {
+    const [seriesName, tendency = ""] = String(text).split("-");
+    const series = style.mapping?.series || seriesName.slice(0, 1);
+    const layout = LABEL_LAYOUTS[series] || LABEL_LAYOUTS.R;
+    const palette = LABEL_PALETTES[style.mapping?.background] || LABEL_PALETTES.blue;
+    const initial = seriesName.slice(0, 1);
+    const rest = seriesName.slice(1);
+    const [dropX, dropY, dropSize] = layout.dropcap;
+    const [mainX, mainY, mainSize] = layout.main;
+    const [subX, subY, subSize] = layout.sub;
+    const [slashX, slashY, slashHeight] = layout.slash;
+    const [lineX, lineY, lineWidth] = layout.hairline;
+
+    const parts = [];
+    parts.push(`<text x="${scaled(dropX)}" y="${scaled(dropY)}" text-anchor="start" dominant-baseline="text-before-edge" font-family="${KICKER_FONT_FAMILY}" font-size="${scaled(dropSize)}" font-weight="400" font-style="italic" letter-spacing="-0.04em" fill="${palette.drop}" opacity="0.82">${escapeXML(initial)}</text>`);
+    parts.push(`<text x="${scaled(mainX)}" y="${scaled(mainY)}" text-anchor="start" dominant-baseline="text-before-edge" font-family="${KICKER_FONT_FAMILY}" font-size="${scaled(mainSize)}" font-weight="400" font-style="italic" letter-spacing="-0.01em" fill="${palette.main}" opacity="0.9">${escapeXML(rest)}</text>`);
+    parts.push(`<text x="${scaled(subX)}" y="${scaled(subY)}" text-anchor="start" dominant-baseline="text-before-edge" font-family="${LABEL_SUB_FONT_FAMILY}" font-size="${scaled(subSize)}" font-weight="700" letter-spacing="0.14em" fill="${palette.sub}" opacity="0.62">${escapeXML(tendency)}</text>`);
+    parts.push(`<line x1="${scaled(slashX)}" y1="${scaled(slashY)}" x2="${scaled(slashX)}" y2="${scaled(slashY + slashHeight)}" stroke="${palette.line}" stroke-width="2" stroke-linecap="round" opacity="0.22" transform="rotate(18 ${scaled(slashX)} ${scaled(slashY + slashHeight / 2)})"/>`);
+    parts.push(`<line x1="${scaled(lineX)}" y1="${scaled(lineY)}" x2="${scaled(lineX + lineWidth)}" y2="${scaled(lineY)}" stroke="${palette.line}" stroke-width="2" stroke-linecap="round" opacity="0.2"/>`);
+    return `<g id="result-kicker">${parts.join("")}</g>`;
   }
 
   async function buildLogoLayer(placed, logos, style) {
@@ -268,6 +317,7 @@
     const footer = `${activityTitle} / ${shareUrl}`;
     const logoLayer = await buildLogoLayer(placed, logos, style);
     const figureDataURL = await imageToDataURL(style.figure.src);
+    const kickerFontDataURL = await assetToDataURL(FONT_ASSETS.kickerItalic);
     const anchor = textAnchorFor(style, "title");
     const displayTendency = DISPLAY_TENDENCY_KEYS[personality.tendency] || personality.tendency.toUpperCase();
     const kickerText = `${style.seriesName || personality.main}-${displayTendency}`;
@@ -278,6 +328,7 @@
           <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" rx="48" ry="48"/>
         </clipPath>
         <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="27" stdDeviation="24" flood-color="${style.shadow}" flood-opacity="0.08"/></filter>
+        ${kickerFontDataURL ? `<style>@font-face{font-family:'DM Serif Display';src:url('${kickerFontDataURL}') format('truetype');font-style:italic;font-weight:400;font-display:block;}</style>` : ""}
         ${renderGlow(style)}
       </defs>
       <g clip-path="url(#card-clip)">
@@ -285,8 +336,7 @@
         ${style.glows.map((_, index) => `<rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" fill="url(#card-glow-${index})"/>`).join("")}
         ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.width)}" height="${scaled(style.figure.height)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMinYMin meet"/>` : ""}
         <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
-        <rect x="${scaled(style.rule.x)}" y="${scaled(style.rule.y)}" width="${scaled(style.rule.width)}" height="2.67" fill="${style.accent}" opacity="${style.ruleOpacity}"/>
-        <text x="${textXFor(style, "kicker").toFixed(2)}" y="${scaled(style.copy.kicker[1] + 28)}" text-anchor="${textAnchorFor(style, "kicker")}" font-family="sans-serif" font-size="37.33" font-weight="600" fill="${style.kicker}">${escapeXML(kickerText)}</text>
+        ${renderKickerText({ style, text: kickerText })}
         <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 64)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
         ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 42.67, lineHeight: 61.33, fill: style.desc, weight: 500 })}
         <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>
