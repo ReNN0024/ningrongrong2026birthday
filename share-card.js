@@ -11,8 +11,10 @@
     G: 0.56
   };
   const KICKER_FONT_FAMILY = "'Instrument Serif', Georgia, Times New Roman, serif";
+  const TENDENCY_FONT_FAMILY = "'DM Serif Display', Georgia, Times New Roman, serif";
   const FONT_ASSETS = {
-    kickerItalic: "assets/fonts/InstrumentSerif-Italic.woff2"
+    kickerItalic: "assets/fonts/InstrumentSerif-Italic.woff2",
+    tendencyItalic: "assets/fonts/DMSerifDisplay-Italic.ttf"
   };
   const RESULT_CARD_MAPPINGS = [
     {
@@ -237,19 +239,19 @@
     const rest = seriesName.slice(1);
     const initialFontSize = 61.33;
     const seriesFontSize = 40;
-    const tendencyFontSize = 30.67;
+    const tendencyFontSize = 34.67;
     const restLetterSpacing = 1.6;
-    const tendencyLetterSpacing = 5.2;
-    const initialGap = 8;
+    const tendencyLetterSpacing = 2.2;
+    const initialGap = 11.33;
     const separatorGap = 18.67;
-    const tendencyGap = 14.67;
-    const separatorWidth = 24;
+    const tendencyGap = 12;
+    const separatorWidth = 17.33;
     const baseline = Number(y);
     const titleWidth = scale(width || 390);
     const titleStartX = anchor === "end" ? x - titleWidth : x;
     const initialWidth = initialFontSize * 0.54;
     const restWidth = rest.length * seriesFontSize * 0.48 + Math.max(0, rest.length - 1) * restLetterSpacing;
-    const tendencyWidth = tendency.length * tendencyFontSize * 0.58 + Math.max(0, tendency.length - 1) * tendencyLetterSpacing;
+    const tendencyWidth = tendency.length * tendencyFontSize * 0.5 + Math.max(0, tendency.length - 1) * tendencyLetterSpacing;
     const labelWidth = initialWidth + initialGap + restWidth + separatorGap + separatorWidth + tendencyGap + tendencyWidth;
     const textStartX = anchor === "end" ? x - labelWidth : titleStartX;
     const restX = textStartX + initialWidth + initialGap;
@@ -259,8 +261,8 @@
     const parts = [];
     parts.push(`<text x="${textStartX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${initialFontSize}" font-weight="400" font-style="italic" fill="${fill}">${escapeXML(initial)}</text>`);
     parts.push(`<text x="${restX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${seriesFontSize}" font-weight="400" font-style="italic" letter-spacing="${restLetterSpacing}" fill="${fill}" opacity="0.92">${escapeXML(rest)}</text>`);
-    parts.push(`<line x1="${separatorX.toFixed(2)}" y1="${(baseline - 12).toFixed(2)}" x2="${(separatorX + separatorWidth).toFixed(2)}" y2="${(baseline - 12).toFixed(2)}" stroke="${fill}" stroke-width="2" stroke-linecap="round" opacity="0.55"/>`);
-    parts.push(`<text x="${tendencyX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="Avenir Next, Helvetica Neue, sans-serif" font-size="${tendencyFontSize}" font-weight="800" letter-spacing="${tendencyLetterSpacing}" fill="${fill}" opacity="0.82">${escapeXML(tendency)}</text>`);
+    parts.push(`<text x="${separatorX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${seriesFontSize}" font-weight="400" font-style="italic" fill="${fill}" opacity="0.72">/</text>`);
+    parts.push(`<text x="${tendencyX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${TENDENCY_FONT_FAMILY}" font-size="${tendencyFontSize}" font-weight="400" font-style="italic" letter-spacing="${tendencyLetterSpacing}" fill="${fill}" opacity="0.86">${escapeXML(tendency)}</text>`);
     return `<g id="result-kicker">${parts.join("")}</g>`;
   }
 
@@ -316,6 +318,7 @@
     const logoLayer = await buildLogoLayer(placed, logos, style);
     const figureDataURL = await imageToDataURL(style.figure.src);
     const kickerFontDataURL = await assetToDataURL(FONT_ASSETS.kickerItalic);
+    const tendencyFontDataURL = await assetToDataURL(FONT_ASSETS.tendencyItalic);
     const anchor = textAnchorFor(style, "title");
     const displayTendency = DISPLAY_TENDENCY_KEYS[personality.tendency] || personality.tendency.toUpperCase();
     const kickerText = `${style.seriesName || personality.main}-${displayTendency}`;
@@ -326,7 +329,7 @@
           <rect width="${CARD_WIDTH}" height="${CARD_HEIGHT}" rx="48" ry="48"/>
         </clipPath>
         <filter id="soft-shadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="27" stdDeviation="24" flood-color="${style.shadow}" flood-opacity="0.08"/></filter>
-        ${kickerFontDataURL ? `<style>@font-face{font-family:'Instrument Serif';src:url('${kickerFontDataURL}') format('woff2');font-style:italic;font-weight:400;font-display:block;}</style>` : ""}
+        ${kickerFontDataURL || tendencyFontDataURL ? `<style>${kickerFontDataURL ? `@font-face{font-family:'Instrument Serif';src:url('${kickerFontDataURL}') format('woff2');font-style:italic;font-weight:400;font-display:block;}` : ""}${tendencyFontDataURL ? `@font-face{font-family:'DM Serif Display';src:url('${tendencyFontDataURL}') format('truetype');font-style:italic;font-weight:400;font-display:block;}` : ""}</style>` : ""}
         ${renderGlow(style)}
       </defs>
       <g clip-path="url(#card-clip)">
