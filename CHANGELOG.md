@@ -4,6 +4,12 @@
 
 ---
 
+## [1.7.10] - 2026-07-24
+
+### Fixed — by Snjór
+- 修正 `RESULT_REPLACEMENT_GUIDE.md` 中副倾向说明：补充内部 key 与结果卡展示英文的对应关系，明确 `flower` 展示为 `BLOOM`、`daily` 展示为 `HEARTH`
+- 精简当前线稿搭配预览表，只保留 R/O/N/G 四个系列对应的背景色与当前线稿，避免 16 个结果重复展示造成维护错误
+
 ## [1.7.9] - 2026-07-24
 
 ### Changed — by Snjór
