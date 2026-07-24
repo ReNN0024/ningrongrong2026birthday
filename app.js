@@ -72,6 +72,7 @@
   let lastToastType = "";
   let lastToastAt = 0;
   let shareResult = null;
+  let shareWarmupStarted = false;
   const shareFileName = "与我周旋久-我的故事坐标.png";
   const stagePointers = new Map();
   let stageGesture = null;
@@ -218,6 +219,7 @@
     $("#placedCountMobile").textContent = String(placed).padStart(2, "0");
     if (dom.desktopProgressFill) dom.desktopProgressFill.style.width = `${Math.round((placed / logos.length) * 100)}%`;
     if (dom.shareTrigger) dom.shareTrigger.hidden = placed < MIN_SHARE_PLACED;
+    if (placed >= MIN_SHARE_PLACED) warmupShareAssets();
     $("#unplacedCount").textContent = String(logos.length - placed);
     dom.clear.disabled = placed === 0;
   }
@@ -440,12 +442,12 @@
 
   function updateShareSaveButton(ready = false) {
     if (!dom.downloadShare) return;
-    if (!ready || !shareResult?.dataURL) {
+    if (!ready || !shareResult?.objectURL) {
       dom.downloadShare.removeAttribute("href");
       dom.downloadShare.setAttribute("aria-disabled", "true");
       return;
     }
-    dom.downloadShare.href = shareResult.dataURL;
+    dom.downloadShare.href = shareResult.objectURL;
     dom.downloadShare.download = shareFileName;
     dom.downloadShare.setAttribute("aria-disabled", "false");
   }
@@ -457,6 +459,29 @@
     } catch (_) {
       return false;
     }
+  }
+
+  function getShareSignature() {
+    return JSON.stringify([...state.placed]
+      .sort((left, right) => left.z - right.z)
+      .map(item => [item.id, Number(item.x.toFixed(4)), Number(item.y.toFixed(4)), item.z]));
+  }
+
+  function revokeShareResult(result = shareResult) {
+    if (result?.objectURL) URL.revokeObjectURL(result.objectURL);
+  }
+
+  function renderSharePreview(result) {
+    if (!result?.objectURL) return;
+    dom.sharePreview.innerHTML = `<img src="${result.objectURL}" alt="宁荣荣与我周旋久结果图">`;
+  }
+
+  function warmupShareAssets() {
+    if (shareWarmupStarted || !window.ShareCard?.warmupShareAssets) return;
+    shareWarmupStarted = true;
+    const run = () => window.ShareCard.warmupShareAssets();
+    if ("requestIdleCallback" in window) window.requestIdleCallback(run, { timeout: 1800 });
+    else window.setTimeout(run, 300);
   }
 
   function hideShareSaveGuide() {
@@ -473,7 +498,7 @@
   }
 
   async function handleShareSave(event) {
-    if (!shareResult?.dataURL) {
+    if (!shareResult?.objectURL) {
       event.preventDefault();
       return toast("结果图还在生成中", "", { key: "share-not-generated", dedupe: 1200 });
     }
@@ -495,7 +520,7 @@
       return;
     }
 
-    dom.downloadShare.href = shareResult.dataURL;
+    dom.downloadShare.href = shareResult.objectURL;
   }
 
   async function generateShareResult() {
@@ -503,12 +528,20 @@
     if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上 Logo 后再生成坐标`, "", { key: "share-not-ready", dedupe: 1200 });
     openDialog(dom.shareDialog);
     hideShareSaveGuide();
+    warmupShareAssets();
+    const signature = getShareSignature();
+    if (shareResult?.signature === signature && shareResult.objectURL) {
+      renderSharePreview(shareResult);
+      updateShareSaveButton(true);
+      return;
+    }
+    revokeShareResult();
     shareResult = null;
     dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
     updateShareSaveButton(false);
     try {
       const personality = window.ShareCard.calculatePersonality(state.placed);
-      const { dataURL, blob } = await window.ShareCard.generateShareImage({
+      const { objectURL, blob } = await window.ShareCard.generateShareImage({
         placed: state.placed,
         logos,
         activityTitle: "宁荣荣·与我周旋久",
@@ -516,8 +549,8 @@
         shareUrl: "ningrr.fun"
       });
       const file = blob ? new File([blob], shareFileName, { type: "image/png" }) : null;
-      shareResult = { dataURL, blob, file };
-      dom.sharePreview.innerHTML = `<img src="${dataURL}" alt="宁荣荣与我周旋久结果图">`;
+      shareResult = { signature, objectURL, blob, file };
+      renderSharePreview(shareResult);
       updateShareSaveButton(true);
     } catch (error) {
       shareResult = null;
