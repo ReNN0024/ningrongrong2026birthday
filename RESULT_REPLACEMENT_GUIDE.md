@@ -58,20 +58,59 @@ window.PERSONALITY_RESULTS = {
 
 ## 三、结果图背景与线稿搭配
 
-结果图的视觉由 `share-card.js` 中的 `CARD_STYLES` 控制。当前线稿图已裁切为 **810×1080**，与设计稿底图尺寸一致；在 SVG 中会按 `TEMPLATE_SCALE = 4 / 3` 放大到 **1080×1440**，并从分享卡片背景原点 `(0, 0)` 重合放置。线稿叠在结果卡背景上时，统一使用 **60% 透明度**（`opacity: 0.6`）。
+结果图的搭配入口集中在 `share-card.js` 顶部的 `RESULT_CARD_MAPPINGS`。当前线稿图已裁切为 **810×1080**，与设计稿底图尺寸一致；在 SVG 中会按 `TEMPLATE_SCALE = 4 / 3` 放大到 **1080×1440**，并从分享卡片背景原点 `(0, 0)` 重合放置。线稿叠在结果卡背景上时，统一使用 **60% 透明度**（`LINEART_OPACITY = 0.6`）。
+
+目前【测试结果象限、系列名、结果图背景颜色、对应线稿】已经尽量抽象为单一配置：
+
+- `RESULT_CARD_MAPPINGS`：后续调整搭配时优先只改这里，包括结果象限、系列名、背景颜色、线稿文件。
+- `CARD_PALETTES`：只在需要新增或修改某个背景色的具体色值、光斑、文字色时才改。
+- `CARD_LAYOUTS`：只在需要改变某个系列的坐标系/文字排版位置时才改。
+- `personality-results.js`：只负责 16 个结果文案，不负责结果图背景和线稿搭配。
 
 当前正在使用的搭配如下：
 
 | 测试结果象限 | 系列名 | 结果图背景颜色 | 当前对应线稿预览 |
 |---|---|---|---|
-| 第三象限：荆棘 × 寻常（x < 0，y < 0） | **R**estrained | 蓝色 `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
-| 第二象限：荆棘 × 不忘（x < 0，y > 0） | **O**bdurate | 粉色 `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
-| 第一象限：繁花 × 不忘（x > 0，y > 0） | **N**uminous | 黄色 `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
-| 第四象限：繁花 × 寻常（x > 0，y < 0） | **G**entled | 绿色 `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
+| 第三象限：荆棘 × 寻常（x < 0，y < 0） | **R**estrained | 蓝色 `blue` / `#E7F2F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
+| 第二象限：荆棘 × 不忘（x < 0，y > 0） | **O**bdurate | 粉色 `pink` / `#F8EAEC` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
+| 第一象限：繁花 × 不忘（x > 0，y > 0） | **N**uminous | 黄色 `yellow` / `#F9F0D4` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
+| 第四象限：繁花 × 寻常（x > 0，y < 0） | **G**entled | 绿色 `green` / `#EAF5EA` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
+
+### 如何更换结果图搭配
+
+#### 用户需要提供什么
+
+如果只想更换结果图搭配，建议直接提供一张四列表格，字段如下：
+
+| 测试结果象限 | 系列名 | 结果图背景颜色 | 对应线稿预览 |
+|---|---|---|---|
+| 例如：第三象限：荆棘 × 寻常（x < 0，y < 0） | 例如：**R**estrained | 例如：蓝色 / 粉色 / 黄色 / 绿色 | 例如：R线稿裁切-蓝色，或直接贴预览图 |
+
+注意：
+
+1. **测试结果象限**决定用户坐标落在哪个象限时，最终会归入哪个系列。
+2. **系列名**必须是 R、O、N、G 开头的英文单词，用于结果卡顶部英文展示。
+3. **结果图背景颜色**建议使用现有颜色名：`blue`、`pink`、`yellow`、`green`。如果要新增颜色，需要同时给出具体色值或设计稿。
+4. **对应线稿预览**可以写文件名，也可以贴图；如果贴的是 PNG 新图，AI 需要先转换为 WebP 后放入 `assets/share-card-figures/`。
+
+#### AI 收到上述指示后怎么改
+
+AI 应优先只修改 `share-card.js` 顶部的 `RESULT_CARD_MAPPINGS`，不要改 16 个结果文案：
+
+1. 根据用户提供的“测试结果象限”，调整对应对象的 `quadrant` 和 `quadrantLabel`：
+   - 第一象限：`quadrant: "first"`，通常对应 `x >= 0 && y >= 0`
+   - 第二象限：`quadrant: "second"`，通常对应 `x < 0 && y >= 0`
+   - 第三象限：`quadrant: "third"`，通常对应 `x < 0 && y < 0`
+   - 第四象限：`quadrant: "fourth"`，通常对应 `x >= 0 && y < 0`
+2. 根据“系列名”，调整对应对象的 `seriesName`，但 `series` 仍保持为内部主倾向 key：`R` / `O` / `N` / `G`。除非用户明确要求改变内部 key，否则不要改 `personality-results.js` 的 `R-thorn` 等 key。
+3. 根据“结果图背景颜色”，调整对应对象的 `background`：优先使用已有 `CARD_PALETTES` 中的 `blue` / `pink` / `yellow` / `green`。
+4. 根据“对应线稿预览”，调整对应对象的 `lineart` 和 `lineartLabel`。如果用户提供新图，先把新图转成 WebP，放入 `assets/share-card-figures/`，再把 `lineart` 指向新文件名。
+5. 一般不要改 `CARD_PALETTES` 和 `CARD_LAYOUTS`；只有当用户明确要求改变背景色具体色值、光斑、文字色或排版位置时才改。
+6. 修改完成后，同步更新本文件的“当前正在使用的搭配”表、`README.md` 当前版本、`CHANGELOG.md`，并检查 `share-card.js` 语法。
 
 ### 可选线稿资源预览
 
-16 张线稿都存放在 `assets/share-card-figures/`。如果后续要更换背景色与线稿搭配，只需要在 `share-card.js` 中调整对应主倾向的 `figure.src`。
+16 张线稿都存放在 `assets/share-card-figures/`。如果后续要更换背景色与线稿搭配，优先只修改 `share-card.js` 顶部的 `RESULT_CARD_MAPPINGS`。
 
 | 线稿名称 | 文件名 | 预览图 |
 |---|---|---|

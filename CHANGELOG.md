@@ -4,6 +4,13 @@
 
 ---
 
+## [1.7.12] - 2026-07-24
+
+### Changed — by Snjór
+- 将结果卡【测试结果象限、系列名、结果图背景颜色、对应线稿】集中抽象到 `share-card.js` 顶部的 `RESULT_CARD_MAPPINGS`，后续调整搭配优先只改这一处配置
+- 拆分 `CARD_PALETTES` 与 `CARD_LAYOUTS`，让背景色/光斑、排版位置和搭配映射解耦，减少后续换线稿或换背景时的改动范围
+- 在 `RESULT_REPLACEMENT_GUIDE.md` 当前搭配表下新增用户与 AI 更换搭配的操作说明，明确用户应提供字段和 AI 应调整的代码入口
+
 ## [1.7.11] - 2026-07-24
 
 ### Changed — by Snjór
