@@ -10,6 +10,7 @@
     N: 0.52,
     G: 0.56
   };
+  const KICKER_FONT_FAMILY = "Bodoni 72, Didot, Baskerville, Times New Roman, serif";
   const RESULT_CARD_MAPPINGS = [
     {
       series: "R",
@@ -222,6 +223,30 @@
     return lines.map((line, index) => `<text x="${x.toFixed(2)}" y="${(y + index * lineHeight).toFixed(2)}" text-anchor="${anchor}" font-family="sans-serif" font-size="${size}" font-weight="${weight}" fill="${fill}">${escapeXML(line)}</text>`).join("");
   }
 
+  function renderKickerText({ text, x, y, anchor, fill }) {
+    const [seriesName, tendency = ""] = String(text).split("-");
+    const letterSpacing = 1.8;
+    const tendencyLetterSpacing = 4.6;
+    const seriesFontSize = 43.33;
+    const tendencyFontSize = 33.33;
+    const separatorGap = 13.33;
+    const tendencyGap = 13.33;
+    const separatorWidth = 20;
+    const baseline = Number(y);
+    const seriesWidth = seriesName.length * seriesFontSize * 0.54 + Math.max(0, seriesName.length - 1) * letterSpacing;
+    const tendencyWidth = tendency.length * tendencyFontSize * 0.58 + Math.max(0, tendency.length - 1) * tendencyLetterSpacing;
+    const groupWidth = seriesWidth + separatorGap + separatorWidth + tendencyGap + tendencyWidth;
+    const startX = anchor === "end" ? x - groupWidth : x;
+    const separatorX = startX + seriesWidth + separatorGap;
+    const tendencyX = separatorX + separatorWidth + tendencyGap;
+
+    const parts = [];
+    parts.push(`<text x="${startX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="${KICKER_FONT_FAMILY}" font-size="${seriesFontSize}" font-weight="600" font-style="italic" letter-spacing="${letterSpacing}" fill="${fill}">${escapeXML(seriesName)}</text>`);
+    parts.push(`<line x1="${separatorX.toFixed(2)}" y1="${(baseline - 13.33).toFixed(2)}" x2="${(separatorX + separatorWidth).toFixed(2)}" y2="${(baseline - 13.33).toFixed(2)}" stroke="${fill}" stroke-width="2" stroke-linecap="round" opacity="0.58"/>`);
+    parts.push(`<text x="${tendencyX.toFixed(2)}" y="${baseline.toFixed(2)}" text-anchor="start" font-family="Avenir Next, Helvetica Neue, sans-serif" font-size="${tendencyFontSize}" font-weight="700" letter-spacing="${tendencyLetterSpacing}" fill="${fill}" opacity="0.86">${escapeXML(tendency)}</text>`);
+    return `<g id="result-kicker">${parts.join("")}</g>`;
+  }
+
   async function buildLogoLayer(placed, logos, style) {
     const logoMap = new Map(logos.map(logo => [logo.id, logo]));
     const cardX = scale(style.coord.x);
@@ -291,7 +316,7 @@
         ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.width)}" height="${scaled(style.figure.height)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMinYMin meet"/>` : ""}
         <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
         <rect x="${scaled(style.rule.x)}" y="${scaled(style.rule.y)}" width="${scaled(style.rule.width)}" height="2.67" fill="${style.accent}" opacity="${style.ruleOpacity}"/>
-        <text x="${textXFor(style, "kicker").toFixed(2)}" y="${scaled(style.copy.kicker[1] + 28)}" text-anchor="${textAnchorFor(style, "kicker")}" font-family="sans-serif" font-size="37.33" font-weight="600" fill="${style.kicker}">${escapeXML(kickerText)}</text>
+        ${renderKickerText({ text: kickerText, x: textXFor(style, "kicker"), y: scale(style.copy.kicker[1] + 30), anchor: textAnchorFor(style, "kicker"), fill: style.kicker })}
         <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 64)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
         ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 42.67, lineHeight: 61.33, fill: style.desc, weight: 500 })}
         <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>
