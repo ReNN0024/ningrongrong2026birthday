@@ -6,6 +6,47 @@
 
 ---
 
+## [1.7.29] - 2026-07-24
+
+### Changed — by coze
+- 更新结果图背景颜色与线稿文件名后缀一致：
+  - R (Restrained)：蓝色 → 绿色
+  - O (Orthodox)：粉色 → 蓝色
+  - N (Numinous)：黄色（不变）
+  - G (Gentle)：绿色 → 粉色
+- 更新 share-card.js 中的 background 配置
+- 更新 RESULT_REPLACEMENT_GUIDE.md 中的搭配表
+
+---
+
+## [1.7.28] - 2026-07-24
+
+### Changed — by coze
+- 重命名线稿文件，交换 n 和 o 前缀：
+  - 原 n-lineart-* → o-lineart-*
+  - 原 o-lineart-* → n-lineart-*
+- 更新 share-card.js 中的 lineart 引用
+- 更新 RESULT_REPLACEMENT_GUIDE.md 中的搭配表
+
+## [1.7.27] - 2026-07-24
+
+### Changed — by coze
+- 修改四主倾向对应的底图（线稿）：
+  - R (Restrained)：r-lineart-blue.webp → r-lineart-green.webp
+  - O (Orthodox)：o-lineart-pink.webp → n-lineart-blue.webp
+  - N (Numinous)：n-lineart-yellow.webp → o-lineart-yellow.webp
+  - G (Gentle)：g-lineart-green.webp → g-lineart-pink.webp
+- 更新 RESULT_REPLACEMENT_GUIDE.md 中的搭配表
+
+## [1.7.26] - 2026-07-24
+
+### Changed — by coze
+- 修改主倾向系列名：
+  - O: Obdurate → **Orthodox**
+  - G: Gentled → **Gentle**
+- 更新 share-card.js 中 RESULT_CARD_MAPPINGS 的 seriesName
+- 更新 RESULT_REPLACEMENT_GUIDE.md 中的主倾向定义表和搭配表
+
 ## [1.7.25] - 2026-07-24
 
 ### Changed — by Snjór

@@ -21,18 +21,18 @@
       seriesName: "Restrained",
       quadrant: "third",
       quadrantLabel: "荆棘 × 寻常",
-      background: "blue",
-      lineart: "r-lineart-blue.webp",
-      lineartLabel: "R线稿裁切-蓝色"
+      background: "green",
+      lineart: "r-lineart-green.webp",
+      lineartLabel: "R线稿裁切-绿色"
     },
     {
       series: "O",
-      seriesName: "Obdurate",
+      seriesName: "Orthodox",
       quadrant: "second",
       quadrantLabel: "荆棘 × 不忘",
-      background: "pink",
-      lineart: "o-lineart-pink.webp",
-      lineartLabel: "O线稿裁切-粉色"
+      background: "blue",
+      lineart: "o-lineart-blue.webp",
+      lineartLabel: "O线稿裁切-蓝色"
     },
     {
       series: "N",
@@ -45,12 +45,12 @@
     },
     {
       series: "G",
-      seriesName: "Gentled",
+      seriesName: "Gentle",
       quadrant: "fourth",
       quadrantLabel: "繁花 × 寻常",
-      background: "green",
-      lineart: "g-lineart-green.webp",
-      lineartLabel: "G线稿裁切-绿色"
+      background: "pink",
+      lineart: "g-lineart-pink.webp",
+      lineartLabel: "G线稿裁切-粉色"
     }
   ];
   const QUADRANT_TESTS = {

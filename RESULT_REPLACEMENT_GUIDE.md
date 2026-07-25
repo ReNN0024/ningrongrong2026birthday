@@ -41,9 +41,9 @@ window.PERSONALITY_RESULTS = {
 | 主倾向 | 对应象限 | 英文定义 | 含义 |
 |---|---|---|---|
 | `R` | 荆棘 × 寻常 | **R**estrained | 偏向痛楚、日常、归于平静的力量 |
-| `O` | 荆棘 × 不忘 | **O**bdurate | 偏向痛楚、坚持、记忆深处的刺 |
+| `O` | 荆棘 × 不忘 | **O**rthodox | 偏向痛楚、坚持、记忆深处的刺 |
 | `N` | 繁花 × 不忘 | **N**uminous | 偏向美好、圆满、值得珍藏的光 |
-| `G` | 繁花 × 寻常 | **G**entled | 偏向日常、烟火、把美好落进生活 |
+| `G` | 繁花 × 寻常 | **G**entle | 偏向日常、烟火、把美好落进生活 |
 
 ### 副倾向
 
@@ -74,10 +74,10 @@ window.PERSONALITY_RESULTS = {
 
 | 测试结果象限 | 系列名 | 结果图背景颜色 | 当前对应线稿预览 |
 |---|---|---|---|
-| 第三象限：荆棘 × 寻常（x < 0，y < 0） | **R**estrained | 蓝色 `blue` / `#E2F0F8` | <img src="assets/share-card-figures/r-lineart-blue.webp" width="90" alt="R线稿裁切-蓝色"> |
-| 第二象限：荆棘 × 不忘（x < 0，y > 0） | **O**bdurate | 粉色 `pink` / `#FAE9EF` | <img src="assets/share-card-figures/o-lineart-pink.webp" width="90" alt="O线稿裁切-粉色"> |
+| 第三象限：荆棘 × 寻常（x < 0，y < 0） | **R**estrained | 绿色 `green` / `#E7F3E7` | <img src="assets/share-card-figures/r-lineart-green.webp" width="90" alt="R线稿裁切-绿色"> |
+| 第二象限：荆棘 × 不忘（x < 0，y > 0） | **O**rthodox | 蓝色 `blue` / `#E2F0F8` | <img src="assets/share-card-figures/o-lineart-blue.webp" width="90" alt="O线稿裁切-蓝色"> |
 | 第一象限：繁花 × 不忘（x > 0，y > 0） | **N**uminous | 黄色 `yellow` / `#F8F0D8` | <img src="assets/share-card-figures/n-lineart-yellow.webp" width="90" alt="N线稿裁切-黄色"> |
-| 第四象限：繁花 × 寻常（x > 0，y < 0） | **G**entled | 绿色 `green` / `#E7F3E7` | <img src="assets/share-card-figures/g-lineart-green.webp" width="90" alt="G线稿裁切-绿色"> |
+| 第四象限：繁花 × 寻常（x > 0，y < 0） | **G**entle | 粉色 `pink` / `#FAE9EF` | <img src="assets/share-card-figures/g-lineart-pink.webp" width="90" alt="G线稿裁切-粉色"> |
 
 ### 如何更换结果图搭配
 
