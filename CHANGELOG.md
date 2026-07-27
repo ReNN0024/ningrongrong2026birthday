@@ -6,6 +6,20 @@
 
 ---
 
+## [1.8.16] - 2026-07-28
+
+### 新增
+- 新增 3_3 位置素材：焦点
+  - Logo 缩略图：assets/logos/3_3.webp (19.5 KB)
+  - 预览大图：assets/detail-images/3_3.webp (293.7 KB)
+- 新增 3_4 位置素材：拙习
+  - Logo 缩略图：assets/logos/3_4.webp (20.1 KB)
+  - 预览大图：assets/detail-images/3_4.webp (260.7 KB)
+- app.js: officialNames 数组添加"焦点"、"拙习"
+- ASSET_REPLACEMENT_GUIDE.md: 更新素材对应位置表
+
+---
+
 ## [1.8.15] - 2026-07-28
 
 ### 新增
