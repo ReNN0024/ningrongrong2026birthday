@@ -6,6 +6,19 @@
 
 ---
 
+## [1.8.15] - 2026-07-28
+
+### 新增
+- 新增 3_2 位置素材：华光
+  - Logo 缩略图：assets/logos/3_2.webp (18.6 KB)
+  - 预览大图：assets/detail-images/3_2.webp (304.9 KB)
+- app.js: officialNames 数组添加"华光"
+
+### 文档
+- ASSET_REPLACEMENT_GUIDE.md: 更新素材对应位置表，3_2 从"暂未命名"改为"华光"
+
+---
+
 ## [1.8.14] - 2026-07-28
 
 ### 新增
