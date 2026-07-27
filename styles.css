@@ -19,17 +19,17 @@
   --coord-green-main: 179 202 149;
   --coord-green-soft: 211 222 186;
   /* 左上：荆棘 × 不忘 */
-  --coord-q-ul-main: var(--coord-pink-main);
-  --coord-q-ul-soft: var(--coord-pink-soft);
+  --coord-q-ul-main: var(--coord-blue-main);
+  --coord-q-ul-soft: var(--coord-blue-soft);
   /* 右上：繁花 × 不忘 */
   --coord-q-ur-main: var(--coord-yellow-main);
   --coord-q-ur-soft: var(--coord-yellow-soft);
   /* 左下：荆棘 × 寻常 */
-  --coord-q-ll-main: var(--coord-blue-main);
-  --coord-q-ll-soft: var(--coord-blue-soft);
+  --coord-q-ll-main: var(--coord-green-main);
+  --coord-q-ll-soft: var(--coord-green-soft);
   /* 右下：繁花 × 寻常 */
-  --coord-q-lr-main: var(--coord-green-main);
-  --coord-q-lr-soft: var(--coord-green-soft);
+  --coord-q-lr-main: var(--coord-pink-main);
+  --coord-q-lr-soft: var(--coord-pink-soft);
 }
 
 * { box-sizing: border-box; }
