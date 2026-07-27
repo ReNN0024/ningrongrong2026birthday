@@ -113,8 +113,8 @@
     },
     O: {
       align: "left",
-      coord: { x: 57, y: 245 },
-      copy: { kicker: [72, 74, 420], title: [72, 810, 560], desc: [74, 898, 586], footer: [72, 1008, 520] }
+      coord: { x: 57, y: 145 },
+      copy: { kicker: [72, 74, 420], title: [72, 710, 560], desc: [74, 798, 586], footer: [72, 1008, 520] }
     },
     N: {
       align: "right",
