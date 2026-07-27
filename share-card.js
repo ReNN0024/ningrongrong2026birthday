@@ -209,37 +209,74 @@
     // 行尾禁则：不能出现在行尾的标点
     const lineEndForbidden = new Set(['（', '【', '《', '「', '『', '"', "'", '(', '[']);
 
+    // 第一步：按 maxChars 初步分行
     let index = 0;
     while (index < chars.length && lines.length < 3) {
-      let end = Math.min(index + maxChars, chars.length);
-      let line = chars.slice(index, end);
+      const end = Math.min(index + maxChars, chars.length);
+      lines.push(chars.slice(index, end));
+      index = end;
+    }
 
-      // 处理行首禁则：如果当前行开头是禁则字符，从上一行末尾借一个字符
-      if (lines.length > 0 && lineStartForbidden.has(line[0])) {
-        const prevLine = lines[lines.length - 1];
+    // 第二步：处理行首禁则 - 从上一行末尾借字符
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i];
+      if (lineStartForbidden.has(line[0])) {
+        const prevLine = lines[i - 1];
         const lastChar = prevLine[prevLine.length - 1];
-        // 检查上一行末尾字符是否不是行尾禁则
         if (!lineEndForbidden.has(lastChar)) {
-          lines[lines.length - 1] = prevLine.slice(0, -1);
+          prevLine.pop();
           line.unshift(lastChar);
         }
       }
+    }
 
-      // 处理行尾禁则：如果当前行末尾是禁则字符，移到下一行
+    // 第三步：处理行尾禁则 - 将禁则字符移到下一行开头
+    for (let i = 0; i < lines.length - 1; i++) {
+      const line = lines[i];
       while (line.length > 0 && lineEndForbidden.has(line[line.length - 1])) {
         const lastChar = line.pop();
-        // 将禁则字符移到下一行开头，但需要检查下一行是否会超长
-        if (index + line.length < chars.length) {
-          // 在下一轮循环中处理
-          chars.splice(index + line.length, 0, lastChar);
-        }
-        break;
+        lines[i + 1].unshift(lastChar);
       }
-
-      lines.push(line.join(""));
-      index += line.length;
     }
-    return lines;
+
+    // 第四步：以第一行字数为基准，使用原始字符重新分配
+    if (lines.length > 1) {
+      let baseLength = lines[0].length;
+      // 如果最后一行太短（≤2 字），减少 baseLength 让最后一行多分一些
+      const lastLine = lines[lines.length - 1];
+      if (lastLine.length <= 2) {
+        baseLength = baseLength - 1;
+      }
+      
+      lines.length = 0;
+      let idx = 0;
+      while (idx < chars.length && lines.length < 3) {
+        const end = Math.min(idx + baseLength, chars.length);
+        lines.push(chars.slice(idx, end));
+        idx = end;
+      }
+      // 处理避头尾
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i];
+        if (lineStartForbidden.has(line[0])) {
+          const prevLine = lines[i - 1];
+          const lastChar = prevLine[prevLine.length - 1];
+          if (!lineEndForbidden.has(lastChar)) {
+            prevLine.pop();
+            line.unshift(lastChar);
+          }
+        }
+      }
+      for (let i = 0; i < lines.length - 1; i++) {
+        const line = lines[i];
+        while (line.length > 0 && lineEndForbidden.has(line[line.length - 1])) {
+          const lastChar = line.pop();
+          lines[i + 1].unshift(lastChar);
+        }
+      }
+    }
+
+    return lines.map(line => line.join(''));
   }
 
   async function assetToDataURL(src, cache = assetCache) {
