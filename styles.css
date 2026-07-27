@@ -36,6 +36,10 @@
 
 html, body { min-height: 100%; }
 
+img {
+  -webkit-user-drag: none;
+}
+
 body {
   margin: 0;
   color: var(--ink);
@@ -278,9 +282,12 @@ button:disabled { cursor: not-allowed; opacity: .36; }
   touch-action: none;
   pointer-events: auto;
   filter: none;
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
 }
 .placed-logo:active { cursor: grabbing; }
-.placed-logo img, .placed-logo .placeholder-mark { display: block; width: 100%; height: 100%; object-fit: contain; }
+.placed-logo img, .placed-logo .placeholder-mark { display: block; width: 100%; height: 100%; object-fit: contain; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
 .placed-logo .placeholder-mark { display: grid; place-items: center; color: rgba(255,255,255,.82); font: 600 12px var(--sans); border-radius: 10px; }
 .placed-logo.is-selected { filter: none; }
 .placed-logo.is-overlap { animation: overlapPulse .7s ease; }
@@ -394,10 +401,10 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .return-target.is-over { background: rgba(243, 222, 164, .98); }
 .logo-scroll { min-height: 0; flex: 1; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: rgba(154,126,76,.45) transparent; scrollbar-width: thin; touch-action: pan-y; }
 .logo-grid { padding: 15px 8px 26px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px 5px; }
-.logo-card { appearance: none; border: 0; padding: 0; min-width: 0; background: transparent; text-align: center; cursor: grab; touch-action: pan-y; position: relative; }
+.logo-card { appearance: none; border: 0; padding: 0; min-width: 0; background: transparent; text-align: center; cursor: grab; touch-action: pan-y; position: relative; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
 .logo-card:active { cursor: grabbing; }
 .logo-thumb { width: 100%; aspect-ratio: 1; display: grid; place-items: center; position: relative; filter: drop-shadow(0 4px 4px rgba(69,56,41,.12)); }
-.logo-thumb img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.logo-thumb img { display: block; width: 100%; height: 100%; object-fit: contain; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
 .logo-thumb .placeholder-mark { width: 78%; height: 78%; border-radius: 9px; display: grid; place-items: center; color: rgba(255,255,255,.82); font: 600 10px var(--sans); }
 .logo-card > span { display: block; overflow: hidden; margin-top: 4px; font: 500 9px/1.2 var(--sans); white-space: nowrap; text-overflow: ellipsis; }
 .logo-card.is-placed { opacity: .5; }
@@ -641,10 +648,10 @@ body.is-immersive .library-panel { display: flex !important; width: 100%; height
   .mobile-progress { min-height: 40px; flex: 0 0 auto; align-items: center; justify-content: space-between; padding: 7px 16px; border-top: 1px solid var(--line); background: rgba(255,251,244,.85); font-size: 9px; }
   .mobile-progress strong { font-weight: 400; color: var(--muted); }
   .mobile-progress em { font: 500 17px var(--sans); color: var(--gold-deep); font-style: normal; }
-  .preview-popover { width: max-content; max-width: calc(100vw - 20px); padding: 7px; border-radius: 14px; pointer-events: none; }
+  .preview-popover { width: max-content; max-width: calc(100vw - 20px); padding: 7px; border-radius: 14px; pointer-events: none; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
   .preview-popover.is-visible { pointer-events: auto; cursor: pointer; }
   .preview-popover > div { border-radius: 9px; }
-  .preview-popover img { max-width: min(64vw, 245px); max-height: min(62vh, 420px); }
+  .preview-popover img { max-width: min(64vw, 245px); max-height: min(62vh, 420px); user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
 
   /* 移动端扩大已放置 Logo 的透明点击热区，不改变视觉占位 */
   .placed-logo::after {

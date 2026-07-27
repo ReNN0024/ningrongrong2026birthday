@@ -112,11 +112,17 @@
     dom.grid.querySelectorAll(".logo-card").forEach(card => {
       card.style.touchAction = mobile ? "none" : "pan-y";
       card.style.webkitTouchCallout = mobile ? "none" : "";
+      card.style.webkitUserSelect = mobile ? "none" : "";
+      card.querySelectorAll("img").forEach(img => {
+        img.draggable = false;
+        img.style.webkitUserDrag = mobile ? "none" : "";
+        img.style.webkitTouchCallout = mobile ? "none" : "";
+      });
     });
   }
 
   function mediaMarkup(logo, className = "", lazy = false) {
-    if (logo.src) return `<img class="${className}" src="${logo.src}" alt="" draggable="false"${lazy ? ' loading="lazy"' : ""}>`;
+    if (logo.src) return `<img class="${className}" src="${logo.src}" alt="" draggable="false" decoding="async"${lazy ? ' loading="lazy"' : ""}>`;
     return `<span class="placeholder-mark ${className}" style="background:${logo.color}">${escapeHTML(logo.slot || logo.name)}</span>`;
   }
 
@@ -702,6 +708,7 @@
     if (event.button !== 0 && event.pointerType === "mouse") return;
     const button = event.target.closest(source === "library" ? ".logo-card" : ".placed-logo");
     if (!button) return;
+    if (event.pointerType !== "mouse") event.preventDefault();
     const id = button.dataset.logoId;
     if (source === "library" && isMobile()) stopListMomentum();
     if (source === "library" && state.placed.some(item => item.id === id)) {
@@ -809,7 +816,8 @@
       if (current.placedLibrary) focusPlaced(current.id);
       else placeAtOrigin(current.id);
     } else if (isMobile()) {
-      openPreview(current.id, event.currentTarget || event.target);
+      event.preventDefault();
+      openPreview(current.id, current.element);
     }
   }
 
@@ -828,8 +836,9 @@
     const logo = logoMap.get(id);
     if (!logo) return;
     state.previewId = id;
+    window.getSelection?.()?.removeAllRanges?.();
     dom.previewMedia.innerHTML = logo.detail
-      ? `<img src="${logo.detail}" alt="${escapeHTML(logo.name)}大图">`
+      ? `<img src="${logo.detail}" alt="${escapeHTML(logo.name)}大图" draggable="false" decoding="async">`
       : `<div class="preview-placeholder" style="background:${logo.color}"></div>`;
     dom.preview.hidden = false;
     dom.previewBackdrop.classList.add("is-visible");
@@ -841,6 +850,12 @@
         dom.preview.classList.add("is-visible");
       });
     };
+    if (previewImage) {
+      previewImage.draggable = false;
+      previewImage.style.webkitUserDrag = "none";
+      previewImage.style.webkitTouchCallout = "none";
+      previewImage.style.webkitUserSelect = "none";
+    }
     if (previewImage && !previewImage.complete) {
       previewImage.addEventListener("load", showPreview, { once: true });
       previewImage.addEventListener("error", showPreview, { once: true });
@@ -889,6 +904,11 @@
 
   function startStageGesture(event) {
     if (event.target.closest(".placed-logo, .coordinate-toolbar")) return;
+    if (isMobile() && state.previewId) {
+      closePreview();
+      event.preventDefault();
+      return;
+    }
     dom.frame.setPointerCapture?.(event.pointerId);
     stagePointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (stagePointers.size === 1) {
@@ -898,7 +918,6 @@
       const pts = [...stagePointers.values()];
       stageGesture = { type: "pinch", distance: Math.hypot(pts[0].x - pts[1].x, pts[0].y - pts[1].y), scale: state.view.scale, panX: state.view.panX, panY: state.view.panY, centerX: (pts[0].x + pts[1].x) / 2, centerY: (pts[0].y + pts[1].y) / 2 };
     }
-    if (isMobile() && state.previewId) closePreview();
   }
 
   function moveStageGesture(event) {
@@ -1123,7 +1142,24 @@
     document.addEventListener("pointerdown", event => {
       if (isMobile() && state.previewId && !event.target.closest(".placed-logo, .preview-popover, .preview-backdrop")) closePreview();
     }, true);
+    const suppressNativeTouchMenu = event => {
+      if (!isMobile()) return;
+      if (event.target.closest(".logo-card, .placed-logo, .preview-popover")) event.preventDefault();
+    };
+    [dom.grid, dom.placedLayer, dom.preview].forEach(element => {
+      element.addEventListener("contextmenu", suppressNativeTouchMenu);
+      element.addEventListener("dragstart", suppressNativeTouchMenu);
+      element.addEventListener("selectstart", suppressNativeTouchMenu);
+    });
+    dom.previewBackdrop.addEventListener("pointerdown", event => {
+      event.preventDefault();
+      event.stopPropagation();
+      closePreview();
+    });
     dom.previewBackdrop.addEventListener("click", closePreview);
+    dom.preview.addEventListener("pointerdown", event => {
+      if (isMobile()) event.preventDefault();
+    });
     dom.preview.addEventListener("click", closePreview);
     dom.mobileGuideCollapseBtn?.addEventListener("click", () => setMobileGuidePreference("hidden"));
     dom.shareTrigger?.addEventListener("click", generateShareResult);
