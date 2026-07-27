@@ -209,30 +209,24 @@
     // 行尾禁则：不能出现在行尾的标点
     const lineEndForbidden = new Set(['（', '【', '《', '「', '『', '"', "'", '(', '[']);
 
-    // 第一步：按 \n 强制分行，然后按 maxChars 分行
-    let index = 0;
-    let currentLine = [];
-    while (index < chars.length && lines.length < 3) {
-      const ch = chars[index];
-      if (ch === '\n') {
-        // 遇到换行符，强制结束当前行
-        if (currentLine.length > 0) {
-          lines.push(currentLine);
-          currentLine = [];
+    // 第一步：按 \n 强制分行，\n 后的内容不限制字数
+    const segments = String(text).split('\n');
+    for (const segment of segments) {
+      const segChars = [...segment];
+      if (segChars.length === 0) continue;
+      
+      // 如果片段超过 maxChars，仍然需要分行
+      if (segChars.length <= maxChars) {
+        lines.push(segChars);
+      } else {
+        // 超长片段按 maxChars 分行
+        let idx = 0;
+        while (idx < segChars.length && lines.length < 3) {
+          const end = Math.min(idx + maxChars, segChars.length);
+          lines.push(segChars.slice(idx, end));
+          idx = end;
         }
-        index++;
-        continue;
       }
-      currentLine.push(ch);
-      if (currentLine.length >= maxChars) {
-        lines.push(currentLine);
-        currentLine = [];
-      }
-      index++;
-    }
-    // 添加最后一行
-    if (currentLine.length > 0 && lines.length < 3) {
-      lines.push(currentLine);
     }
 
     // 第二步：处理行首禁则 - 从上一行末尾借字符
@@ -257,8 +251,9 @@
       }
     }
 
-    // 第四步：以第一行字数为基准，使用原始字符重新分配
-    if (lines.length > 1) {
+    // 第四步：以第一行字数为基准，使用原始字符重新分配（仅在没有 \n 强制换行时执行）
+    const hasForcedLineBreak = String(text).includes('\n');
+    if (lines.length > 1 && !hasForcedLineBreak) {
       let baseLength = lines[0].length;
       // 如果最后一行太短（≤2 字），减少 baseLength 让最后一行多分一些
       const lastLine = lines[lines.length - 1];
