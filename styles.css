@@ -54,6 +54,16 @@ body {
 
 button { color: inherit; font: inherit; }
 button, [role="button"] { -webkit-tap-highlight-color: transparent; }
+.logo-card, .placed-logo, .preview-popover, .drag-ghost,
+.logo-card *, .placed-logo *, .preview-popover *, .drag-ghost * {
+  user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+}
+.logo-card img, .placed-logo img, .preview-popover img, .drag-ghost img {
+  pointer-events: none;
+}
 button:focus-visible, .logo-card:focus-visible {
   outline: 3px solid rgba(166, 124, 43, .56);
   outline-offset: 3px;

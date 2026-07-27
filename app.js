@@ -59,6 +59,7 @@
   let drag = null;
   let hoverTimer = 0;
   let previewHideTimer = 0;
+  let previewCloseGuardUntil = 0;
   let toolbarDrag = null;
   let minimapDrag = null;
   let mobileGuideAutoHideTimer = 0;
@@ -107,22 +108,34 @@
     listMomentumFrame = requestAnimationFrame(step);
   }
 
+  function hardenLogoMedia(root = document) {
+    root.querySelectorAll?.(".logo-card, .placed-logo, .preview-popover, .drag-ghost").forEach(element => {
+      element.setAttribute("draggable", "false");
+      element.style.webkitTouchCallout = "none";
+      element.style.webkitUserSelect = "none";
+      element.style.userSelect = "none";
+    });
+    root.querySelectorAll?.(".logo-card img, .placed-logo img, .preview-popover img, .drag-ghost img").forEach(img => {
+      img.setAttribute("draggable", "false");
+      img.setAttribute("contenteditable", "false");
+      img.style.pointerEvents = "none";
+      img.style.webkitUserDrag = "none";
+      img.style.webkitTouchCallout = "none";
+      img.style.webkitUserSelect = "none";
+      img.style.userSelect = "none";
+    });
+  }
+
   function applyLibraryTouchMode() {
     const mobile = isMobile();
     dom.grid.querySelectorAll(".logo-card").forEach(card => {
       card.style.touchAction = mobile ? "none" : "pan-y";
-      card.style.webkitTouchCallout = mobile ? "none" : "";
-      card.style.webkitUserSelect = mobile ? "none" : "";
-      card.querySelectorAll("img").forEach(img => {
-        img.draggable = false;
-        img.style.webkitUserDrag = mobile ? "none" : "";
-        img.style.webkitTouchCallout = mobile ? "none" : "";
-      });
     });
+    hardenLogoMedia(dom.grid);
   }
 
   function mediaMarkup(logo, className = "", lazy = false) {
-    if (logo.src) return `<img class="${className}" src="${logo.src}" alt="" draggable="false" decoding="async"${lazy ? ' loading="lazy"' : ""}>`;
+    if (logo.src) return `<img class="${className}" src="${logo.src}" alt="" draggable="false" contenteditable="false" decoding="async"${lazy ? ' loading="lazy"' : ""}>`;
     return `<span class="placeholder-mark ${className}" style="background:${logo.color}">${escapeHTML(logo.slot || logo.name)}</span>`;
   }
 
@@ -189,6 +202,7 @@
       const logo = logoMap.get(item.id);
       return `<button class="placed-logo${state.selectedId === item.id ? " is-selected" : ""}" type="button" data-logo-id="${item.id}" style="z-index:${item.z}" aria-label="${escapeHTML(logo.name)}，已放置在坐标 ${item.x.toFixed(2)}, ${item.y.toFixed(2)}">${mediaMarkup(logo)}</button>`;
     }).join("");
+    hardenLogoMedia(dom.placedLayer);
     updatePlacedLayout();
   }
 
@@ -648,6 +662,7 @@
     closePreview();
     const logo = logoMap.get(id);
     dom.ghost.innerHTML = mediaMarkup(logo);
+    hardenLogoMedia(dom.ghost);
     dom.ghost.classList.add("is-active");
     updateDrag(event.clientX, event.clientY);
     document.body.classList.add("is-logo-dragging");
@@ -837,9 +852,11 @@
     if (!logo) return;
     state.previewId = id;
     window.getSelection?.()?.removeAllRanges?.();
+    previewCloseGuardUntil = performance.now() + 420;
     dom.previewMedia.innerHTML = logo.detail
-      ? `<img src="${logo.detail}" alt="${escapeHTML(logo.name)}大图" draggable="false" decoding="async">`
+      ? `<img src="${logo.detail}" alt="${escapeHTML(logo.name)}大图" draggable="false" contenteditable="false" decoding="async">`
       : `<div class="preview-placeholder" style="background:${logo.color}"></div>`;
+    hardenLogoMedia(dom.preview);
     dom.preview.hidden = false;
     dom.previewBackdrop.classList.add("is-visible");
     const anchorEl = anchor?.closest?.(".placed-logo") || dom.placedLayer.querySelector(`[data-logo-id="${id}"]`);
@@ -877,7 +894,8 @@
     dom.preview.style.left = `${left}px`; dom.preview.style.top = `${top}px`;
   }
 
-  function closePreview() {
+  function closePreview(force = false) {
+    if (!force && isMobile() && performance.now() < previewCloseGuardUntil) return;
     clearTimeout(hoverTimer); clearTimeout(previewHideTimer);
     dom.preview.classList.remove("is-visible");
     dom.previewBackdrop.classList.remove("is-visible");
@@ -1144,23 +1162,26 @@
     }, true);
     const suppressNativeTouchMenu = event => {
       if (!isMobile()) return;
-      if (event.target.closest(".logo-card, .placed-logo, .preview-popover")) event.preventDefault();
+      if (!event.target.closest(".logo-card, .placed-logo, .preview-popover, .drag-ghost")) return;
+      event.preventDefault();
+      event.stopPropagation();
+      window.getSelection?.()?.removeAllRanges?.();
     };
-    [dom.grid, dom.placedLayer, dom.preview].forEach(element => {
-      element.addEventListener("contextmenu", suppressNativeTouchMenu);
-      element.addEventListener("dragstart", suppressNativeTouchMenu);
-      element.addEventListener("selectstart", suppressNativeTouchMenu);
+    [document, dom.grid, dom.placedLayer, dom.preview, dom.ghost].forEach(element => {
+      ["contextmenu", "dragstart", "selectstart", "copy", "cut"].forEach(type => {
+        element.addEventListener(type, suppressNativeTouchMenu, { capture: true });
+      });
     });
     dom.previewBackdrop.addEventListener("pointerdown", event => {
       event.preventDefault();
       event.stopPropagation();
-      closePreview();
+      closePreview(true);
     });
-    dom.previewBackdrop.addEventListener("click", closePreview);
+    dom.previewBackdrop.addEventListener("click", () => closePreview(true));
     dom.preview.addEventListener("pointerdown", event => {
       if (isMobile()) event.preventDefault();
     });
-    dom.preview.addEventListener("click", closePreview);
+    dom.preview.addEventListener("click", () => closePreview(true));
     dom.mobileGuideCollapseBtn?.addEventListener("click", () => setMobileGuidePreference("hidden"));
     dom.shareTrigger?.addEventListener("click", generateShareResult);
     dom.downloadShare?.addEventListener("click", handleShareSave);
