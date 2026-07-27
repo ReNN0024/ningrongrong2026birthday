@@ -109,7 +109,7 @@
     R: {
       align: "left-footer-right",
       coord: { x: 42, y: 450 },
-      copy: { kicker: [72, 74, 390], title: [72, 166, 460], desc: [72, 256, 430], footer: [42, 982, 440] }
+      copy: { kicker: [72, 74, 390], title: [72, 210, 460], desc: [72, 300, 430], footer: [42, 982, 440] }
     },
     O: {
       align: "left",
@@ -201,11 +201,82 @@
     return { key, main, tendency, stats, result: window.PERSONALITY_RESULTS?.[key] || fallback };
   }
 
-  function wrapText(text, maxChars = 14) {
+  function wrapText(text, maxChars = 17) {
     const chars = [...String(text)];
     const lines = [];
-    for (let index = 0; index < chars.length; index += maxChars) lines.push(chars.slice(index, index + maxChars).join(""));
-    return lines.slice(0, 3);
+    // 行首禁则：不能出现在行首的标点
+    const lineStartForbidden = new Set(['，', '。', '！', '？', '；', '：', '、', '）', '】', '》', '」', '』', '"', "'", ')', ']']);
+    // 行尾禁则：不能出现在行尾的标点
+    const lineEndForbidden = new Set(['（', '【', '《', '「', '『', '"', "'", '(', '[']);
+
+    // 第一步：按 maxChars 初步分行
+    let index = 0;
+    while (index < chars.length && lines.length < 3) {
+      const end = Math.min(index + maxChars, chars.length);
+      lines.push(chars.slice(index, end));
+      index = end;
+    }
+
+    // 第二步：处理行首禁则 - 从上一行末尾借字符
+    for (let i = 1; i < lines.length; i++) {
+      const line = lines[i];
+      if (lineStartForbidden.has(line[0])) {
+        const prevLine = lines[i - 1];
+        const lastChar = prevLine[prevLine.length - 1];
+        if (!lineEndForbidden.has(lastChar)) {
+          prevLine.pop();
+          line.unshift(lastChar);
+        }
+      }
+    }
+
+    // 第三步：处理行尾禁则 - 将禁则字符移到下一行开头
+    for (let i = 0; i < lines.length - 1; i++) {
+      const line = lines[i];
+      while (line.length > 0 && lineEndForbidden.has(line[line.length - 1])) {
+        const lastChar = line.pop();
+        lines[i + 1].unshift(lastChar);
+      }
+    }
+
+    // 第四步：以第一行字数为基准，使用原始字符重新分配
+    if (lines.length > 1) {
+      let baseLength = lines[0].length;
+      // 如果最后一行太短（≤2 字），减少 baseLength 让最后一行多分一些
+      const lastLine = lines[lines.length - 1];
+      if (lastLine.length <= 2) {
+        baseLength = baseLength - 1;
+      }
+      
+      lines.length = 0;
+      let idx = 0;
+      while (idx < chars.length && lines.length < 3) {
+        const end = Math.min(idx + baseLength, chars.length);
+        lines.push(chars.slice(idx, end));
+        idx = end;
+      }
+      // 处理避头尾
+      for (let i = 1; i < lines.length; i++) {
+        const line = lines[i];
+        if (lineStartForbidden.has(line[0])) {
+          const prevLine = lines[i - 1];
+          const lastChar = prevLine[prevLine.length - 1];
+          if (!lineEndForbidden.has(lastChar)) {
+            prevLine.pop();
+            line.unshift(lastChar);
+          }
+        }
+      }
+      for (let i = 0; i < lines.length - 1; i++) {
+        const line = lines[i];
+        while (line.length > 0 && lineEndForbidden.has(line[line.length - 1])) {
+          const lastChar = line.pop();
+          lines[i + 1].unshift(lastChar);
+        }
+      }
+    }
+
+    return lines.map(line => line.join(''));
   }
 
   async function assetToDataURL(src, cache = assetCache) {
@@ -313,7 +384,7 @@
     const personality = calculatePersonality(placed);
     const style = CARD_STYLES[personality.main] || CARD_STYLES.R;
     const result = personality.result;
-    const descLines = wrapText(result.description, 14);
+    const descLines = wrapText(result.description, 17);
     const footer = `${activityTitle} / ${shareUrl}`;
     const logoLayer = await buildLogoLayer(placed, logos, style);
     const figureDataURL = await imageToDataURL(style.figure.src);
@@ -338,7 +409,7 @@
         <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
         ${renderKickerText({ style, text: kickerText })}
         <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 64)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
-        ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 42.67, lineHeight: 61.33, fill: style.desc, weight: 500 })}
+        ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 34.67, lineHeight: 50, fill: style.desc, weight: 500 })}
         <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>
       </g>
     </svg>`;
