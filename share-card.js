@@ -201,28 +201,7 @@
     return { key, main, tendency, stats, result: window.PERSONALITY_RESULTS?.[key] || fallback };
   }
 
-  // 自定义分行配置：为特定结果 ID 指定分行位置（按字符索引）
-  const CUSTOM_BREAKS = {
-    'R04': [13], // "波心浸冷月，鲛珠坠水无声。" | "莫羡珠玑贵，粒粒皆从泣泪成。"
-  };
-
-  function wrapText(text, maxChars = 17, resultId = null) {
-    // 如果有自定义分行配置，直接使用
-    if (resultId && CUSTOM_BREAKS[resultId]) {
-      const chars = [...String(text)];
-      const breaks = CUSTOM_BREAKS[resultId];
-      const lines = [];
-      let start = 0;
-      for (const breakPos of breaks) {
-        lines.push(chars.slice(start, breakPos).join(''));
-        start = breakPos;
-      }
-      if (start < chars.length) {
-        lines.push(chars.slice(start).join(''));
-      }
-      return lines;
-    }
-
+  function wrapText(text, maxChars = 17) {
     const chars = [...String(text)];
     const lines = [];
     // 行首禁则：不能出现在行首的标点
@@ -405,7 +384,7 @@
     const personality = calculatePersonality(placed);
     const style = CARD_STYLES[personality.main] || CARD_STYLES.R;
     const result = personality.result;
-    const descLines = wrapText(result.description, 17, result.id);
+    const descLines = wrapText(result.description, 17);
     const footer = `${activityTitle} / ${shareUrl}`;
     const logoLayer = await buildLogoLayer(placed, logos, style);
     const figureDataURL = await imageToDataURL(style.figure.src);
