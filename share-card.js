@@ -109,7 +109,7 @@
     R: {
       align: "left-footer-right",
       coord: { x: 42, y: 450 },
-      copy: { kicker: [72, 74, 390], title: [72, 166, 460], desc: [72, 256, 430], footer: [42, 982, 440] }
+      copy: { kicker: [72, 74, 390], title: [72, 210, 460], desc: [72, 300, 430], footer: [42, 982, 440] }
     },
     O: {
       align: "left",
