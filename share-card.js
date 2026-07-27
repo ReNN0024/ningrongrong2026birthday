@@ -201,7 +201,7 @@
     return { key, main, tendency, stats, result: window.PERSONALITY_RESULTS?.[key] || fallback };
   }
 
-  function wrapText(text, maxChars = 14) {
+  function wrapText(text, maxChars = 17) {
     const chars = [...String(text)];
     const lines = [];
     for (let index = 0; index < chars.length; index += maxChars) lines.push(chars.slice(index, index + maxChars).join(""));
@@ -338,7 +338,7 @@
         <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
         ${renderKickerText({ style, text: kickerText })}
         <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 64)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
-        ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 42.67, lineHeight: 61.33, fill: style.desc, weight: 500 })}
+        ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 34.67, lineHeight: 50, fill: style.desc, weight: 500 })}
         <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>
       </g>
     </svg>`;
