@@ -209,12 +209,30 @@
     // 行尾禁则：不能出现在行尾的标点
     const lineEndForbidden = new Set(['（', '【', '《', '「', '『', '"', "'", '(', '[']);
 
-    // 第一步：按 maxChars 初步分行
+    // 第一步：按 \n 强制分行，然后按 maxChars 分行
     let index = 0;
+    let currentLine = [];
     while (index < chars.length && lines.length < 3) {
-      const end = Math.min(index + maxChars, chars.length);
-      lines.push(chars.slice(index, end));
-      index = end;
+      const ch = chars[index];
+      if (ch === '\n') {
+        // 遇到换行符，强制结束当前行
+        if (currentLine.length > 0) {
+          lines.push(currentLine);
+          currentLine = [];
+        }
+        index++;
+        continue;
+      }
+      currentLine.push(ch);
+      if (currentLine.length >= maxChars) {
+        lines.push(currentLine);
+        currentLine = [];
+      }
+      index++;
+    }
+    // 添加最后一行
+    if (currentLine.length > 0 && lines.length < 3) {
+      lines.push(currentLine);
     }
 
     // 第二步：处理行首禁则 - 从上一行末尾借字符
