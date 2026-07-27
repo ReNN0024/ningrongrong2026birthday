@@ -313,7 +313,7 @@
     const personality = calculatePersonality(placed);
     const style = CARD_STYLES[personality.main] || CARD_STYLES.R;
     const result = personality.result;
-    const descLines = wrapText(result.description, 14);
+    const descLines = wrapText(result.description, 17);
     const footer = `${activityTitle} / ${shareUrl}`;
     const logoLayer = await buildLogoLayer(placed, logos, style);
     const figureDataURL = await imageToDataURL(style.figure.src);
