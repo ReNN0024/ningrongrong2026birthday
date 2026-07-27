@@ -204,8 +204,42 @@
   function wrapText(text, maxChars = 17) {
     const chars = [...String(text)];
     const lines = [];
-    for (let index = 0; index < chars.length; index += maxChars) lines.push(chars.slice(index, index + maxChars).join(""));
-    return lines.slice(0, 3);
+    // 行首禁则：不能出现在行首的标点
+    const lineStartForbidden = new Set(['，', '。', '！', '？', '；', '：', '、', '）', '】', '》', '」', '』', '"', "'", ')', ']']);
+    // 行尾禁则：不能出现在行尾的标点
+    const lineEndForbidden = new Set(['（', '【', '《', '「', '『', '"', "'", '(', '[']);
+
+    let index = 0;
+    while (index < chars.length && lines.length < 3) {
+      let end = Math.min(index + maxChars, chars.length);
+      let line = chars.slice(index, end);
+
+      // 处理行首禁则：如果当前行开头是禁则字符，从上一行末尾借一个字符
+      if (lines.length > 0 && lineStartForbidden.has(line[0])) {
+        const prevLine = lines[lines.length - 1];
+        const lastChar = prevLine[prevLine.length - 1];
+        // 检查上一行末尾字符是否不是行尾禁则
+        if (!lineEndForbidden.has(lastChar)) {
+          lines[lines.length - 1] = prevLine.slice(0, -1);
+          line.unshift(lastChar);
+        }
+      }
+
+      // 处理行尾禁则：如果当前行末尾是禁则字符，移到下一行
+      while (line.length > 0 && lineEndForbidden.has(line[line.length - 1])) {
+        const lastChar = line.pop();
+        // 将禁则字符移到下一行开头，但需要检查下一行是否会超长
+        if (index + line.length < chars.length) {
+          // 在下一轮循环中处理
+          chars.splice(index + line.length, 0, lastChar);
+        }
+        break;
+      }
+
+      lines.push(line.join(""));
+      index += line.length;
+    }
+    return lines;
   }
 
   async function assetToDataURL(src, cache = assetCache) {
