@@ -10,7 +10,7 @@
   const isIOS = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   const placeholderColors = ["#caa7a2", "#cdbb83", "#9bb9bd", "#aabe91", "#c494aa", "#b7a58e", "#d5aa7c"];
-  const officialNames = ["远航", "暝夜", "心跳", "醇香", "代言", "心意", "昏晓", "幻蝶", "晨曦"];
+  const officialNames = ["远航", "暝夜", "心跳", "醇香", "代言", "心意", "昏晓", "幻蝶", "晨曦", "华光"];
   const slotForIndex = index => `${Math.floor(index / 4) + 1}_${index % 4 + 1}`;
   const logos = Array.from({ length: 41 }, (_, index) => {
     const slot = slotForIndex(index);
