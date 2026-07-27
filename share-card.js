@@ -117,7 +117,7 @@
       copy: { kicker: [72, 74, 420], title: [72, 760, 560], desc: [74, 848, 586], footer: [72, 1008, 520] }
     },
     N: {
-      align: "right",
+      align: "left",
       coord: { x: 23, y: 432 },
       copy: { kicker: [360, 74, 360], title: [338, 142, 410], desc: [338, 232, 402], footer: [300, 982, 440] }
     },
