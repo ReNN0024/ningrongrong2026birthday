@@ -119,7 +119,7 @@
     N: {
       align: "left",
       coord: { x: 72, y: 432 },
-      copy: { kicker: [360, 74, 360], title: [338, 142, 410], desc: [338, 232, 402], footer: [72, 982, 440] }
+      copy: { kicker: [360, 74, 360], title: [338, 200, 410], desc: [338, 290, 402], footer: [72, 982, 440] }
     },
     G: {
       align: "left",
