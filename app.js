@@ -1177,11 +1177,11 @@
       event.stopPropagation();
       closePreview(true);
     });
-    dom.previewBackdrop.addEventListener("click", () => closePreview(true));
+    dom.previewBackdrop.addEventListener("click", () => closePreview());
     dom.preview.addEventListener("pointerdown", event => {
       if (isMobile()) event.preventDefault();
     });
-    dom.preview.addEventListener("click", () => closePreview(true));
+    dom.preview.addEventListener("click", () => closePreview());
     dom.mobileGuideCollapseBtn?.addEventListener("click", () => setMobileGuidePreference("hidden"));
     dom.shareTrigger?.addEventListener("click", generateShareResult);
     dom.downloadShare?.addEventListener("click", handleShareSave);
