@@ -262,7 +262,7 @@
   function updateMobileGuide() {
     if (!dom.mobileInstruction) return;
     const placed = state.placed.length;
-    const visibleMode = placed > 0 ? "compact" : "full";
+    const visibleMode = placed >= MIN_SHARE_PLACED ? "compact" : "full";
     clearTimeout(mobileGuideAutoHideTimer);
 
     if (state.mobileGuidePreference === "hidden") {
@@ -291,7 +291,7 @@
     dom.mobileInstruction.removeAttribute("aria-hidden");
     dom.mobileInstruction.dataset.mode = visibleMode;
     if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", String(visibleMode !== "compact"));
-    if (visibleMode === "compact" && placed >= 3) mobileGuideAutoHideTimer = window.setTimeout(() => setMobileGuidePreference("hidden"), 3200);
+    if (visibleMode === "compact") mobileGuideAutoHideTimer = window.setTimeout(() => setMobileGuidePreference("hidden"), 6000);
   }
 
   function setMobileGuidePreference(preference) {
