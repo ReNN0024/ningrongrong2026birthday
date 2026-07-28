@@ -12,6 +12,8 @@
   };
   const KICKER_FONT_FAMILY = "'DM Serif Display', Georgia, Times New Roman, serif";
   const LABEL_SUB_FONT_FAMILY = "Avenir Next, Helvetica Neue, PingFang SC, sans-serif";
+  const SHARE_ASSET_VERSION = "20260728-01";
+  const withAssetVersion = src => `${src}${src.includes("?") ? "&" : "?"}v=${SHARE_ASSET_VERSION}`;
   const FONT_ASSETS = {
     kickerItalic: "assets/fonts/DMSerifDisplay-Italic.ttf"
   };
@@ -148,7 +150,7 @@
       mapping,
       seriesName: mapping.seriesName,
       figure: {
-        src: `assets/share-card-figures/${mapping.lineart}`,
+        src: withAssetVersion(`assets/share-card-figures/${mapping.lineart}`),
         x: 0,
         y: 0,
         width: 810,

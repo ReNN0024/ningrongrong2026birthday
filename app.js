@@ -6,6 +6,8 @@
   const ACTIVITY_ID = "ningrongrong-2026-birthday";
   const MIN_SHARE_PLACED = 7;
   const ASSET_ROOT = window.__ASSET_ROOT__ || "assets";
+  const DETAIL_ASSET_VERSION = "20260728-01";
+  const withAssetVersion = src => `${src}${src.includes("?") ? "&" : "?"}v=${DETAIL_ASSET_VERSION}`;
   const isMobile = () => window.matchMedia("(max-width: 1023px)").matches;
   const isIOS = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
@@ -60,6 +62,9 @@
   let hoverTimer = 0;
   let previewHideTimer = 0;
   let previewCloseGuardUntil = 0;
+  let detailPreloadTimer = 0;
+  let detailPreloadScheduled = false;
+  const detailPreloadCache = new Set();
   let toolbarDrag = null;
   let minimapDrag = null;
   let mobileGuideAutoHideTimer = 0;
@@ -240,6 +245,7 @@
     if (dom.desktopProgressFill) dom.desktopProgressFill.style.width = `${Math.round((placed / logos.length) * 100)}%`;
     if (dom.shareTrigger) dom.shareTrigger.hidden = placed < MIN_SHARE_PLACED;
     if (placed >= MIN_SHARE_PLACED) warmupShareAssets();
+    warmupPlacedDetails();
     $("#unplacedCount").textContent = String(logos.length - placed);
     dom.clear.disabled = placed === 0;
   }
@@ -502,6 +508,34 @@
     const run = () => window.ShareCard.warmupShareAssets();
     if ("requestIdleCallback" in window) window.requestIdleCallback(run, { timeout: 1800 });
     else window.setTimeout(run, 300);
+  }
+
+  function warmupDetail(id) {
+    const src = logoMap.get(id)?.detail;
+    if (!src || detailPreloadCache.has(src)) return;
+    detailPreloadCache.add(src);
+    const image = new Image();
+    image.decoding = "async";
+    image.src = withAssetVersion(src);
+  }
+
+  function warmupPlacedDetails() {
+    if (detailPreloadScheduled) return;
+    detailPreloadScheduled = true;
+    clearTimeout(detailPreloadTimer);
+    const run = deadline => {
+      detailPreloadScheduled = false;
+      const pending = state.placed.map(item => item.id).filter(id => {
+        const src = logoMap.get(id)?.detail;
+        return src && !detailPreloadCache.has(src);
+      });
+      if (!pending.length) return;
+      const hasBudget = () => !deadline || deadline.timeRemaining() > 6 || deadline.didTimeout;
+      while (pending.length && hasBudget()) warmupDetail(pending.shift());
+      if (pending.length) warmupPlacedDetails();
+    };
+    if ("requestIdleCallback" in window) window.requestIdleCallback(run, { timeout: 1600 });
+    else detailPreloadTimer = window.setTimeout(() => run(), 240);
   }
 
   function hideShareSaveGuide() {
@@ -832,6 +866,7 @@
       else placeAtOrigin(current.id);
     } else if (isMobile()) {
       event.preventDefault();
+      warmupDetail(current.id);
       openPreview(current.id, current.element);
     }
   }
@@ -853,8 +888,9 @@
     state.previewId = id;
     window.getSelection?.()?.removeAllRanges?.();
     previewCloseGuardUntil = performance.now() + 420;
-    dom.previewMedia.innerHTML = logo.detail
-      ? `<img src="${logo.detail}" alt="${escapeHTML(logo.name)}大图" draggable="false" contenteditable="false" decoding="async">`
+    const detailSrc = logo.detail ? withAssetVersion(logo.detail) : "";
+    dom.previewMedia.innerHTML = detailSrc
+      ? `<img src="${detailSrc}" alt="${escapeHTML(logo.name)}大图" draggable="false" contenteditable="false" decoding="async">`
       : `<div class="preview-placeholder" style="background:${logo.color}"></div>`;
     hardenLogoMedia(dom.preview);
     dom.preview.hidden = false;
