@@ -261,54 +261,19 @@
 
   function updateMobileGuide() {
     if (!dom.mobileInstruction) return;
-    const placed = state.placed.length;
-    const visibleMode = placed >= MIN_SHARE_PLACED ? "compact" : "full";
     clearTimeout(mobileGuideAutoHideTimer);
-
-    if (state.mobileGuidePreference === "hidden") {
-      dom.mobileInstruction.hidden = false;
-      dom.mobileInstruction.dataset.mode = visibleMode;
-      dom.mobileInstruction.setAttribute("aria-hidden", "true");
-      if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", "true");
-      const alreadyCollapsed = dom.mobileInstruction.classList.contains("is-collapsed");
-      const locked = isGuideMotionLocked() && !alreadyCollapsed;
-      dom.mobileInstruction.classList.add("is-hiding");
-      dom.mobileInstruction.classList.toggle("is-locked", locked);
-      if (!alreadyCollapsed && !locked) {
-        clearTimeout(mobileGuideCollapseTimer);
-        mobileGuideCollapseTimer = window.setTimeout(() => {
-          dom.mobileInstruction?.classList.remove("is-locked");
-          dom.mobileInstruction?.classList.add("is-collapsed");
-          requestAnimationFrame(() => { clampView(); applyView(); resetToolbarIfNeeded(); });
-        }, 260);
-      }
-      return;
-    }
-
     clearTimeout(mobileGuideCollapseTimer);
+    state.mobileGuidePreference = "auto";
     dom.mobileInstruction.classList.remove("is-hiding", "is-collapsed", "is-locked");
     dom.mobileInstruction.hidden = false;
     dom.mobileInstruction.removeAttribute("aria-hidden");
-    dom.mobileInstruction.dataset.mode = visibleMode;
-    if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", String(visibleMode !== "compact"));
-    if (visibleMode === "compact") mobileGuideAutoHideTimer = window.setTimeout(() => setMobileGuidePreference("hidden"), 6000);
+    dom.mobileInstruction.dataset.mode = "full";
+    if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", "true");
   }
 
-  function setMobileGuidePreference(preference) {
-    const nextPreference = preference === "hidden" ? "hidden" : "auto";
-    state.mobileGuidePreference = nextPreference;
-    if (nextPreference !== "hidden") {
-      updateMobileGuide();
-      return;
-    }
+  function setMobileGuidePreference() {
+    state.mobileGuidePreference = "auto";
     updateMobileGuide();
-    clearTimeout(mobileGuideCollapseTimer);
-    if (isGuideMotionLocked()) return;
-    mobileGuideCollapseTimer = window.setTimeout(() => {
-      dom.mobileInstruction?.classList.remove("is-locked");
-      dom.mobileInstruction?.classList.add("is-collapsed");
-      requestAnimationFrame(() => { clampView(); applyView(); resetToolbarIfNeeded(); });
-    }, 260);
   }
 
   function selectLogo(id) {
