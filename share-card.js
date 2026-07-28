@@ -379,6 +379,7 @@
   }
 
   function renderCoordCard(style, logoLayer) {
+    const axisLabelBase = `font-family="sans-serif" font-size="30" font-weight="800" fill="${style.axis}" fill-opacity="0.82"`;
     return `<g id="coordinate-card" transform="translate(${scaled(style.coord.x)} ${scaled(style.coord.y)}) scale(${TEMPLATE_SCALE})">
       <rect x="0" y="0" width="520" height="520" rx="36" fill="#FFFFFF" fill-opacity="${style.glass}" stroke="${style.accent}" stroke-opacity="0.34" stroke-width="2"/>
       <g transform="translate(26 26)">
@@ -386,10 +387,10 @@
         <line x1="233" y1="26" x2="233" y2="442" stroke="${style.axis}" stroke-opacity="0.42" stroke-width="2"/>
         <line x1="26" y1="233" x2="442" y2="233" stroke="${style.axis}" stroke-opacity="0.42" stroke-width="2"/>
         <circle cx="234" cy="234" r="7" fill="${style.base}" stroke="${style.axis}" stroke-opacity="0.55" stroke-width="2"/>
-        <text x="252" y="64" font-family="sans-serif" font-size="30" font-weight="800" fill="${style.axis}" fill-opacity="0.82">不忘</text>
-        <text x="42" y="226" font-family="sans-serif" font-size="30" font-weight="800" fill="${style.axis}" fill-opacity="0.82">荆棘</text>
-        <text x="360" y="226" font-family="sans-serif" font-size="30" font-weight="800" fill="${style.axis}" fill-opacity="0.82">繁花</text>
-        <text x="252" y="434" font-family="sans-serif" font-size="30" font-weight="800" fill="${style.axis}" fill-opacity="0.82">寻常</text>
+        <text x="252" y="64" ${axisLabelBase}>不忘</text>
+        <text x="42" y="226" ${axisLabelBase}>荆棘</text>
+        <text x="360" y="274" ${axisLabelBase}>繁花</text>
+        <text x="216" y="434" text-anchor="end" ${axisLabelBase}>寻常</text>
       </g>
     </g>
     <g id="placed-logo-result-layer">${logoLayer}</g>`;
