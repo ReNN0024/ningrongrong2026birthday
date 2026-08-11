@@ -12,6 +12,8 @@
   };
   const KICKER_FONT_FAMILY = "'DM Serif Display', Georgia, Times New Roman, serif";
   const LABEL_SUB_FONT_FAMILY = "Avenir Next, Helvetica Neue, PingFang SC, sans-serif";
+  const SHARE_ASSET_VERSION = "20260728-01";
+  const withAssetVersion = src => `${src}${src.includes("?") ? "&" : "?"}v=${SHARE_ASSET_VERSION}`;
   const FONT_ASSETS = {
     kickerItalic: "assets/fonts/DMSerifDisplay-Italic.ttf"
   };
@@ -113,13 +115,13 @@
     },
     O: {
       align: "left",
-      coord: { x: 57, y: 245 },
-      copy: { kicker: [72, 74, 420], title: [72, 810, 560], desc: [74, 898, 586], footer: [72, 1008, 520] }
+      coord: { x: 57, y: 195 },
+      copy: { kicker: [72, 74, 420], title: [72, 760, 560], desc: [74, 848, 586], footer: [72, 1008, 520] }
     },
     N: {
-      align: "right",
-      coord: { x: 23, y: 432 },
-      copy: { kicker: [360, 74, 360], title: [338, 142, 410], desc: [338, 232, 402], footer: [300, 982, 440] }
+      align: "left",
+      coord: { x: 72, y: 432 },
+      copy: { kicker: [360, 74, 360], title: [338, 200, 410], desc: [338, 290, 402], footer: [72, 982, 440] }
     },
     G: {
       align: "left",
@@ -148,7 +150,7 @@
       mapping,
       seriesName: mapping.seriesName,
       figure: {
-        src: `assets/share-card-figures/${mapping.lineart}`,
+        src: withAssetVersion(`assets/share-card-figures/${mapping.lineart}`),
         x: 0,
         y: 0,
         width: 810,
@@ -209,12 +211,24 @@
     // 行尾禁则：不能出现在行尾的标点
     const lineEndForbidden = new Set(['（', '【', '《', '「', '『', '"', "'", '(', '[']);
 
-    // 第一步：按 maxChars 初步分行
-    let index = 0;
-    while (index < chars.length && lines.length < 3) {
-      const end = Math.min(index + maxChars, chars.length);
-      lines.push(chars.slice(index, end));
-      index = end;
+    // 第一步：按 \n 强制分行，\n 后的内容不限制字数
+    const segments = String(text).split('\n');
+    for (const segment of segments) {
+      const segChars = [...segment];
+      if (segChars.length === 0) continue;
+      
+      // 如果片段超过 maxChars，仍然需要分行
+      if (segChars.length <= maxChars) {
+        lines.push(segChars);
+      } else {
+        // 超长片段按 maxChars 分行
+        let idx = 0;
+        while (idx < segChars.length && lines.length < 3) {
+          const end = Math.min(idx + maxChars, segChars.length);
+          lines.push(segChars.slice(idx, end));
+          idx = end;
+        }
+      }
     }
 
     // 第二步：处理行首禁则 - 从上一行末尾借字符
@@ -239,8 +253,9 @@
       }
     }
 
-    // 第四步：以第一行字数为基准，使用原始字符重新分配
-    if (lines.length > 1) {
+    // 第四步：以第一行字数为基准，使用原始字符重新分配（仅在没有 \n 强制换行时执行）
+    const hasForcedLineBreak = String(text).includes('\n');
+    if (lines.length > 1 && !hasForcedLineBreak) {
       let baseLength = lines[0].length;
       // 如果最后一行太短（≤2 字），减少 baseLength 让最后一行多分一些
       const lastLine = lines[lines.length - 1];
@@ -364,6 +379,7 @@
   }
 
   function renderCoordCard(style, logoLayer) {
+    const axisLabelBase = `font-family="sans-serif" font-size="30" font-weight="800" fill="${style.axis}" fill-opacity="0.82"`;
     return `<g id="coordinate-card" transform="translate(${scaled(style.coord.x)} ${scaled(style.coord.y)}) scale(${TEMPLATE_SCALE})">
       <rect x="0" y="0" width="520" height="520" rx="36" fill="#FFFFFF" fill-opacity="${style.glass}" stroke="${style.accent}" stroke-opacity="0.34" stroke-width="2"/>
       <g transform="translate(26 26)">
@@ -371,10 +387,10 @@
         <line x1="233" y1="26" x2="233" y2="442" stroke="${style.axis}" stroke-opacity="0.42" stroke-width="2"/>
         <line x1="26" y1="233" x2="442" y2="233" stroke="${style.axis}" stroke-opacity="0.42" stroke-width="2"/>
         <circle cx="234" cy="234" r="7" fill="${style.base}" stroke="${style.axis}" stroke-opacity="0.55" stroke-width="2"/>
-        <text x="252" y="64" font-family="sans-serif" font-size="30" font-weight="800" fill="${style.axis}" fill-opacity="0.82">不忘</text>
-        <text x="42" y="226" font-family="sans-serif" font-size="30" font-weight="800" fill="${style.axis}" fill-opacity="0.82">荆棘</text>
-        <text x="360" y="226" font-family="sans-serif" font-size="30" font-weight="800" fill="${style.axis}" fill-opacity="0.82">繁花</text>
-        <text x="252" y="434" font-family="sans-serif" font-size="30" font-weight="800" fill="${style.axis}" fill-opacity="0.82">寻常</text>
+        <text x="252" y="64" ${axisLabelBase}>不忘</text>
+        <text x="42" y="226" ${axisLabelBase}>荆棘</text>
+        <text x="360" y="274" ${axisLabelBase}>繁花</text>
+        <text x="216" y="434" text-anchor="end" ${axisLabelBase}>寻常</text>
       </g>
     </g>
     <g id="placed-logo-result-layer">${logoLayer}</g>`;

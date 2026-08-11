@@ -6,11 +6,13 @@
   const ACTIVITY_ID = "ningrongrong-2026-birthday";
   const MIN_SHARE_PLACED = 7;
   const ASSET_ROOT = window.__ASSET_ROOT__ || "assets";
+  const DETAIL_ASSET_VERSION = "20260728-01";
+  const withAssetVersion = src => `${src}${src.includes("?") ? "&" : "?"}v=${DETAIL_ASSET_VERSION}`;
   const isMobile = () => window.matchMedia("(max-width: 1023px)").matches;
   const isIOS = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   const placeholderColors = ["#caa7a2", "#cdbb83", "#9bb9bd", "#aabe91", "#c494aa", "#b7a58e", "#d5aa7c"];
-  const officialNames = ["远航", "暝夜", "心跳", "醇香", "代言", "心意", "昏晓", "幻蝶", "晨曦"];
+  const officialNames = ["远航", "暝夜", "心跳", "醇香", "代言", "心意", "昏晓", "幻蝶", "晨曦", "华光", "焦点", "拙习"];
   const slotForIndex = index => `${Math.floor(index / 4) + 1}_${index % 4 + 1}`;
   const logos = Array.from({ length: 41 }, (_, index) => {
     const slot = slotForIndex(index);
@@ -60,6 +62,9 @@
   let hoverTimer = 0;
   let previewHideTimer = 0;
   let previewCloseGuardUntil = 0;
+  let detailPreloadTimer = 0;
+  let detailPreloadScheduled = false;
+  const detailPreloadCache = new Set();
   let toolbarDrag = null;
   let minimapDrag = null;
   let mobileGuideAutoHideTimer = 0;
@@ -240,6 +245,7 @@
     if (dom.desktopProgressFill) dom.desktopProgressFill.style.width = `${Math.round((placed / logos.length) * 100)}%`;
     if (dom.shareTrigger) dom.shareTrigger.hidden = placed < MIN_SHARE_PLACED;
     if (placed >= MIN_SHARE_PLACED) warmupShareAssets();
+    warmupPlacedDetails();
     $("#unplacedCount").textContent = String(logos.length - placed);
     dom.clear.disabled = placed === 0;
   }
@@ -255,54 +261,19 @@
 
   function updateMobileGuide() {
     if (!dom.mobileInstruction) return;
-    const placed = state.placed.length;
-    const visibleMode = placed > 0 ? "compact" : "full";
     clearTimeout(mobileGuideAutoHideTimer);
-
-    if (state.mobileGuidePreference === "hidden") {
-      dom.mobileInstruction.hidden = false;
-      dom.mobileInstruction.dataset.mode = visibleMode;
-      dom.mobileInstruction.setAttribute("aria-hidden", "true");
-      if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", "true");
-      const alreadyCollapsed = dom.mobileInstruction.classList.contains("is-collapsed");
-      const locked = isGuideMotionLocked() && !alreadyCollapsed;
-      dom.mobileInstruction.classList.add("is-hiding");
-      dom.mobileInstruction.classList.toggle("is-locked", locked);
-      if (!alreadyCollapsed && !locked) {
-        clearTimeout(mobileGuideCollapseTimer);
-        mobileGuideCollapseTimer = window.setTimeout(() => {
-          dom.mobileInstruction?.classList.remove("is-locked");
-          dom.mobileInstruction?.classList.add("is-collapsed");
-          requestAnimationFrame(() => { clampView(); applyView(); resetToolbarIfNeeded(); });
-        }, 260);
-      }
-      return;
-    }
-
     clearTimeout(mobileGuideCollapseTimer);
+    state.mobileGuidePreference = "auto";
     dom.mobileInstruction.classList.remove("is-hiding", "is-collapsed", "is-locked");
     dom.mobileInstruction.hidden = false;
     dom.mobileInstruction.removeAttribute("aria-hidden");
-    dom.mobileInstruction.dataset.mode = visibleMode;
-    if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", String(visibleMode !== "compact"));
-    if (visibleMode === "compact" && placed >= 3) mobileGuideAutoHideTimer = window.setTimeout(() => setMobileGuidePreference("hidden"), 3200);
+    dom.mobileInstruction.dataset.mode = "full";
+    if (dom.mobileGuideCompact) dom.mobileGuideCompact.setAttribute("aria-hidden", "true");
   }
 
-  function setMobileGuidePreference(preference) {
-    const nextPreference = preference === "hidden" ? "hidden" : "auto";
-    state.mobileGuidePreference = nextPreference;
-    if (nextPreference !== "hidden") {
-      updateMobileGuide();
-      return;
-    }
+  function setMobileGuidePreference() {
+    state.mobileGuidePreference = "auto";
     updateMobileGuide();
-    clearTimeout(mobileGuideCollapseTimer);
-    if (isGuideMotionLocked()) return;
-    mobileGuideCollapseTimer = window.setTimeout(() => {
-      dom.mobileInstruction?.classList.remove("is-locked");
-      dom.mobileInstruction?.classList.add("is-collapsed");
-      requestAnimationFrame(() => { clampView(); applyView(); resetToolbarIfNeeded(); });
-    }, 260);
   }
 
   function selectLogo(id) {
@@ -502,6 +473,34 @@
     const run = () => window.ShareCard.warmupShareAssets();
     if ("requestIdleCallback" in window) window.requestIdleCallback(run, { timeout: 1800 });
     else window.setTimeout(run, 300);
+  }
+
+  function warmupDetail(id) {
+    const src = logoMap.get(id)?.detail;
+    if (!src || detailPreloadCache.has(src)) return;
+    detailPreloadCache.add(src);
+    const image = new Image();
+    image.decoding = "async";
+    image.src = withAssetVersion(src);
+  }
+
+  function warmupPlacedDetails() {
+    if (detailPreloadScheduled) return;
+    detailPreloadScheduled = true;
+    clearTimeout(detailPreloadTimer);
+    const run = deadline => {
+      detailPreloadScheduled = false;
+      const pending = state.placed.map(item => item.id).filter(id => {
+        const src = logoMap.get(id)?.detail;
+        return src && !detailPreloadCache.has(src);
+      });
+      if (!pending.length) return;
+      const hasBudget = () => !deadline || deadline.timeRemaining() > 6 || deadline.didTimeout;
+      while (pending.length && hasBudget()) warmupDetail(pending.shift());
+      if (pending.length) warmupPlacedDetails();
+    };
+    if ("requestIdleCallback" in window) window.requestIdleCallback(run, { timeout: 1600 });
+    else detailPreloadTimer = window.setTimeout(() => run(), 240);
   }
 
   function hideShareSaveGuide() {
@@ -832,6 +831,7 @@
       else placeAtOrigin(current.id);
     } else if (isMobile()) {
       event.preventDefault();
+      warmupDetail(current.id);
       openPreview(current.id, current.element);
     }
   }
@@ -853,8 +853,9 @@
     state.previewId = id;
     window.getSelection?.()?.removeAllRanges?.();
     previewCloseGuardUntil = performance.now() + 420;
-    dom.previewMedia.innerHTML = logo.detail
-      ? `<img src="${logo.detail}" alt="${escapeHTML(logo.name)}大图" draggable="false" contenteditable="false" decoding="async">`
+    const detailSrc = logo.detail ? withAssetVersion(logo.detail) : "";
+    dom.previewMedia.innerHTML = detailSrc
+      ? `<img src="${detailSrc}" alt="${escapeHTML(logo.name)}大图" draggable="false" contenteditable="false" decoding="async">`
       : `<div class="preview-placeholder" style="background:${logo.color}"></div>`;
     hardenLogoMedia(dom.preview);
     dom.preview.hidden = false;

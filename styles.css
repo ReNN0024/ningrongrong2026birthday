@@ -255,29 +255,30 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 
 .quadrant-glow { position: absolute; inset: 0; box-shadow: inset 0 0 90px rgba(107, 89, 58, .06); pointer-events: none; }
 .axis { position: absolute; background: rgba(90, 81, 72, .35); pointer-events: none; }
-.axis-x { left: 5%; right: 5%; top: 50%; height: 1px; }
-.axis-y { top: 5%; bottom: 5%; left: 50%; width: 1px; }
+.axis-x { left: 21%; right: 21%; top: 50%; height: 1px; }
+.axis-y { top: 15%; bottom: 15%; left: 50%; width: 1px; }
 .origin-mark { position: absolute; width: 7px; height: 7px; left: 50%; top: 50%; border: 1px solid rgba(91, 80, 65, .46); border-radius: 50%; transform: translate(-50%, -50%); background: #f7f1e8; }
 .guide-line { display: none; position: absolute; z-index: 4; pointer-events: none; border-color: rgba(139, 106, 42, .58); border-style: dashed; }
 .guide-line-x { left: 3%; right: 3%; height: 0; border-width: 1px 0 0; top: 50%; }
 .guide-line-y { top: 3%; bottom: 3%; width: 0; border-width: 0 0 0 1px; left: 50%; }
 .coordinate-world.guides-on .guide-line { display: block; }
 
-.quadrant-label { position: absolute; z-index: 1; color: rgba(73, 66, 60, .68); line-height: 1.5; pointer-events: none; }
+.coordinate-world { --coord-label-gap: 1px; --coord-label-edge: 7%; --coord-bottom-label-top: 85.5%; }
+.quadrant-label { position: absolute; z-index: 1; color: rgba(73, 66, 60, .68); line-height: 1.28; pointer-events: none; }
 .quadrant-label strong { display: block; font: 500 clamp(11px, 1vw, 14px) var(--sans); letter-spacing: .08em; }
-.quadrant-label span { font-size: clamp(7px, .7vw, 9px); letter-spacing: .06em; }
-.q-ul { left: 8%; top: 8%; }.q-ur { right: 8%; top: 8%; text-align: right; }
-.q-ll { left: 8%; bottom: 8%; }.q-lr { right: 8%; bottom: 8%; text-align: right; }
+.quadrant-label span { display: block; margin-top: var(--coord-label-gap); font-size: clamp(7px, .7vw, 9px); line-height: 1.28; letter-spacing: .06em; }
+.q-ul { left: var(--coord-label-edge); top: var(--coord-label-edge); }.q-ur { right: var(--coord-label-edge); top: var(--coord-label-edge); text-align: right; }
+.q-ll { left: var(--coord-label-edge); top: var(--coord-bottom-label-top); }.q-lr { right: var(--coord-label-edge); top: var(--coord-bottom-label-top); text-align: right; }
 .axis-copy { position: absolute; z-index: 1; pointer-events: none; color: rgba(68, 61, 56, .74); }
-.axis-copy strong { font: 500 clamp(12px, 1.2vw, 17px) var(--sans); letter-spacing: .12em; }
-.axis-copy span { font-size: clamp(7px, .65vw, 9px); color: rgba(91, 82, 74, .58); }
+.axis-copy strong { display: block; font: 500 clamp(12px, 1.2vw, 17px) var(--sans); letter-spacing: .12em; }
+.axis-copy span { display: block; margin-top: var(--coord-label-gap); font-size: clamp(7px, .65vw, 9px); line-height: 1.28; color: rgba(91, 82, 74, .58); }
 .axis-left, .axis-right { top: 50%; width: 24%; height: 0; }
-.axis-left { left: 2.8%; text-align: left; }
-.axis-right { right: 2.8%; text-align: right; }
-.axis-left strong, .axis-right strong { position: absolute; bottom: 5px; display: block; width: 100%; }
-.axis-left span, .axis-right span { position: absolute; top: 7px; display: block; width: 100%; }
-.axis-top { top: 2%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; }
-.axis-bottom { bottom: 2%; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 2px; }
+.axis-left { left: var(--coord-label-edge); text-align: left; }
+.axis-right { right: var(--coord-label-edge); text-align: right; }
+.axis-left strong, .axis-right strong { position: absolute; bottom: calc(var(--coord-label-gap) / 2); width: 100%; }
+.axis-left span, .axis-right span { position: absolute; top: calc(var(--coord-label-gap) / 2); width: 100%; }
+.axis-top { top: var(--coord-label-edge); left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; }
+.axis-bottom { top: var(--coord-bottom-label-top); left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; text-align: center; gap: 0; }
 
 .placed-layer { position: absolute; inset: 0; z-index: 5; pointer-events: none; }
 .placed-logo {

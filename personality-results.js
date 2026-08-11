@@ -49,7 +49,7 @@ window.PERSONALITY_RESULTS = {
   },
   "G-thorn": {
     name: "风里飞絮",
-    description: "柳絮辞别旧木，擦肩便是相逢一场。浮沉非关私意，行止尽赴天涯。"
+    description: "柳絮辞别旧木，擦肩便是相逢一场。\n浮沉非关私意，行止尽赴天涯。"
   },
   "G-flower": {
     name: "点金手",
@@ -57,10 +57,10 @@ window.PERSONALITY_RESULTS = {
   },
   "G-memory": {
     name: "织梦者",
-    description: "梦里揽星河入怀，醒时携清风入世。织满温柔与理想，前路自有一程晴朗。"
+    description: "梦里揽星河入怀，醒时携清风入世。\n织满温柔与理想，前路自有一程晴朗。"
   },
   "G-daily": {
     name: "春日信使",
-    description: "踏残冬余冷，衔繁花讯息遍走尘寰。四季轮转，暖意定会如期抵达人间。"
+    description: "踏残冬余冷，衔繁花讯息遍走尘寰。\n四季轮转，暖意定会如期抵达人间。"
   }
 };
