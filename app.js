@@ -565,7 +565,7 @@
         logos,
         activityTitle: "宁荣荣·与我周旋久",
         subtitle: `${personality.result.name}·${personality.key}`,
-        shareUrl: "ningrr.fun"
+        shareUrl: "https://ningrr.fun"
       });
       const file = blob ? new File([blob], shareFileName, { type: "image/png" }) : null;
       shareResult = { signature, objectURL, blob, file };
