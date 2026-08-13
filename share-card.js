@@ -61,6 +61,27 @@
     third: item => item.x < 0 && item.y < 0,
     fourth: item => item.x >= 0 && item.y < 0
   };
+
+  // Logo 坐标系二次赋值（ASSET_REASSIGNMENT.md）
+  // 格式：{ logoId: { x: xOffset, y: yOffset } }
+  // xOffset/yOffset 为分界点偏移，默认值为 0
+  const LOGO_QUADRANT_OFFSETS = {
+    "1_2": { x: -1, y: 0 }  // 夜：自带荆棘倾向，X 轴分界左移至 -1
+  };
+
+  function getOffset(item) {
+    return LOGO_QUADRANT_OFFSETS[item.id] || { x: 0, y: 0 };
+  }
+
+  function adjustedX(item) {
+    const offset = getOffset(item);
+    return item.x - offset.x;
+  }
+
+  function adjustedY(item) {
+    const offset = getOffset(item);
+    return item.y - offset.y;
+  }
   const QUADRANTS = Object.fromEntries(RESULT_CARD_MAPPINGS.map((mapping, index) => [
     mapping.series,
     { label: mapping.quadrantLabel, order: index }
@@ -171,7 +192,8 @@
   function scaled(value) { return scale(value).toFixed(2); }
 
   function quadrantFor(item) {
-    const mapping = RESULT_CARD_MAPPINGS.find(candidate => QUADRANT_TESTS[candidate.quadrant]?.(item));
+    const adjustedItem = { x: adjustedX(item), y: adjustedY(item) };
+    const mapping = RESULT_CARD_MAPPINGS.find(candidate => QUADRANT_TESTS[candidate.quadrant]?.(adjustedItem));
     return mapping?.series || "R";
   }
 
@@ -182,10 +204,12 @@
 
     placed.forEach(item => {
       const key = quadrantFor(item);
+      const ax = adjustedX(item);
+      const ay = adjustedY(item);
       stats[key].count += 1;
-      stats[key].outer += Math.hypot(item.x, item.y);
-      sumX += item.x;
-      sumY += item.y;
+      stats[key].outer += Math.hypot(ax, ay);
+      sumX += ax;
+      sumY += ay;
     });
 
     const main = Object.values(stats).sort((left, right) => {

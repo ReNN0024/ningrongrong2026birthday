@@ -6,6 +6,19 @@
 
 ---
 
+## [1.8.25] - 2026-07-28
+
+### Added — by Snjór
+- 新增 Logo 坐标系二次赋值机制，支持对自带倾向的 Logo 进行分界点偏移
+- 新增 `ASSET_REASSIGNMENT.md` 文档，维护二次赋值对照表
+- `1_2 夜` 首个应用二次赋值：X 轴分界左移至 -1，细化荆棘倾向内的判定
+
+### Changed — by Snjór
+- `share-card.js`：新增 `LOGO_QUADRANT_OFFSETS` 配置和 `adjustedX/adjustedY` 函数
+- `share-card.js`：`quadrantFor` 和 `calculatePersonality` 使用偏移后的坐标判定象限和计算加权总和
+
+---
+
 ## [1.8.24] - 2026-07-28
 
 ### Changed — by Snjór
