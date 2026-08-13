@@ -67,7 +67,7 @@
   // xOffset/yOffset 为分界点偏移，默认值为 0
   const LOGO_QUADRANT_OFFSETS = {
     "1_2": { x: -1, y: 0 },  // 暝夜：自带荆棘倾向，X 轴分界左移至 -1
-    "1_3": { x: -1, y: 0 }   // 昏晓：自带荆棘倾向，X 轴分界左移至 -1
+    "2_3": { x: -1, y: 0 }   // 昏晓：自带荆棘倾向，X 轴分界左移至 -1
   };
 
   function getOffset(item) {
