@@ -551,6 +551,7 @@
       if (shareResult?.signature === signature && shareResult.objectURL) {
         renderSharePreview(shareResult);
         updateShareSaveButton(true);
+        openDialog(dom.shareDialog);
         return;
       }
 
