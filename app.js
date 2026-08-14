@@ -180,7 +180,7 @@
       dom.grid.innerHTML = visible.map((logo, index) => {
         const placed = placedIds.has(logo.id);
         const sequence = String(logos.indexOf(logo) + 1).padStart(2, "0");
-        const label = logo.placeholder ? `占位 Logo ${sequence}` : logo.name;
+        const label = logo.placeholder ? `占位碎片 ${sequence}` : logo.name;
         return `<button class="logo-card${placed ? " is-placed" : ""}${state.selectedId === logo.id ? " is-focused" : ""}" type="button" data-logo-id="${logo.id}" aria-label="${placed ? "定位已放置" : "放置"}${escapeHTML(label)}" aria-pressed="${state.selectedId === logo.id}">
           <span class="logo-thumb">${mediaMarkup(logo, "", true)}</span><span>${escapeHTML(logo.name)}</span>
         </button>`;
@@ -192,7 +192,7 @@
         const placed = placedIds.has(id);
         const logo = logoMap.get(id);
         const sequence = String(logos.indexOf(logo) + 1).padStart(2, "0");
-        const label = logo.placeholder ? `占位 Logo ${sequence}` : logo.name;
+        const label = logo.placeholder ? `占位碎片 ${sequence}` : logo.name;
         card.classList.toggle("is-placed", placed);
         card.classList.toggle("is-focused", state.selectedId === id);
         card.setAttribute("aria-pressed", String(state.selectedId === id));
@@ -544,7 +544,7 @@
 
   async function generateShareResult() {
     if (!window.ShareCard) return toast("结果图生成器未加载", "error", { key: "share-generator-missing" });
-    if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上 Logo 后再生成坐标`, "", { key: "share-not-ready", dedupe: 1200 });
+    if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上碎片后生成她的人生坐标`, "", { key: "share-not-ready", dedupe: 1200 });
     openDialog(dom.shareDialog);
     hideShareSaveGuide();
     warmupShareAssets();
@@ -702,7 +702,7 @@
     }
     dom.frame.classList.add("is-drop-invalid");
     window.setTimeout(() => dom.frame.classList.remove("is-drop-invalid"), 420);
-    const invalidDropMessage = current.source === "placed" ? "未进入有效区域，已回到原位置" : "请将 Logo 放入坐标区域";
+    const invalidDropMessage = current.source === "placed" ? "未进入有效区域，已回到原位置" : "请将碎片放入坐标区域";
     toast(invalidDropMessage, "error", { key: `invalid-drop-${current.source}`, dedupe: 1400 });
   }
 
@@ -759,7 +759,7 @@
           press.element.classList.remove("is-holding");
           press.element.classList.add("is-drag-ready");
           navigator.vibrate?.(18);
-          announce("\u5DF2\u62FE\u53D6 Logo\uFF0C\u53EF\u4EE5\u62D6\u52A8\u653E\u7F6E");
+          announce("已拾取碎片，可以拖动放置");
           startDrag(id, source, event);
         }
       }, 280);

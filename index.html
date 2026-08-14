@@ -21,7 +21,7 @@
       <div class="mobile-credits" aria-label="制作名单">
         <span>主办 / 发行 · @宁荣荣_琉璃记熠<span class="credit-suffix">（微博）</span></span>
         <span>网页 / 策划 · @酒起子起不来<span class="credit-suffix">（微博）</span></span>
-        <span>LOGO 绘制 · 甘吉得橘<span class="credit-suffix">（米画师）</span></span>
+        <span>碎片绘制 · 甘吉得橘<span class="credit-suffix">（米画师）</span></span>
       </div>
     </header>
 
@@ -33,7 +33,7 @@
             <h2>找到你的坐标</h2>
             <p class="guide-intro">把 41 份碎片，放进她的故事里。</p>
             <ol class="steps">
-              <li><b>选一个 Logo</b><span>从右侧素材栏开始</span></li>
+              <li><b>选一个碎片</b><span>从右侧素材栏开始</span></li>
               <li><b>放入坐标系</b><span>单击居中 · 拖动定位</span></li>
               <li><b>微调并探索</b><span>滚轮缩放 · 拖动视角</span></li>
             </ol>
@@ -50,8 +50,8 @@
           </div>
           <div class="tip-card">
             <strong><i>i</i>小提示</strong>
-            <p>1、鼠标悬停在已放置的 Logo 上，即可预览对应图片；</p>
-            <p>2、Logo 可以互相重叠，后放置的会显示在上层；</p>
+            <p>1、鼠标悬停在已放置的碎片上，即可预览对应图片；</p>
+            <p>2、碎片可以互相重叠，后放置的会显示在上层；</p>
             <p>3、右下角可调整缩放比例、复位视角、显示辅助线，以及全屏查看</p>
           </div>
         </div>
@@ -60,7 +60,7 @@
             <span>Credits</span>
             <p>主办 / 发行 · @宁荣荣_琉璃记熠<span class="credit-suffix">（微博）</span></p>
             <p>网页 / 策划 · @酒起子起不来<span class="credit-suffix">（微博）</span></p>
-            <p>LOGO 绘制 · 甘吉得橘<span class="credit-suffix">（米画师）</span></p>
+            <p>碎片绘制 · 甘吉得橘<span class="credit-suffix">（米画师）</span></p>
           </div>
         </div>
       </aside>
@@ -109,7 +109,7 @@
             <button class="desktop-tool" id="zoomOutBtn" type="button" aria-label="缩小坐标视角">−</button>
             <output class="desktop-tool zoom-value" id="zoomValue" aria-label="当前缩放比例">100%</output>
             <button class="desktop-tool" id="zoomInBtn" type="button" aria-label="放大坐标视角">＋</button>
-            <button id="resetViewBtn" type="button" aria-label="复位视角，不会清空已放置 Logo" title="复位视角">↺</button>
+            <button id="resetViewBtn" type="button" aria-label="复位视角，不会清空已放置碎片" title="复位视角">↺</button>
             <button id="guideBtn" type="button" aria-label="开启参考线" aria-pressed="false" title="开启参考线"><span class="guide-icon"></span></button>
             <button id="fullscreenBtn" type="button" aria-label="进入全屏" aria-pressed="false" title="全屏"><span class="fullscreen-icon"></span></button>
           </div>
@@ -127,22 +127,22 @@
         </div>
       </section>
 
-      <aside class="library-panel" id="libraryPanel" aria-label="待选 Logo">
+      <aside class="library-panel" id="libraryPanel" aria-label="待选碎片">
         <div class="library-head" id="libraryHead">
           <div class="library-title-row">
-            <div><p class="section-index">FRAGMENTS</p><h2>待选 LOGO</h2></div>
+            <div><p class="section-index">FRAGMENTS</p><h2>待选碎片</h2></div>
             <div class="history-actions" role="group" aria-label="历史操作">
               <button id="undoBtn" type="button" aria-label="撤销上一步" disabled><span>↺</span><small>撤销</small></button>
               <button id="redoBtn" type="button" aria-label="重做下一步" disabled><span>↻</span><small>重做</small></button>
-              <button class="clear-btn" id="clearBtn" type="button" aria-label="一键清空全部已放置 Logo"><span>清空</span></button>
+              <button class="clear-btn" id="clearBtn" type="button" aria-label="一键清空全部已放置碎片"><span>清空</span></button>
             </div>
           </div>
-          <p class="library-help">轻触已放置 Logo 查看大图 · 放够数量后生成我的坐标</p>
-          <div class="filter-row" role="group" aria-label="Logo 筛选">
+          <p class="library-help">轻触已放置碎片查看大图 · 放够数量后生成她的人生坐标</p>
+          <div class="filter-row" role="group" aria-label="碎片筛选">
             <button class="filter-btn is-active" data-filter="all" type="button" aria-pressed="true">全部 <span data-total>41</span></button>
             <button class="filter-btn" data-filter="unplaced" type="button" aria-pressed="false">未放置 <span id="unplacedCount">41</span></button>
           </div>
-          <button class="share-trigger" id="shareTriggerBtn" type="button" hidden>生成我的坐标</button>
+          <button class="share-trigger" id="shareTriggerBtn" type="button" hidden>生成她的人生坐标</button>
           <div class="return-target" id="returnTarget" aria-hidden="true"><span>↓</span>松开放回待选区</div>
         </div>
         <div class="logo-scroll" id="logoScroll">
@@ -155,7 +155,7 @@
   </main>
 
   <div class="preview-backdrop" id="previewBackdrop" aria-hidden="true"></div>
-  <div class="preview-popover" id="previewPopover" role="dialog" aria-label="Logo 图片预览" hidden>
+  <div class="preview-popover" id="previewPopover" role="dialog" aria-label="碎片图片预览" hidden>
     <div id="previewMedia"></div>
   </div>
   <div class="immersive-return" id="immersiveReturn" aria-hidden="true">松开放回待选区</div>
@@ -187,7 +187,7 @@
     <div class="dialog-card">
       <p class="section-index">CLEAR ALL</p>
       <h2 id="clearTitle">清空全部坐标？</h2>
-      <p>已放置的 Logo 将全部回到待选区。清空后仍可撤销一次。</p>
+      <p>已放置的碎片将全部回到待选区。清空后仍可撤销一次。</p>
       <div class="dialog-actions">
         <button id="cancelClearBtn" type="button">暂不清空</button>
         <button class="danger" id="confirmClearBtn" type="button">确认清空</button>
@@ -198,6 +198,6 @@
   <noscript>请启用 JavaScript 后参与活动。</noscript>
   <script src="personality-results.js?v=20260727-01" defer></script>
   <script src="share-card.js?v=20260728-07" defer></script>
-  <script src="app.js?v=20260728-07" defer></script>
+  <script src="app.js?v=20260728-08" defer></script>
 </body>
 </html>
