@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>16 种结果卡片预览</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #1a1a1a;
+    padding: 40px 20px;
+    color: #fff;
+  }
+  h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 28px;
+    font-weight: 500;
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 30px;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  .card-wrapper {
+    background: #2a2a2a;
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+  }
+  .card-wrapper h3 {
+    margin-bottom: 12px;
+    font-size: 14px;
+    color: #aaa;
+    font-weight: 400;
+  }
+  .card-wrapper svg {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    background: #fff;
+  }
+  .controls {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .controls button {
+    background: #4a9eff;
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 0 8px;
+  }
+  .controls button:hover {
+    background: #3a8eef;
+  }
+</style>
+</head>
+<body>
+
+<h1>16 种结果卡片预览</h1>
+
+<div class="controls">
+  <button onclick="downloadAll()">下载全部结果图</button>
+  <button onclick="location.reload()">刷新预览</button>
+</div>
+
+<div class="grid" id="cardGrid"></div>
+
+<script src="share-card.js?v=20260728-07"></script>
+<script>
+const SERIES = ['R', 'O', 'N', 'G'];
+const TENDENCIES = ['thorn', 'flower', 'memory', 'daily'];
+const SERIES_NAMES = { R: 'Restrained', O: 'Orthodox', N: 'Numinous', G: 'Gentle' };
+const TENDENCY_NAMES = { thorn: '荆棘', flower: '繁花', memory: '不忘', daily: '寻常' };
+
+function generateAllCards() {
+  const grid = document.getElementById('cardGrid');
+  grid.innerHTML = '';
+
+  SERIES.forEach(series => {
+    TENDENCIES.forEach(tendency => {
+      const key = `${series}-${tendency}`;
+      const result = window.ShareCard.PERSONALITY_RESULTS[key];
+      if (!result) return;
+
+      const svg = window.ShareCard.buildSVG({
+        series: series,
+        tendency: tendency,
+        result: result,
+        placed: [],
+        userId: '佚名'
+      });
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'card-wrapper';
+      wrapper.innerHTML = `
+        <h3>${series} · ${SERIES_NAMES[series]} / ${TENDENCY_NAMES[tendency]} · ${result.name}</h3>
+        <div data-key="${key}">${svg}</div>
+      `;
+      grid.appendChild(wrapper);
+    });
+  });
+}
+
+function downloadAll() {
+  const cards = document.querySelectorAll('.card-wrapper div[data-key]');
+  cards.forEach((card, index) => {
+    const key = card.dataset.key;
+    const svg = card.querySelector('svg');
+    if (!svg) return;
+
+    const svgData = new XMLSerializer().serializeToString(svg);
+    const canvas = document.createElement('canvas');
+    canvas.width = 1080;
+    canvas.height = 1440;
+    const ctx = canvas.getContext('2d');
+
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0);
+      const link = document.createElement('a');
+      link.download = `${key}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    };
+    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+  });
+}
+
+// 初始化
+generateAllCards();
+</script>
+
+</body>
+</html>
