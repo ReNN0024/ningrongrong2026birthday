@@ -424,8 +424,8 @@
     <g id="placed-logo-result-layer">${logoLayer}</g>`;
   }
 
-  async function buildSVG({ placed, logos, activityTitle, shareUrl, userId = "佚名" }) {
-    const personality = calculatePersonality(placed);
+  async function buildSVG({ placed, logos, activityTitle, shareUrl, userId = "佚名", personality: overridePersonality }) {
+    const personality = overridePersonality || calculatePersonality(placed);
     const style = CARD_STYLES[personality.main] || CARD_STYLES.R;
     const result = personality.result;
     const descLines = wrapText(result.description, 17);
@@ -501,7 +501,7 @@
       context.drawImage(image, 0, 0);
       const blob = await canvasToBlob(canvas);
       const objectURL = URL.createObjectURL(blob);
-      return { objectURL, blob, svg, personality: calculatePersonality(options.placed) };
+      return { objectURL, blob, svg, personality: options.personality || calculatePersonality(options.placed) };
     } finally {
       URL.revokeObjectURL(svgURL);
     }
