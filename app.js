@@ -46,7 +46,7 @@
     desktopProgressFill: $("#desktopProgressFill"),
     guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), previewBackdrop: $("#previewBackdrop"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
     toastStack: $("#toastStack"), live: $("#liveRegion"), empty: $("#emptyState"),
-    userIdDialog: $("#userIdDialog"), userIdInput: $("#userIdInput"), anonymousBtn: $("#anonymousBtn"), confirmUserIdBtn: $("#confirmUserIdBtn"),
+    userIdDialog: $("#userIdDialog"), userIdInput: $("#userIdInput"), anonymousBtn: $("#anonymousBtn"), confirmUserIdBtn: $("#confirmUserIdBtn"), closeUserIdBtn: $("#closeUserIdBtn"),
     shareDialog: $("#shareDialog"), sharePreview: $("#sharePreview"), shareSaveGuide: $("#shareSaveGuide"), shareSaveGuideClose: $("#shareSaveGuideCloseBtn"),
     shareTrigger: $("#shareTriggerBtn"), downloadShare: $("#downloadShareBtn"), regenerateShare: $("#regenerateShareBtn"), continueEdit: $("#continueEditBtn"), shareClose: $("#shareCloseBtn"),
     clearDialog: $("#clearDialog"), undo: $("#undoBtn"), redo: $("#redoBtn"), clear: $("#clearBtn")
