@@ -548,12 +548,7 @@
       if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上碎片后生成她的人生坐标`, "", { key: "share-not-ready", dedupe: 1200 });
 
       const signature = getShareSignature();
-      if (shareResult?.signature === signature && shareResult.objectURL) {
-        renderSharePreview(shareResult);
-        updateShareSaveButton(true);
-        openDialog(dom.shareDialog);
-        return;
-      }
+      // 关闭结果图后 shareResult 已清空，每次都重新生成
 
       // 立即开始预加载结果图
       openDialog(dom.shareDialog);
@@ -1280,9 +1275,9 @@
     dom.downloadShare?.addEventListener("click", handleShareSave);
     dom.shareSaveGuideClose?.addEventListener("click", hideShareSaveGuide);
     dom.regenerateShare?.addEventListener("click", regenerateShareResult);
-    dom.continueEdit?.addEventListener("click", () => { hideShareSaveGuide(); closeDialog(dom.shareDialog); });
-    dom.shareClose?.addEventListener("click", () => { hideShareSaveGuide(); closeDialog(dom.shareDialog); });
-    dom.shareDialog?.addEventListener("click", event => { if (event.target === dom.shareDialog) { hideShareSaveGuide(); closeDialog(dom.shareDialog); } });
+    dom.continueEdit?.addEventListener("click", () => { hideShareSaveGuide(); closeDialog(dom.shareDialog); revokeShareResult(); shareResult = null; });
+    dom.shareClose?.addEventListener("click", () => { hideShareSaveGuide(); closeDialog(dom.shareDialog); revokeShareResult(); shareResult = null; });
+    dom.shareDialog?.addEventListener("click", event => { if (event.target === dom.shareDialog) { hideShareSaveGuide(); closeDialog(dom.shareDialog); revokeShareResult(); shareResult = null; } });
 
     dom.frame.addEventListener("pointerdown", startStageGesture);
     dom.frame.addEventListener("pointermove", moveStageGesture, { passive: false });
