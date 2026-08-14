@@ -109,65 +109,69 @@ function generateAllCards() {
   });
 }
 
-function downloadAll() {
+async function downloadAll() {
   const cards = document.querySelectorAll('.card-wrapper div[data-key]');
   const total = cards.length;
   let completed = 0;
 
-  cards.forEach((card, index) => {
+  for (const card of cards) {
     const key = card.dataset.key;
     const svg = card.querySelector('svg');
-    if (!svg) return;
+    if (!svg) {
+      completed++;
+      continue;
+    }
 
-    // 等待 SVG 中的图片加载完成
-    const images = svg.querySelectorAll('image');
-    let imagesLoaded = 0;
-    const totalImages = images.length;
-
-    function tryDownload() {
+    try {
       const svgData = new XMLSerializer().serializeToString(svg);
-      const canvas = document.createElement('canvas');
-      canvas.width = 1080;
-      canvas.height = 1440;
-      const ctx = canvas.getContext('2d');
+      const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
+      const url = URL.createObjectURL(svgBlob);
 
       const img = new Image();
-      img.onload = () => {
-        ctx.drawImage(img, 0, 0);
-        const link = document.createElement('a');
-        link.download = `${key}.png`;
-        link.href = canvas.toDataURL('image/png');
-        link.click();
-        completed++;
-        console.log(`已下载 ${completed}/${total}: ${key}.png`);
-      };
-      img.onerror = (e) => {
-        console.error(`下载失败：${key}`, e);
-        completed++;
-      };
-      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
-    }
+      img.crossOrigin = 'anonymous';
 
-    if (totalImages === 0) {
-      tryDownload();
-    } else {
-      images.forEach(img => {
+      await new Promise((resolve, reject) => {
         img.onload = () => {
-          imagesLoaded++;
-          if (imagesLoaded === totalImages) {
-            setTimeout(tryDownload, 100);
-          }
+          const canvas = document.createElement('canvas');
+          canvas.width = 1080;
+          canvas.height = 1440;
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0);
+          URL.revokeObjectURL(url);
+
+          canvas.toBlob((blob) => {
+            if (blob) {
+              const link = document.createElement('a');
+              link.download = `${key}.png`;
+              link.href = URL.createObjectURL(blob);
+              link.click();
+              URL.revokeObjectURL(link.href);
+              console.log(`已下载 ${completed + 1}/${total}: ${key}.png`);
+            } else {
+              console.error(`转换失败：${key}`);
+            }
+            completed++;
+            resolve();
+          }, 'image/png');
         };
-        // 如果图片已加载，触发 onload
-        if (img.complete) {
-          imagesLoaded++;
-          if (imagesLoaded === totalImages) {
-            setTimeout(tryDownload, 100);
-          }
-        }
+        img.onerror = (e) => {
+          console.error(`加载失败：${key}`, e);
+          URL.revokeObjectURL(url);
+          completed++;
+          resolve();
+        };
+        img.src = url;
       });
+
+      // 延迟一下，避免浏览器阻塞
+      await new Promise(r => setTimeout(r, 300));
+    } catch (e) {
+      console.error(`下载错误：${key}`, e);
+      completed++;
     }
-  });
+  }
+
+  console.log('下载完成');
 }
 
 // 初始化
