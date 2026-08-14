@@ -475,8 +475,8 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 
 .share-dialog { border: 0; padding: 0; background: transparent; width: min(430px, calc(100vw - 24px)); max-width: calc(100vw - 24px); max-height: min(94dvh, 860px); overflow: auto; }
 .confirm-dialog, .user-id-dialog { border: 0; padding: 0; background: transparent; max-width: calc(100vw - 32px); }
-.share-dialog::backdrop, .confirm-dialog::backdrop, .user-id-dialog::backdrop { background: rgba(63,55,47,.32); backdrop-filter: blur(3px); }
-.share-dialog.is-fallback-open, .confirm-dialog.is-fallback-open, .user-id-dialog.is-fallback-open { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; display: grid; place-items: center; background: rgba(63,55,47,.32); z-index: 1200; }
+.share-dialog::backdrop, .confirm-dialog::backdrop { background: rgba(63,55,47,.32); backdrop-filter: blur(3px); }
+.share-dialog.is-fallback-open, .confirm-dialog.is-fallback-open { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; display: grid; place-items: center; background: rgba(63,55,47,.32); z-index: 1200; }
 .share-dialog-card { position: relative; width: 100%; padding: 0 0 16px; background: transparent; border: 0; border-radius: 0; box-shadow: none; text-align: center; }
 .share-close { position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(255, 250, 241, .86); color: var(--muted); box-shadow: 0 4px 14px rgba(55,46,34,.16); font-size: 22px; line-height: 1; }
 .share-preview { min-height: 320px; display: grid; place-items: center; background: transparent; overflow: visible; color: var(--muted); font-size: 12px; }
@@ -494,22 +494,267 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .share-actions a[aria-disabled="true"] { opacity: .42; pointer-events: none; }
 .share-help { margin: 12px 0 0; color: var(--muted); font-size: 10px; line-height: 1.7; }
 .dialog-card { position: relative; width: min(400px, calc(100vw - 32px)); padding: 32px; background: var(--paper-2); border: 1px solid rgba(141,112,57,.32); border-radius: 14px; box-shadow: var(--shadow); }
-.user-id-close { position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(255, 250, 241, .86); color: var(--muted); box-shadow: 0 4px 14px rgba(55,46,34,.16); font-size: 22px; line-height: 1; cursor: pointer; }
-.user-id-close:hover { background: rgba(255, 250, 241, 1); }
-.dialog-card h2 { font: 500 22px var(--sans); margin: 0 0 8px; }
-.user-id-subtitle { color: var(--muted); font: 400 14px var(--sans); margin: 0 0 16px; line-height: 1.6; }
-.dialog-card > p:not(.section-index) { color: var(--muted); font-size: 12px; line-height: 1.8; }
-.user-id-prompt { display: flex; align-items: center; gap: 8px; margin: 16px 0 0 !important; }
-.user-id-input { flex: 1; padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); color: var(--ink); font: 400 14px var(--sans); outline: none; transition: border-color .15s ease; }
-.user-id-input:focus { border-color: var(--accent); }
-.user-id-input::placeholder { color: var(--muted); }
-.dialog-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
-.dialog-actions button { min-height: 56px; border: 1px solid var(--line); border-radius: 8px; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 8px; gap: 2px; }
-.dialog-actions .btn-main { font-size: 15px; font-weight: 500; line-height: 1.3; }
-.dialog-actions .btn-sub { font-size: 11px; color: var(--muted); line-height: 1.3; }
-.dialog-actions .danger { background: #8f554e; border-color: #8f554e; color: white; }
-.dialog-actions .danger .btn-sub { color: rgba(255,255,255,0.8); }
-.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+/* User ID Dialog - Optimized Styles */
+
+/* Backdrop - warm gray-brown with blur */
+.user-id-dialog::backdrop {
+  background: rgba(63, 55, 47, .26);
+  backdrop-filter: blur(6px);
+}
+
+.user-id-dialog.is-fallback-open {
+  background: rgba(63, 55, 47, .26);
+  backdrop-filter: blur(6px);
+}
+
+/* Dialog Card - cream background, gold border, soft shadow */
+.user-id-dialog .dialog-card {
+  width: min(440px, calc(100vw - 32px));
+  padding: 36px 32px 32px;
+  background: #fffaf1;
+  border: 1px solid rgba(141, 112, 57, .25);
+  border-radius: 22px;
+  box-shadow: 0 24px 70px rgba(68, 57, 42, .20);
+  position: relative;
+  overflow: hidden;
+}
+
+/* Subtle quadrant color accents */
+.user-id-dialog .dialog-card::before {
+  content: "";
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(232, 245, 233, .4) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(227, 242, 253, .4) 0%, transparent 50%),
+    radial-gradient(circle at 20% 80%, rgba(252, 228, 236, .4) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 248, 225, .4) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.user-id-dialog .dialog-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Close Button - integrated, subtle */
+.user-id-close {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 2;
+  width: 32px;
+  height: 32px;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+  display: grid;
+  place-items: center;
+  transition: background .15s ease, color .15s ease;
+}
+
+.user-id-close:hover {
+  background: rgba(189, 155, 85, .12);
+  color: var(--gold-deep);
+}
+
+.user-id-close:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Title - ink color, not pure black */
+.dialog-card h2 {
+  font: 600 22px var(--sans);
+  color: #453f3a;
+  margin: 0 0 6px;
+  letter-spacing: .01em;
+}
+
+/* Subtitle - muted, softer */
+.user-id-subtitle {
+  color: var(--muted);
+  font: 400 13px var(--sans);
+  margin: 0 0 20px;
+  line-height: 1.6;
+}
+
+/* Prompt Label - gold, small, spaced */
+.user-id-prompt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 20px 0 10px !important;
+}
+
+.user-id-prompt label {
+  color: var(--gold-deep);
+  font: 500 11px var(--sans);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* Input Field - cream background, gold focus */
+.user-id-input {
+  flex: 1;
+  padding: 10px 14px;
+  height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 11px;
+  background: #f7f1e7;
+  color: var(--ink);
+  font: 400 14px var(--sans);
+  transition: border-color .15s ease, box-shadow .15s ease;
+}
+
+.user-id-input:hover {
+  border-color: rgba(141, 112, 57, .4);
+}
+
+.user-id-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(189, 155, 85, .16);
+  outline: none;
+}
+
+.user-id-input::placeholder {
+  color: var(--muted);
+  opacity: .7;
+}
+
+/* Action Buttons */
+.dialog-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.dialog-actions button {
+  min-height: 52px;
+  border-radius: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 12px;
+  gap: 3px;
+  cursor: pointer;
+  transition: all .15s ease;
+  font-family: var(--sans);
+}
+
+/* Anonymous Button - light cream, subtle */
+#anonymousBtn {
+  border: 1px solid rgba(141, 112, 57, .28);
+  background: rgba(255, 250, 241, .6);
+  color: var(--ink);
+}
+
+#anonymousBtn:hover {
+  background: rgba(255, 250, 241, .9);
+  border-color: rgba(141, 112, 57, .4);
+}
+
+#anonymousBtn:active {
+  background: rgba(247, 241, 231, .9);
+  transform: translateY(1px);
+}
+
+#anonymousBtn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+}
+
+/* Confirm Button - deep gold gradient, cream text */
+#confirmUserIdBtn {
+  background: linear-gradient(135deg, #8e7137 0%, #bd9b55 100%);
+  border-color: #8e7137;
+  color: #fffaf1;
+  box-shadow: 0 4px 14px rgba(142, 113, 55, .28);
+}
+
+#confirmUserIdBtn:hover {
+  background: linear-gradient(135deg, #7d6330 0%, #ad8b4a 100%);
+  box-shadow: 0 6px 18px rgba(142, 113, 55, .36);
+  transform: translateY(-1px);
+}
+
+#confirmUserIdBtn:active {
+  transform: translateY(1px);
+  box-shadow: 0 2px 8px rgba(142, 113, 55, .24);
+}
+
+#confirmUserIdBtn:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 3px;
+}
+
+.dialog-actions .btn-main {
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: .01em;
+}
+
+.dialog-actions .btn-sub {
+  font-size: 11px;
+  line-height: 1.3;
+  opacity: .85;
+}
+
+#confirmUserIdBtn .btn-sub {
+  color: rgba(255, 250, 241, .9);
+}
+
+/* Responsive - Small Screens */
+@media (max-width: 480px) {
+  .user-id-dialog .dialog-card {
+    width: min(440px, calc(100vw - 24px));
+    padding: 32px 24px 28px;
+    border-radius: 20px;
+  }
+  
+  .user-id-close {
+    top: 12px;
+    right: 12px;
+  }
+  
+  .dialog-actions {
+    gap: 10px;
+  }
+  
+  .dialog-actions button {
+    min-height: 48px;
+    padding: 6px 10px;
+  }
+}
+
+/* Responsive - Very Small Screens (320px) */
+@media (max-width: 360px) {
+  .user-id-dialog .dialog-card {
+    padding: 28px 20px 24px;
+  }
+  
+  .dialog-actions {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  
+  .dialog-actions button {
+    min-height: 46px;
+  }
+}
+
 .immersive-return { display: none; }
 
 body.is-immersive { overflow: hidden; }
