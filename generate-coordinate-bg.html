@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>生成透明底坐标系图片</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: #f5f5f5;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+    .controls {
+      margin-bottom: 20px;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    label {
+      font-size: 14px;
+      color: #666;
+    }
+    input[type="number"], input[type="color"] {
+      padding: 6px 10px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+    input[type="number"] {
+      width: 80px;
+    }
+    button {
+      padding: 8px 16px;
+      background: #4a90d9;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    button:hover {
+      background: #357abd;
+    }
+    .preview {
+      background: 
+        linear-gradient(45deg, #ccc 25%, transparent 25%),
+        linear-gradient(-45deg, #ccc 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #ccc 75%),
+        linear-gradient(-45deg, transparent 75%, #ccc 75%);
+      background-size: 20px 20px;
+      background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+    canvas {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>生成透明底坐标系图片</h1>
+    
+    <div class="controls">
+      <div class="control-group">
+        <label>尺寸 (px):</label>
+        <input type="number" id="size" value="1080" min="100" max="4096">
+      </div>
+      <div class="control-group">
+        <label>轴线颜色:</label>
+        <input type="color" id="axisColor" value="#999999">
+      </div>
+      <div class="control-group">
+        <label>轴线粗细:</label>
+        <input type="number" id="axisWidth" value="2" min="1" max="10">
+      </div>
+      <div class="control-group">
+        <label>中心点大小:</label>
+        <input type="number" id="centerSize" value="8" min="4" max="20">
+      </div>
+      <button id="generateBtn">生成图片</button>
+      <button id="downloadBtn">下载 PNG</button>
+    </div>
+    
+    <div class="preview">
+      <canvas id="canvas"></canvas>
+    </div>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const sizeInput = document.getElementById('size');
+    const axisColorInput = document.getElementById('axisColor');
+    const axisWidthInput = document.getElementById('axisWidth');
+    const centerSizeInput = document.getElementById('centerSize');
+    const generateBtn = document.getElementById('generateBtn');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    function draw() {
+      const size = parseInt(sizeInput.value) || 1080;
+      const axisColor = axisColorInput.value;
+      const axisWidth = parseInt(axisWidthInput.value) || 2;
+      const centerSize = parseInt(centerSizeInput.value) || 8;
+
+      canvas.width = size;
+      canvas.height = size;
+
+      // 清空画布（透明底）
+      ctx.clearRect(0, 0, size, size);
+
+      const center = size / 2;
+      const margin = size * 0.15;
+
+      // 绘制 X 轴
+      ctx.beginPath();
+      ctx.moveTo(margin, center);
+      ctx.lineTo(size - margin, center);
+      ctx.strokeStyle = axisColor;
+      ctx.lineWidth = axisWidth;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // 绘制 Y 轴
+      ctx.beginPath();
+      ctx.moveTo(center, margin);
+      ctx.lineTo(center, size - margin);
+      ctx.strokeStyle = axisColor;
+      ctx.lineWidth = axisWidth;
+      ctx.lineCap = 'round';
+      ctx.stroke();
+
+      // 绘制中心点
+      ctx.beginPath();
+      ctx.arc(center, center, centerSize, 0, Math.PI * 2);
+      ctx.fillStyle = '#ffffff';
+      ctx.fill();
+      ctx.strokeStyle = axisColor;
+      ctx.lineWidth = axisWidth;
+      ctx.stroke();
+
+      // 绘制四个象限的标签位置标记（小圆点）
+      const labelOffset = size * 0.35;
+      const positions = [
+        { x: center + labelOffset, y: center },  // 右（繁花）
+        { x: center - labelOffset, y: center },  // 左（荆棘）
+        { x: center, y: center - labelOffset },  // 上（不忘）
+        { x: center, y: center + labelOffset }   // 下（寻常）
+      ];
+
+      positions.forEach(pos => {
+        ctx.beginPath();
+        ctx.arc(pos.x, pos.y, 3, 0, Math.PI * 2);
+        ctx.fillStyle = axisColor;
+        ctx.fill();
+      });
+    }
+
+    function download() {
+      const link = document.createElement('a');
+      link.download = `coordinate-bg-${canvas.width}x${canvas.height}.png`;
+      link.href = canvas.toDataURL('image/png');
+      link.click();
+    }
+
+    generateBtn.addEventListener('click', draw);
+    downloadBtn.addEventListener('click', download);
+
+    // 初始绘制
+    draw();
+  </script>
+</body>
+</html>
