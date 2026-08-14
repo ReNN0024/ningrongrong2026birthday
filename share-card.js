@@ -135,30 +135,30 @@
   const CARD_LAYOUTS = {
     R: {
       align: "left",
-      coord: { x: 42, y: 450 },
-      copy: { kicker: [72, 74, 390], title: [72, 210, 460], desc: [72, 300, 430], footer: [72, 982, 440] }
+      coord: { x: 60, y: 450 },
+      copy: { kicker: [90, 74, 390], title: [90, 210, 460], desc: [90, 300, 430], footer: [90, 982, 440] }
     },
     O: {
       align: "left",
-      coord: { x: 57, y: 195 },
-      copy: { kicker: [72, 74, 420], title: [72, 760, 560], desc: [74, 848, 586], footer: [72, 1008, 520] }
+      coord: { x: 75, y: 195 },
+      copy: { kicker: [90, 74, 420], title: [90, 760, 560], desc: [92, 848, 586], footer: [90, 1008, 520] }
     },
     N: {
       align: "left",
-      coord: { x: 72, y: 432 },
-      copy: { kicker: [360, 74, 360], title: [338, 200, 410], desc: [338, 290, 402], footer: [72, 982, 440] }
+      coord: { x: 90, y: 432 },
+      copy: { kicker: [360, 74, 360], title: [338, 200, 410], desc: [338, 290, 402], footer: [90, 982, 440] }
     },
     G: {
       align: "left",
-      coord: { x: 72, y: 104 },
-      copy: { kicker: [72, 756, 410], title: [72, 810, 520], desc: [74, 896, 586], footer: [72, 1008, 520] }
+      coord: { x: 90, y: 104 },
+      copy: { kicker: [90, 756, 410], title: [90, 810, 520], desc: [92, 896, 586], footer: [90, 1008, 520] }
     }
   };
   const LABEL_LAYOUTS = {
-    R: { dropcap: [70, 42, 106], main: [154, 66, 42], sub: [158, 114, 18], slash: [151, 112, 27], hairline: [232, 126, 96] },
-    O: { dropcap: [57, 42, 106], main: [139, 66, 42], sub: [143, 114, 18], slash: [135, 112, 27], hairline: [221, 126, 104] },
-    N: { dropcap: [70, 42, 106], main: [154, 66, 42], sub: [158, 114, 18], slash: [151, 112, 27], hairline: [232, 126, 96] },
-    G: { dropcap: [70, 682, 106], main: [154, 706, 42], sub: [158, 754, 18], slash: [151, 752, 27], hairline: [232, 766, 104] }
+    R: { dropcap: [88, 42, 106], main: [172, 66, 42], sub: [176, 114, 18], slash: [169, 112, 27], hairline: [250, 126, 96] },
+    O: { dropcap: [75, 42, 106], main: [157, 66, 42], sub: [161, 114, 18], slash: [153, 112, 27], hairline: [239, 126, 104] },
+    N: { dropcap: [88, 42, 106], main: [172, 66, 42], sub: [176, 114, 18], slash: [169, 112, 27], hairline: [250, 126, 96] },
+    G: { dropcap: [88, 682, 106], main: [172, 706, 42], sub: [176, 754, 18], slash: [169, 752, 27], hairline: [250, 766, 104] }
   };
   const LABEL_PALETTES = {
     blue: { drop: "#315F78", main: "#407C9A", sub: "#315F78", line: "#3D7FA4" },
