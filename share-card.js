@@ -511,5 +511,5 @@
     Object.values(CARD_STYLES).forEach(style => imageToDataURL(style.figure.src));
   }
 
-  window.ShareCard = { generateShareImage, calculatePersonality, warmupShareAssets };
+  window.ShareCard = { generateShareImage, calculatePersonality, warmupShareAssets, buildSVG, PERSONALITY_RESULTS, CARD_STYLES };
 })();
