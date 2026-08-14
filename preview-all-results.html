@@ -5,178 +5,54 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>16 种结果卡片预览</title>
 <style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background: #1a1a1a;
-    padding: 40px 20px;
-    color: #fff;
-  }
-  h1 {
-    text-align: center;
-    margin-bottom: 40px;
-    font-size: 28px;
-    font-weight: 500;
-  }
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 30px;
-    max-width: 1400px;
-    margin: 0 auto;
-  }
-  .card-wrapper {
-    background: #2a2a2a;
-    border-radius: 12px;
-    padding: 16px;
-    text-align: center;
-  }
-  .card-wrapper h3 {
-    margin-bottom: 12px;
-    font-size: 14px;
-    color: #aaa;
-    font-weight: 400;
-  }
-  .card-wrapper svg {
-    width: 100%;
-    height: auto;
-    border-radius: 8px;
-    background: #fff;
-  }
-  .controls {
-    text-align: center;
-    margin-bottom: 30px;
-  }
-  .controls button {
-    background: #4a9eff;
-    color: #fff;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    margin: 0 8px;
-  }
-  .controls button:hover {
-    background: #3a8eef;
-  }
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #f0f0f0; padding: 20px; font-family: sans-serif; }
+h1 { text-align: center; margin-bottom: 20px; font-size: 24px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+.card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.card svg { width: 100%; height: auto; display: block; }
+.card-label { padding: 8px 12px; text-align: center; font-size: 14px; color: #666; background: #fafafa; border-top: 1px solid #eee; }
 </style>
 </head>
 <body>
-
 <h1>16 种结果卡片预览</h1>
+<div class="grid" id="grid"></div>
 
-<div class="controls">
-  <button onclick="downloadAll()">下载全部结果图</button>
-  <button onclick="location.reload()">刷新预览</button>
-</div>
-
-<div class="grid" id="cardGrid"></div>
-
-<script src="share-card.js?v=20260728-07"></script>
+<script src="share-card.js?v=20260728-09"></script>
 <script>
-const SERIES = ['R', 'O', 'N', 'G'];
-const TENDENCIES = ['thorn', 'flower', 'memory', 'daily'];
-const SERIES_NAMES = { R: 'Restrained', O: 'Orthodox', N: 'Numinous', G: 'Gentle' };
-const TENDENCY_NAMES = { thorn: '荆棘', flower: '繁花', memory: '不忘', daily: '寻常' };
+const combos = [
+  { main: 'R', tendency: 'thorn' }, { main: 'R', tendency: 'flower' }, { main: 'R', tendency: 'memory' }, { main: 'R', tendency: 'daily' },
+  { main: 'O', tendency: 'thorn' }, { main: 'O', tendency: 'flower' }, { main: 'O', tendency: 'memory' }, { main: 'O', tendency: 'daily' },
+  { main: 'N', tendency: 'thorn' }, { main: 'N', tendency: 'flower' }, { main: 'N', tendency: 'memory' }, { main: 'N', tendency: 'daily' },
+  { main: 'G', tendency: 'thorn' }, { main: 'G', tendency: 'flower' }, { main: 'G', tendency: 'memory' }, { main: 'G', tendency: 'daily' },
+];
 
-function generateAllCards() {
-  const grid = document.getElementById('cardGrid');
-  grid.innerHTML = '';
+const grid = document.getElementById('grid');
 
-  SERIES.forEach(series => {
-    TENDENCIES.forEach(tendency => {
-      const key = `${series}-${tendency}`;
-      const result = window.ShareCard.PERSONALITY_RESULTS[key];
-      if (!result) return;
-
-      const svg = window.ShareCard.buildSVG({
-        series: series,
-        tendency: tendency,
-        result: result,
-        placed: [],
-        userId: '佚名'
-      });
-
-      const wrapper = document.createElement('div');
-      wrapper.className = 'card-wrapper';
-      wrapper.innerHTML = `
-        <h3>${series} · ${SERIES_NAMES[series]} / ${TENDENCY_NAMES[tendency]} · ${result.name}</h3>
-        <div data-key="${key}">${svg}</div>
-      `;
-      grid.appendChild(wrapper);
-    });
+combos.forEach(({ main, tendency }) => {
+  const result = window.ShareCard.PERSONALITY_RESULTS[`${main}-${tendency}`];
+  const svg = window.ShareCard.buildSVG({
+    main, tendency,
+    title: result.title,
+    description: result.description,
+    placed: [],
+    userId: '佚名',
   });
-}
 
-async function downloadAll() {
-  const cards = document.querySelectorAll('.card-wrapper div[data-key]');
-  const total = cards.length;
-  let completed = 0;
+  const card = document.createElement('div');
+  card.className = 'card';
 
-  for (const card of cards) {
-    const key = card.dataset.key;
-    const svg = card.querySelector('svg');
-    if (!svg) {
-      completed++;
-      continue;
-    }
+  const svgEl = document.createElement('div');
+  svgEl.innerHTML = svg;
 
-    try {
-      const svgData = new XMLSerializer().serializeToString(svg);
-      const svgBlob = new Blob([svgData], { type: 'image/svg+xml;charset=utf-8' });
-      const url = URL.createObjectURL(svgBlob);
+  const label = document.createElement('div');
+  label.className = 'card-label';
+  label.textContent = `${main} · ${tendency} · ${result.title}`;
 
-      const img = new Image();
-      img.crossOrigin = 'anonymous';
-
-      await new Promise((resolve, reject) => {
-        img.onload = () => {
-          const canvas = document.createElement('canvas');
-          canvas.width = 1080;
-          canvas.height = 1440;
-          const ctx = canvas.getContext('2d');
-          ctx.drawImage(img, 0, 0);
-          URL.revokeObjectURL(url);
-
-          canvas.toBlob((blob) => {
-            if (blob) {
-              const link = document.createElement('a');
-              link.download = `${key}.png`;
-              link.href = URL.createObjectURL(blob);
-              link.click();
-              URL.revokeObjectURL(link.href);
-              console.log(`已下载 ${completed + 1}/${total}: ${key}.png`);
-            } else {
-              console.error(`转换失败：${key}`);
-            }
-            completed++;
-            resolve();
-          }, 'image/png');
-        };
-        img.onerror = (e) => {
-          console.error(`加载失败：${key}`, e);
-          URL.revokeObjectURL(url);
-          completed++;
-          resolve();
-        };
-        img.src = url;
-      });
-
-      // 延迟一下，避免浏览器阻塞
-      await new Promise(r => setTimeout(r, 300));
-    } catch (e) {
-      console.error(`下载错误：${key}`, e);
-      completed++;
-    }
-  }
-
-  console.log('下载完成');
-}
-
-// 初始化
-generateAllCards();
+  card.appendChild(svgEl);
+  card.appendChild(label);
+  grid.appendChild(card);
+});
 </script>
-
 </body>
 </html>
