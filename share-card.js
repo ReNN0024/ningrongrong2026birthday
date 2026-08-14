@@ -453,7 +453,7 @@
         ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.width)}" height="${scaled(style.figure.height)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMinYMin meet"/>` : ""}
         <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
         ${renderKickerText({ style, text: kickerText })}
-        <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] - 10)}" text-anchor="${anchor}" font-family="sans-serif" font-size="26.67" font-weight="500" fill="${style.desc}" letter-spacing="1">${escapeXML(userIdText)}</text>
+        <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 30)}" text-anchor="${anchor}" font-family="sans-serif" font-size="26.67" font-weight="500" fill="${style.desc}" letter-spacing="1">${escapeXML(userIdText)}</text>
         <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 80)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
         ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 40), lines: descLines, anchor, size: 34.67, lineHeight: 50, fill: style.desc, weight: 500 })}
         <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>
