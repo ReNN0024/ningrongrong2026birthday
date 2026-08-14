@@ -571,7 +571,7 @@
       const userId = await getUserIdFromUser();
       if (userId === null) {
         // 用户取消，关闭结果页
-        dom.shareDialog.close();
+        closeDialog(dom.shareDialog);
         return;
       }
 
