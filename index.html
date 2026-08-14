@@ -163,6 +163,18 @@
   <div class="toast-stack" id="toastStack" aria-live="polite" aria-atomic="true"></div>
   <div class="sr-only" id="liveRegion" aria-live="polite"></div>
 
+  <dialog class="user-id-dialog" id="userIdDialog" aria-label="输入捡拾者 ID">
+    <div class="dialog-card">
+      <p class="section-index">PICKER ID</p>
+      <h2>碎片已捡拾成功</h2>
+      <p class="user-id-prompt">本次捡拾者：<input type="text" id="userIdInput" class="user-id-input" placeholder="请输入你的 ID" maxlength="20" autocomplete="off"></p>
+      <div class="dialog-actions">
+        <button id="anonymousBtn" type="button">佚名</button>
+        <button id="confirmUserIdBtn" type="button">确认</button>
+      </div>
+    </div>
+  </dialog>
+
   <dialog class="share-dialog" id="shareDialog" aria-label="结果图预览">
     <div class="share-dialog-card">
       <button class="share-close" id="shareCloseBtn" type="button" aria-label="关闭结果图预览">×</button>
@@ -197,7 +209,7 @@
 
   <noscript>请启用 JavaScript 后参与活动。</noscript>
   <script src="personality-results.js?v=20260727-01" defer></script>
-  <script src="share-card.js?v=20260728-07" defer></script>
-  <script src="app.js?v=20260728-08" defer></script>
+  <script src="share-card.js?v=20260728-08" defer></script>
+  <script src="app.js?v=20260728-09" defer></script>
 </body>
 </html>

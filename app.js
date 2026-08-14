@@ -46,6 +46,7 @@
     desktopProgressFill: $("#desktopProgressFill"),
     guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), previewBackdrop: $("#previewBackdrop"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
     toastStack: $("#toastStack"), live: $("#liveRegion"), empty: $("#emptyState"),
+    userIdDialog: $("#userIdDialog"), userIdInput: $("#userIdInput"), anonymousBtn: $("#anonymousBtn"), confirmUserIdBtn: $("#confirmUserIdBtn"),
     shareDialog: $("#shareDialog"), sharePreview: $("#sharePreview"), shareSaveGuide: $("#shareSaveGuide"), shareSaveGuideClose: $("#shareSaveGuideCloseBtn"),
     shareTrigger: $("#shareTriggerBtn"), downloadShare: $("#downloadShareBtn"), regenerateShare: $("#regenerateShareBtn"), continueEdit: $("#continueEditBtn"), shareClose: $("#shareCloseBtn"),
     clearDialog: $("#clearDialog"), undo: $("#undoBtn"), redo: $("#redoBtn"), clear: $("#clearBtn")
@@ -545,6 +546,11 @@
   async function generateShareResult() {
     if (!window.ShareCard) return toast("结果图生成器未加载", "error", { key: "share-generator-missing" });
     if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上碎片后生成她的人生坐标`, "", { key: "share-not-ready", dedupe: 1200 });
+
+    // 先显示 ID 输入浮层
+    const userId = await getUserIdFromUser();
+    if (userId === null) return; // 用户取消
+
     openDialog(dom.shareDialog);
     hideShareSaveGuide();
     warmupShareAssets();
@@ -565,7 +571,8 @@
         logos,
         activityTitle: "宁荣荣·与我周旋久",
         subtitle: `${personality.result.name}·${personality.key}`,
-        shareUrl: "https://ningrr.fun"
+        shareUrl: "https://ningrr.fun",
+        userId
       });
       const file = blob ? new File([blob], shareFileName, { type: "image/png" }) : null;
       shareResult = { signature, objectURL, blob, file };
@@ -577,6 +584,49 @@
       updateShareSaveButton(false);
       toast("结果图生成失败，请重试", "error", { key: "share-generation-failed" });
     }
+  }
+
+  function getUserIdFromUser() {
+    return new Promise(resolve => {
+      dom.userIdInput.value = "";
+      openDialog(dom.userIdDialog);
+
+      function cleanup() {
+        dom.anonymousBtn.removeEventListener("click", onAnonymous);
+        dom.confirmUserIdBtn.removeEventListener("click", onConfirm);
+        dom.userIdDialog.removeEventListener("close", onClose);
+      }
+
+      function onAnonymous() {
+        cleanup();
+        dom.userIdDialog.close();
+        resolve("佚名");
+      }
+
+      function onConfirm() {
+        cleanup();
+        dom.userIdDialog.close();
+        const value = dom.userIdInput.value.trim();
+        resolve(value || "佚名");
+      }
+
+      function onClose() {
+        cleanup();
+        resolve(null); // 用户关闭对话框
+      }
+
+      dom.anonymousBtn.addEventListener("click", onAnonymous);
+      dom.confirmUserIdBtn.addEventListener("click", onConfirm);
+      dom.userIdDialog.addEventListener("close", onClose);
+
+      // 输入框回车确认
+      dom.userIdInput.onkeydown = (e) => {
+        if (e.key === "Enter") onConfirm();
+      };
+
+      // 自动聚焦输入框
+      setTimeout(() => dom.userIdInput.focus(), 100);
+    });
   }
 
   function announce(message) { dom.live.textContent = message; }
