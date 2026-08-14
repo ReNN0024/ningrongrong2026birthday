@@ -135,23 +135,23 @@
   const CARD_LAYOUTS = {
     R: {
       align: "left",
-      coord: { x: 60, y: 450 },
-      copy: { kicker: [90, 74, 390], title: [90, 210, 460], desc: [90, 300, 430], footer: [90, 982, 440] }
+      coord: { x: 42, y: 450 },
+      copy: { kicker: [72, 74, 390], title: [72, 210, 460], desc: [72, 300, 430], footer: [90, 982, 440] }
     },
     O: {
       align: "left",
-      coord: { x: 75, y: 195 },
-      copy: { kicker: [90, 74, 420], title: [90, 760, 560], desc: [92, 848, 586], footer: [90, 1008, 520] }
+      coord: { x: 57, y: 195 },
+      copy: { kicker: [72, 74, 420], title: [72, 760, 560], desc: [74, 848, 586], footer: [72, 1008, 520] }
     },
     N: {
       align: "left",
-      coord: { x: 90, y: 432 },
-      copy: { kicker: [360, 74, 360], title: [338, 200, 410], desc: [338, 290, 402], footer: [90, 982, 440] }
+      coord: { x: 72, y: 432 },
+      copy: { kicker: [360, 74, 360], title: [338, 200, 410], desc: [338, 290, 402], footer: [72, 982, 440] }
     },
     G: {
       align: "left",
-      coord: { x: 90, y: 104 },
-      copy: { kicker: [90, 756, 410], title: [90, 810, 520], desc: [92, 896, 586], footer: [90, 1008, 520] }
+      coord: { x: 72, y: 104 },
+      copy: { kicker: [72, 756, 410], title: [72, 810, 520], desc: [74, 896, 586], footer: [72, 1008, 520] }
     }
   };
   const LABEL_LAYOUTS = {
