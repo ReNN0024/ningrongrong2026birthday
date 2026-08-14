@@ -543,48 +543,83 @@
     dom.downloadShare.href = shareResult.objectURL;
   }
 
-  async function generateShareResult() {
-    if (!window.ShareCard) return toast("结果图生成器未加载", "error", { key: "share-generator-missing" });
-    if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上碎片后生成她的人生坐标`, "", { key: "share-not-ready", dedupe: 1200 });
+    async function generateShareResult() {
+      if (!window.ShareCard) return toast("结果图生成器未加载", "error", { key: "share-generator-missing" });
+      if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上碎片后生成她的人生坐标`, "", { key: "share-not-ready", dedupe: 1200 });
 
-    // 先显示 ID 输入浮层
-    const userId = await getUserIdFromUser();
-    if (userId === null) return; // 用户取消
+      const signature = getShareSignature();
+      if (shareResult?.signature === signature && shareResult.objectURL) {
+        renderSharePreview(shareResult);
+        updateShareSaveButton(true);
+        return;
+      }
 
-    openDialog(dom.shareDialog);
-    hideShareSaveGuide();
-    warmupShareAssets();
-    const signature = getShareSignature();
-    if (shareResult?.signature === signature && shareResult.objectURL) {
-      renderSharePreview(shareResult);
-      updateShareSaveButton(true);
-      return;
-    }
-    revokeShareResult();
-    shareResult = null;
-    dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
-    updateShareSaveButton(false);
-    try {
+      // 立即开始预加载结果图
+      openDialog(dom.shareDialog);
+      hideShareSaveGuide();
+      warmupShareAssets();
+      dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
+      updateShareSaveButton(false);
+
       const personality = window.ShareCard.calculatePersonality(state.placed);
-      const { objectURL, blob } = await window.ShareCard.generateShareImage({
+      const preloadPromise = window.ShareCard.generateShareImage({
         placed: state.placed,
         logos,
         activityTitle: "宁荣荣·与我周旋久",
         subtitle: `${personality.result.name}·${personality.key}`,
         shareUrl: "https://ningrr.fun",
-        userId
+        userId: "佚名"
       });
+
+      // 同时弹出 ID 蒙层
+      const userId = await getUserIdFromUser();
+      if (userId === null) {
+        // 用户取消，关闭结果页
+        dom.shareDialog.close();
+        return;
+      }
+
+      // 等待预加载完成
+      let result;
+      try {
+        result = await preloadPromise;
+      } catch (error) {
+        dom.sharePreview.innerHTML = "<span>生成失败，请稍后再试</span>";
+        updateShareSaveButton(false);
+        toast("结果图生成失败，请重试", "error", { key: "share-generation-failed" });
+        return;
+      }
+
+      // 如果用户输入的 ID 不是"佚名"，需要重新生成
+      if (userId !== "佚名") {
+        revokeShareResult();
+        shareResult = null;
+        dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
+        updateShareSaveButton(false);
+        try {
+          result = await window.ShareCard.generateShareImage({
+            placed: state.placed,
+            logos,
+            activityTitle: "宁荣荣·与我周旋久",
+            subtitle: `${personality.result.name}·${personality.key}`,
+            shareUrl: "https://ningrr.fun",
+            userId
+          });
+        } catch (error) {
+          dom.sharePreview.innerHTML = "<span>生成失败，请稍后再试</span>";
+          updateShareSaveButton(false);
+          toast("结果图生成失败，请重试", "error", { key: "share-generation-failed" });
+          return;
+        }
+      }
+
+      const { objectURL, blob } = result;
       const file = blob ? new File([blob], shareFileName, { type: "image/png" }) : null;
       shareResult = { signature, objectURL, blob, file };
       renderSharePreview(shareResult);
       updateShareSaveButton(true);
-    } catch (error) {
-      shareResult = null;
-      dom.sharePreview.innerHTML = "<span>生成失败，请稍后再试</span>";
-      updateShareSaveButton(false);
-      toast("结果图生成失败，请重试", "error", { key: "share-generation-failed" });
     }
-  }
+
 
   function getUserIdFromUser() {
     return new Promise(resolve => {
