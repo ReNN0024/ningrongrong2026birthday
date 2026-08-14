@@ -158,7 +158,7 @@
     R: { dropcap: [88, 42, 106], main: [172, 66, 42], sub: [176, 114, 18], slash: [169, 112, 27], hairline: [250, 126, 96] },
     O: { dropcap: [75, 42, 106], main: [157, 66, 42], sub: [161, 114, 18], slash: [153, 112, 27], hairline: [239, 126, 104] },
     N: { dropcap: [88, 42, 106], main: [172, 66, 42], sub: [176, 114, 18], slash: [169, 112, 27], hairline: [250, 126, 96] },
-    G: { dropcap: [88, 682, 106], main: [172, 706, 42], sub: [176, 754, 18], slash: [169, 752, 27], hairline: [250, 766, 104] }
+    G: { dropcap: [88, 602, 106], main: [172, 626, 42], sub: [176, 674, 18], slash: [169, 672, 27], hairline: [250, 686, 104] }
   };
   const LABEL_PALETTES = {
     blue: { drop: "#315F78", main: "#407C9A", sub: "#315F78", line: "#3D7FA4" },
