@@ -594,6 +594,7 @@
       function cleanup() {
         dom.anonymousBtn.removeEventListener("click", onAnonymous);
         dom.confirmUserIdBtn.removeEventListener("click", onConfirm);
+        dom.closeUserIdBtn.removeEventListener("click", onCloseBtn);
         dom.userIdDialog.removeEventListener("close", onClose);
       }
 
@@ -615,8 +616,13 @@
         resolve(null); // 用户关闭对话框
       }
 
+      function onCloseBtn() {
+        dom.userIdDialog.close();
+      }
+
       dom.anonymousBtn.addEventListener("click", onAnonymous);
       dom.confirmUserIdBtn.addEventListener("click", onConfirm);
+      dom.closeUserIdBtn.addEventListener("click", onCloseBtn);
       dom.userIdDialog.addEventListener("close", onClose);
 
       // 输入框回车确认
