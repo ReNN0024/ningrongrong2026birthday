@@ -111,26 +111,62 @@ function generateAllCards() {
 
 function downloadAll() {
   const cards = document.querySelectorAll('.card-wrapper div[data-key]');
+  const total = cards.length;
+  let completed = 0;
+
   cards.forEach((card, index) => {
     const key = card.dataset.key;
     const svg = card.querySelector('svg');
     if (!svg) return;
 
-    const svgData = new XMLSerializer().serializeToString(svg);
-    const canvas = document.createElement('canvas');
-    canvas.width = 1080;
-    canvas.height = 1440;
-    const ctx = canvas.getContext('2d');
+    // 等待 SVG 中的图片加载完成
+    const images = svg.querySelectorAll('image');
+    let imagesLoaded = 0;
+    const totalImages = images.length;
 
-    const img = new Image();
-    img.onload = () => {
-      ctx.drawImage(img, 0, 0);
-      const link = document.createElement('a');
-      link.download = `${key}.png`;
-      link.href = canvas.toDataURL('image/png');
-      link.click();
-    };
-    img.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgData)));
+    function tryDownload() {
+      const svgData = new XMLSerializer().serializeToString(svg);
+      const canvas = document.createElement('canvas');
+      canvas.width = 1080;
+      canvas.height = 1440;
+      const ctx = canvas.getContext('2d');
+
+      const img = new Image();
+      img.onload = () => {
+        ctx.drawImage(img, 0, 0);
+        const link = document.createElement('a');
+        link.download = `${key}.png`;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+        completed++;
+        console.log(`已下载 ${completed}/${total}: ${key}.png`);
+      };
+      img.onerror = (e) => {
+        console.error(`下载失败：${key}`, e);
+        completed++;
+      };
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgData);
+    }
+
+    if (totalImages === 0) {
+      tryDownload();
+    } else {
+      images.forEach(img => {
+        img.onload = () => {
+          imagesLoaded++;
+          if (imagesLoaded === totalImages) {
+            setTimeout(tryDownload, 100);
+          }
+        };
+        // 如果图片已加载，触发 onload
+        if (img.complete) {
+          imagesLoaded++;
+          if (imagesLoaded === totalImages) {
+            setTimeout(tryDownload, 100);
+          }
+        }
+      });
+    }
   });
 }
 
