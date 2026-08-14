@@ -408,7 +408,7 @@
     const userIdAnchor = textAnchorFor(style, "title");
     const fittedUserId = fitDisplayUserId(userId);
     const safeUserId = escapeXML(fittedUserId.text);
-    return `<text x="${userIdX.toFixed(2)}" y="${userIdY.toFixed(2)}" text-anchor="${userIdAnchor}" font-family="Avenir Next, Helvetica Neue, PingFang SC, sans-serif"><tspan font-size="21" font-weight="500" letter-spacing="1.6" fill="${style.desc}" opacity="0.66">碎片捡拾者</tspan><tspan dx="10" font-size="18" font-weight="500" fill="${style.accent}" opacity="0.52">·</tspan><tspan dx="10" font-size="${fittedUserId.fontSize}" font-weight="600" letter-spacing="0.8" fill="${style.desc}" opacity="0.66">${safeUserId}</tspan></text>`;
+    return `<text x="${userIdX.toFixed(2)}" y="${userIdY.toFixed(2)}" text-anchor="${userIdAnchor}" font-family="Avenir Next, Helvetica Neue, PingFang SC, sans-serif"><tspan font-size="21" font-weight="500" letter-spacing="1.6" fill="${style.desc}" opacity="0.66">碎片捡拾者</tspan><tspan dx="10" font-size="18" font-weight="500" fill="${style.desc}" opacity="0.66">·</tspan><tspan dx="10" font-size="${fittedUserId.fontSize}" font-weight="600" letter-spacing="0.8" fill="${style.desc}" opacity="0.66">${safeUserId}</tspan></text>`;
   }
 
   function renderKickerText({ style, text }) {
