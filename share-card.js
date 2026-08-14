@@ -134,7 +134,7 @@
   };
   const CARD_LAYOUTS = {
     R: {
-      align: "left-footer-right",
+      align: "left",
       coord: { x: 42, y: 450 },
       copy: { kicker: [72, 74, 390], title: [72, 210, 460], desc: [72, 300, 430], footer: [72, 982, 440] }
     },
