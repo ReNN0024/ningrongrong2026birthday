@@ -46,6 +46,7 @@
     desktopProgressFill: $("#desktopProgressFill"),
     guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), previewBackdrop: $("#previewBackdrop"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
     toastStack: $("#toastStack"), live: $("#liveRegion"), empty: $("#emptyState"),
+    userIdDialog: $("#userIdDialog"), userIdInput: $("#userIdInput"), anonymousBtn: $("#anonymousBtn"), confirmUserIdBtn: $("#confirmUserIdBtn"), closeUserIdBtn: $("#userIdCloseBtn"),
     shareDialog: $("#shareDialog"), sharePreview: $("#sharePreview"), shareSaveGuide: $("#shareSaveGuide"), shareSaveGuideClose: $("#shareSaveGuideCloseBtn"),
     shareTrigger: $("#shareTriggerBtn"), downloadShare: $("#downloadShareBtn"), regenerateShare: $("#regenerateShareBtn"), continueEdit: $("#continueEditBtn"), shareClose: $("#shareCloseBtn"),
     clearDialog: $("#clearDialog"), undo: $("#undoBtn"), redo: $("#redoBtn"), clear: $("#clearBtn")
@@ -180,7 +181,7 @@
       dom.grid.innerHTML = visible.map((logo, index) => {
         const placed = placedIds.has(logo.id);
         const sequence = String(logos.indexOf(logo) + 1).padStart(2, "0");
-        const label = logo.placeholder ? `占位 Logo ${sequence}` : logo.name;
+        const label = logo.placeholder ? `占位碎片 ${sequence}` : logo.name;
         return `<button class="logo-card${placed ? " is-placed" : ""}${state.selectedId === logo.id ? " is-focused" : ""}" type="button" data-logo-id="${logo.id}" aria-label="${placed ? "定位已放置" : "放置"}${escapeHTML(label)}" aria-pressed="${state.selectedId === logo.id}">
           <span class="logo-thumb">${mediaMarkup(logo, "", true)}</span><span>${escapeHTML(logo.name)}</span>
         </button>`;
@@ -192,7 +193,7 @@
         const placed = placedIds.has(id);
         const logo = logoMap.get(id);
         const sequence = String(logos.indexOf(logo) + 1).padStart(2, "0");
-        const label = logo.placeholder ? `占位 Logo ${sequence}` : logo.name;
+        const label = logo.placeholder ? `占位碎片 ${sequence}` : logo.name;
         card.classList.toggle("is-placed", placed);
         card.classList.toggle("is-focused", state.selectedId === id);
         card.setAttribute("aria-pressed", String(state.selectedId === id));
@@ -542,41 +543,127 @@
     dom.downloadShare.href = shareResult.objectURL;
   }
 
-  async function generateShareResult() {
-    if (!window.ShareCard) return toast("结果图生成器未加载", "error", { key: "share-generator-missing" });
-    if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上 Logo 后再生成坐标`, "", { key: "share-not-ready", dedupe: 1200 });
-    openDialog(dom.shareDialog);
-    hideShareSaveGuide();
-    warmupShareAssets();
-    const signature = getShareSignature();
-    if (shareResult?.signature === signature && shareResult.objectURL) {
-      renderSharePreview(shareResult);
-      updateShareSaveButton(true);
-      return;
-    }
-    revokeShareResult();
-    shareResult = null;
-    dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
-    updateShareSaveButton(false);
-    try {
+    async function generateShareResult() {
+      if (!window.ShareCard) return toast("结果图生成器未加载", "error", { key: "share-generator-missing" });
+      if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上碎片后生成她的人生坐标`, "", { key: "share-not-ready", dedupe: 1200 });
+
+      const signature = getShareSignature();
+      // 关闭结果图后 shareResult 已清空，每次都重新生成
+
+      // 立即开始预加载结果图
+      openDialog(dom.shareDialog);
+      hideShareSaveGuide();
+      warmupShareAssets();
+      dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
+      updateShareSaveButton(false);
+
       const personality = window.ShareCard.calculatePersonality(state.placed);
-      const { objectURL, blob } = await window.ShareCard.generateShareImage({
+      const preloadPromise = window.ShareCard.generateShareImage({
         placed: state.placed,
         logos,
         activityTitle: "宁荣荣·与我周旋久",
         subtitle: `${personality.result.name}·${personality.key}`,
-        shareUrl: "ningrr.fun"
+        shareUrl: "https://ningrr.fun",
+        userId: "佚名"
       });
+
+      // 同时弹出 ID 蒙层
+      const userId = await getUserIdFromUser();
+      if (userId === null) {
+        // 用户取消，关闭结果页
+        closeDialog(dom.shareDialog);
+        return;
+      }
+
+      // 等待预加载完成
+      let result;
+      try {
+        result = await preloadPromise;
+      } catch (error) {
+        dom.sharePreview.innerHTML = "<span>生成失败，请稍后再试</span>";
+        updateShareSaveButton(false);
+        toast("结果图生成失败，请重试", "error", { key: "share-generation-failed" });
+        return;
+      }
+
+      // 如果用户输入的 ID 不是"佚名"，需要重新生成
+      if (userId !== "佚名") {
+        revokeShareResult();
+        shareResult = null;
+        dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
+        updateShareSaveButton(false);
+        try {
+          result = await window.ShareCard.generateShareImage({
+            placed: state.placed,
+            logos,
+            activityTitle: "宁荣荣·与我周旋久",
+            subtitle: `${personality.result.name}·${personality.key}`,
+            shareUrl: "https://ningrr.fun",
+            userId
+          });
+        } catch (error) {
+          dom.sharePreview.innerHTML = "<span>生成失败，请稍后再试</span>";
+          updateShareSaveButton(false);
+          toast("结果图生成失败，请重试", "error", { key: "share-generation-failed" });
+          return;
+        }
+      }
+
+      const { objectURL, blob } = result;
       const file = blob ? new File([blob], shareFileName, { type: "image/png" }) : null;
       shareResult = { signature, objectURL, blob, file };
       renderSharePreview(shareResult);
       updateShareSaveButton(true);
-    } catch (error) {
-      shareResult = null;
-      dom.sharePreview.innerHTML = "<span>生成失败，请稍后再试</span>";
-      updateShareSaveButton(false);
-      toast("结果图生成失败，请重试", "error", { key: "share-generation-failed" });
     }
+
+
+  function getUserIdFromUser() {
+    return new Promise(resolve => {
+      dom.userIdInput.value = "";
+      openDialog(dom.userIdDialog);
+
+      function cleanup() {
+        dom.anonymousBtn.removeEventListener("click", onAnonymous);
+        dom.confirmUserIdBtn.removeEventListener("click", onConfirm);
+        dom.closeUserIdBtn.removeEventListener("click", onCloseBtn);
+        dom.userIdDialog.removeEventListener("close", onClose);
+      }
+
+      function onAnonymous() {
+        cleanup();
+        dom.userIdDialog.close();
+        resolve("佚名");
+      }
+
+      function onConfirm() {
+        cleanup();
+        dom.userIdDialog.close();
+        const value = dom.userIdInput.value.trim();
+        resolve(value || "佚名");
+      }
+
+      function onClose() {
+        cleanup();
+        resolve(null); // 用户关闭对话框
+      }
+
+      function onCloseBtn() {
+        dom.userIdDialog.close();
+      }
+
+      dom.anonymousBtn.addEventListener("click", onAnonymous);
+      dom.confirmUserIdBtn.addEventListener("click", onConfirm);
+      dom.closeUserIdBtn.addEventListener("click", onCloseBtn);
+      dom.userIdDialog.addEventListener("close", onClose);
+
+      // 输入框回车确认
+      dom.userIdInput.onkeydown = (e) => {
+        if (e.key === "Enter") onConfirm();
+      };
+
+      // 自动聚焦输入框
+      setTimeout(() => dom.userIdInput.focus(), 100);
+    });
   }
 
   function announce(message) { dom.live.textContent = message; }
@@ -702,7 +789,7 @@
     }
     dom.frame.classList.add("is-drop-invalid");
     window.setTimeout(() => dom.frame.classList.remove("is-drop-invalid"), 420);
-    const invalidDropMessage = current.source === "placed" ? "未进入有效区域，已回到原位置" : "请将 Logo 放入坐标区域";
+    const invalidDropMessage = current.source === "placed" ? "未进入有效区域，已回到原位置" : "请将碎片放入坐标区域";
     toast(invalidDropMessage, "error", { key: `invalid-drop-${current.source}`, dedupe: 1400 });
   }
 
@@ -759,7 +846,7 @@
           press.element.classList.remove("is-holding");
           press.element.classList.add("is-drag-ready");
           navigator.vibrate?.(18);
-          announce("\u5DF2\u62FE\u53D6 Logo\uFF0C\u53EF\u4EE5\u62D6\u52A8\u653E\u7F6E");
+          announce("已拾取碎片，可以拖动放置");
           startDrag(id, source, event);
         }
       }, 280);
@@ -1187,10 +1274,10 @@
     dom.shareTrigger?.addEventListener("click", generateShareResult);
     dom.downloadShare?.addEventListener("click", handleShareSave);
     dom.shareSaveGuideClose?.addEventListener("click", hideShareSaveGuide);
-    dom.regenerateShare?.addEventListener("click", generateShareResult);
-    dom.continueEdit?.addEventListener("click", () => { hideShareSaveGuide(); closeDialog(dom.shareDialog); });
-    dom.shareClose?.addEventListener("click", () => { hideShareSaveGuide(); closeDialog(dom.shareDialog); });
-    dom.shareDialog?.addEventListener("click", event => { if (event.target === dom.shareDialog) { hideShareSaveGuide(); closeDialog(dom.shareDialog); } });
+    dom.regenerateShare?.addEventListener("click", regenerateShareResult);
+    dom.continueEdit?.addEventListener("click", () => { hideShareSaveGuide(); closeDialog(dom.shareDialog); revokeShareResult(); shareResult = null; });
+    dom.shareClose?.addEventListener("click", () => { hideShareSaveGuide(); closeDialog(dom.shareDialog); revokeShareResult(); shareResult = null; });
+    dom.shareDialog?.addEventListener("click", event => { if (event.target === dom.shareDialog) { hideShareSaveGuide(); closeDialog(dom.shareDialog); revokeShareResult(); shareResult = null; } });
 
     dom.frame.addEventListener("pointerdown", startStageGesture);
     dom.frame.addEventListener("pointermove", moveStageGesture, { passive: false });
@@ -1301,3 +1388,49 @@
 
   init();
 })();
+
+  function regenerateShareResult() {
+    if (!window.ShareCard) return toast("结果图生成器未加载", "error", { key: "share-generator-missing" });
+    if (state.placed.length < MIN_SHARE_PLACED) return toast(`放置 ${MIN_SHARE_PLACED} 个及以上碎片后生成她的人生坐标`, "", { key: "share-not-ready", dedupe: 1200 });
+
+    openDialog(dom.shareDialog);
+    hideShareSaveGuide();
+    warmupShareAssets();
+    const signature = getShareSignature();
+    if (shareResult?.signature === signature && shareResult.objectURL) {
+      renderSharePreview(shareResult);
+      updateShareSaveButton(true);
+      return;
+    }
+    revokeShareResult();
+    shareResult = null;
+    dom.sharePreview.innerHTML = "<span>正在生成结果图…</span>";
+    updateShareSaveButton(false);
+    try {
+      const personality = window.ShareCard.calculatePersonality(state.placed);
+      const userId = shareResult?.userId || "佚名";
+      window.ShareCard.generateShareImage({
+        placed: state.placed,
+        logos,
+        activityTitle: "宁荣荣·与我周旋久",
+        subtitle: `${personality.result.name}·${personality.key}`,
+        shareUrl: "https://ningrr.fun",
+        userId
+      }).then(({ objectURL, blob }) => {
+        const file = blob ? new File([blob], shareFileName, { type: "image/png" }) : null;
+        shareResult = { signature, objectURL, blob, file, userId };
+        renderSharePreview(shareResult);
+        updateShareSaveButton(true);
+      }).catch(() => {
+        shareResult = null;
+        dom.sharePreview.innerHTML = "<span>生成失败，请稍后再试</span>";
+        updateShareSaveButton(false);
+        toast("结果图生成失败，请重试", "error", { key: "share-generation-failed" });
+      });
+    } catch (error) {
+      shareResult = null;
+      dom.sharePreview.innerHTML = "<span>生成失败，请稍后再试</span>";
+      updateShareSaveButton(false);
+      toast("结果图生成失败，请重试", "error", { key: "share-generation-failed" });
+    }
+  }

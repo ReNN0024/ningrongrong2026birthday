@@ -61,6 +61,31 @@
     third: item => item.x < 0 && item.y < 0,
     fourth: item => item.x >= 0 && item.y < 0
   };
+
+  // Logo 坐标系二次赋值（ASSET_REASSIGNMENT.md）
+  // 格式：{ logoId: { x: xOffset, y: yOffset } }
+  // xOffset/yOffset 为分界点偏移，默认值为 0
+  const LOGO_QUADRANT_OFFSETS = {
+    "1_2": { x: -1, y: 0 },  // 暝夜：自带荆棘倾向，X 轴分界左移至 -1
+    "2_3": { x: -1, y: 0 },  // 昏晓：自带荆棘倾向，X 轴分界左移至 -1
+    "2_2": { x: 1, y: 0 },   // 心意：自带繁花倾向，X 轴分界右移至 1
+    "3_1": { x: 1, y: 0 },   // 晨曦：自带繁花倾向，X 轴分界右移至 1
+    "3_2": { x: 1, y: 0 }    // 华光：自带繁花倾向，X 轴分界右移至 1
+  };
+
+  function getOffset(item) {
+    return LOGO_QUADRANT_OFFSETS[item.id] || { x: 0, y: 0 };
+  }
+
+  function adjustedX(item) {
+    const offset = getOffset(item);
+    return item.x - offset.x;
+  }
+
+  function adjustedY(item) {
+    const offset = getOffset(item);
+    return item.y - offset.y;
+  }
   const QUADRANTS = Object.fromEntries(RESULT_CARD_MAPPINGS.map((mapping, index) => [
     mapping.series,
     { label: mapping.quadrantLabel, order: index }
@@ -109,9 +134,9 @@
   };
   const CARD_LAYOUTS = {
     R: {
-      align: "left-footer-right",
+      align: "left",
       coord: { x: 42, y: 450 },
-      copy: { kicker: [72, 74, 390], title: [72, 210, 460], desc: [72, 300, 430], footer: [42, 982, 440] }
+      copy: { kicker: [72, 74, 390], title: [72, 210, 460], desc: [72, 300, 430], footer: [90, 982, 440] }
     },
     O: {
       align: "left",
@@ -130,10 +155,10 @@
     }
   };
   const LABEL_LAYOUTS = {
-    R: { dropcap: [70, 42, 106], main: [154, 66, 42], sub: [158, 114, 18], slash: [151, 112, 27], hairline: [232, 126, 96] },
-    O: { dropcap: [57, 42, 106], main: [139, 66, 42], sub: [143, 114, 18], slash: [135, 112, 27], hairline: [221, 126, 104] },
-    N: { dropcap: [70, 42, 106], main: [154, 66, 42], sub: [158, 114, 18], slash: [151, 112, 27], hairline: [232, 126, 96] },
-    G: { dropcap: [70, 682, 106], main: [154, 706, 42], sub: [158, 754, 18], slash: [151, 752, 27], hairline: [232, 766, 104] }
+    R: { dropcap: [88, 42, 106], main: [172, 66, 42], sub: [176, 114, 18], slash: [169, 112, 27], hairline: [250, 126, 96] },
+    O: { dropcap: [75, 42, 106], main: [157, 66, 42], sub: [161, 114, 18], slash: [153, 112, 27], hairline: [239, 126, 104] },
+    N: { dropcap: [88, 42, 106], main: [172, 66, 42], sub: [176, 114, 18], slash: [169, 112, 27], hairline: [250, 126, 96] },
+    G: { dropcap: [88, 642, 106], main: [172, 666, 42], sub: [176, 714, 18], slash: [169, 712, 27], hairline: [250, 726, 104] }
   };
   const LABEL_PALETTES = {
     blue: { drop: "#315F78", main: "#407C9A", sub: "#315F78", line: "#3D7FA4" },
@@ -171,7 +196,8 @@
   function scaled(value) { return scale(value).toFixed(2); }
 
   function quadrantFor(item) {
-    const mapping = RESULT_CARD_MAPPINGS.find(candidate => QUADRANT_TESTS[candidate.quadrant]?.(item));
+    const adjustedItem = { x: adjustedX(item), y: adjustedY(item) };
+    const mapping = RESULT_CARD_MAPPINGS.find(candidate => QUADRANT_TESTS[candidate.quadrant]?.(adjustedItem));
     return mapping?.series || "R";
   }
 
@@ -182,10 +208,12 @@
 
     placed.forEach(item => {
       const key = quadrantFor(item);
+      const ax = adjustedX(item);
+      const ay = adjustedY(item);
       stats[key].count += 1;
-      stats[key].outer += Math.hypot(item.x, item.y);
-      sumX += item.x;
-      sumY += item.y;
+      stats[key].outer += Math.hypot(ax, ay);
+      sumX += ax;
+      sumY += ay;
     });
 
     const main = Object.values(stats).sort((left, right) => {
@@ -330,6 +358,59 @@
     return lines.map((line, index) => `<text x="${x.toFixed(2)}" y="${(y + index * lineHeight).toFixed(2)}" text-anchor="${anchor}" font-family="sans-serif" font-size="${size}" font-weight="${weight}" fill="${fill}">${escapeXML(line)}</text>`).join("");
   }
 
+  function visibleChars(value) {
+    const text = String(value || "佚名").trim() || "佚名";
+    if (typeof Intl !== "undefined" && Intl.Segmenter) {
+      return [...new Intl.Segmenter("zh", { granularity: "grapheme" }).segment(text)].map(part => part.segment);
+    }
+    return [...text];
+  }
+
+  function userIdFontSizeFor(length) {
+    if (length <= 8) return 24;
+    if (length <= 12) return 22;
+    if (length <= 16) return 20;
+    return 18;
+  }
+
+  function measureSignatureWidth(userId, fontSize) {
+    if (typeof document === "undefined") return 0;
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    if (!context) return 0;
+    context.font = "500 21px Avenir Next, Helvetica Neue, PingFang SC, sans-serif";
+    const labelWidth = context.measureText("碎片捡拾者").width + 1.6 * 4;
+    context.font = "500 18px Avenir Next, Helvetica Neue, PingFang SC, sans-serif";
+    const dotWidth = context.measureText("·").width;
+    context.font = `600 ${fontSize}px Avenir Next, Helvetica Neue, PingFang SC, sans-serif`;
+    const idWidth = context.measureText(userId).width + Math.max(0, visibleChars(userId).length - 1) * 0.8;
+    return labelWidth + 10 + dotWidth + 10 + idWidth;
+  }
+
+  function fitDisplayUserId(userId, maxWidth = 360) {
+    const chars = visibleChars(userId);
+    let fontSize = userIdFontSizeFor(chars.length);
+    let text = chars.join("");
+    while (fontSize > 18 && measureSignatureWidth(text, fontSize) > maxWidth) fontSize -= 1;
+    if (measureSignatureWidth(text, fontSize) <= maxWidth) return { text, fontSize };
+    const ellipsis = "…";
+    while (chars.length > 1) {
+      chars.pop();
+      text = `${chars.join("")}${ellipsis}`;
+      if (measureSignatureWidth(text, fontSize) <= maxWidth) break;
+    }
+    return { text, fontSize };
+  }
+
+  function renderUserIdSignature({ style, userId }) {
+    const userIdX = textXFor(style, "title");
+    const userIdY = scale(style.copy.title[1]);
+    const userIdAnchor = textAnchorFor(style, "title");
+    const fittedUserId = fitDisplayUserId(userId);
+    const safeUserId = escapeXML(fittedUserId.text);
+    return `<text x="${userIdX.toFixed(2)}" y="${userIdY.toFixed(2)}" text-anchor="${userIdAnchor}" font-family="Avenir Next, Helvetica Neue, PingFang SC, sans-serif"><tspan font-size="21" font-weight="500" letter-spacing="1.6" fill="${style.desc}" opacity="0.66">碎片捡拾者</tspan><tspan dx="10" font-size="18" font-weight="500" fill="${style.desc}" opacity="0.66">·</tspan><tspan dx="10" font-size="${fittedUserId.fontSize}" font-weight="600" letter-spacing="0.8" fill="${style.desc}" opacity="0.66">${safeUserId}</tspan></text>`;
+  }
+
   function renderKickerText({ style, text }) {
     const [seriesName, tendency = ""] = String(text).split("-");
     const series = style.mapping?.series || seriesName.slice(0, 1);
@@ -396,8 +477,8 @@
     <g id="placed-logo-result-layer">${logoLayer}</g>`;
   }
 
-  async function buildSVG({ placed, logos, activityTitle, shareUrl }) {
-    const personality = calculatePersonality(placed);
+  async function buildSVG({ placed, logos, activityTitle, shareUrl, userId = "佚名", personality: overridePersonality }) {
+    const personality = overridePersonality || calculatePersonality(placed);
     const style = CARD_STYLES[personality.main] || CARD_STYLES.R;
     const result = personality.result;
     const descLines = wrapText(result.description, 17);
@@ -408,6 +489,7 @@
     const anchor = textAnchorFor(style, "title");
     const displayTendency = DISPLAY_TENDENCY_KEYS[personality.tendency] || personality.tendency.toUpperCase();
     const kickerText = `${style.seriesName || personality.main}-${displayTendency}`;
+    const userIdMarkup = renderUserIdSignature({ style, userId });
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
       <defs>
@@ -424,9 +506,10 @@
         ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.width)}" height="${scaled(style.figure.height)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMinYMin meet"/>` : ""}
         <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
         ${renderKickerText({ style, text: kickerText })}
-        <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 64)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
-        ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 32), lines: descLines, anchor, size: 34.67, lineHeight: 50, fill: style.desc, weight: 500 })}
-        <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>
+        ${userIdMarkup}
+        <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 80)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
+        ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 40), lines: descLines, anchor, size: 34.67, lineHeight: 50, fill: style.desc, weight: 500 })}
+        <text x="${textXFor(style, "footer").toFixed(2)}" y="${Math.min(scale(style.copy.footer[1] + 28), CARD_HEIGHT - 82).toFixed(2)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="Avenir Next, Helvetica Neue, PingFang SC, sans-serif" font-size="28" font-weight="500" letter-spacing="0.5" fill="${style.footer}" opacity="0.72">${escapeXML(footer)}</text>
       </g>
     </svg>`;
   }
@@ -471,7 +554,7 @@
       context.drawImage(image, 0, 0);
       const blob = await canvasToBlob(canvas);
       const objectURL = URL.createObjectURL(blob);
-      return { objectURL, blob, svg, personality: calculatePersonality(options.placed) };
+      return { objectURL, blob, svg, personality: options.personality || calculatePersonality(options.placed) };
     } finally {
       URL.revokeObjectURL(svgURL);
     }
@@ -481,5 +564,5 @@
     Object.values(CARD_STYLES).forEach(style => imageToDataURL(style.figure.src));
   }
 
-  window.ShareCard = { generateShareImage, calculatePersonality, warmupShareAssets };
+  window.ShareCard = { generateShareImage, calculatePersonality, warmupShareAssets, buildSVG, PERSONALITY_RESULTS, CARD_STYLES };
 })();

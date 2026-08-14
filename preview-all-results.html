@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>16 种结果卡片预览</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { background: #f0f0f0; padding: 20px; font-family: sans-serif; }
+h1 { text-align: center; margin-bottom: 20px; font-size: 24px; }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 20px; max-width: 1200px; margin: 0 auto; }
+.card { background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+.card img { width: 100%; height: auto; display: block; }
+.card-label { padding: 8px 12px; text-align: center; font-size: 14px; color: #666; background: #fafafa; border-top: 1px solid #eee; }
+.loading { text-align: center; padding: 40px; color: #999; font-size: 16px; }
+</style>
+</head>
+<body>
+<h1>16 种结果卡片预览</h1>
+<div id="loading" class="loading">正在生成结果卡片...</div>
+<div class="grid" id="grid" style="display:none;"></div>
+
+<script src="personality-results.js?v=20260728-11" defer></script>
+<script src="share-card.js?v=20260814-15" defer></script>
+<script>
+// 构造 placed 数据以产生指定的主倾向和副倾向
+function makePlaced(main, tendency) {
+  // 象限中心点
+  const quadrants = {
+    R: { x: -0.5, y: -0.5 },  // 第三象限
+    O: { x: -0.5, y: 0.5 },   // 第二象限
+    N: { x: 0.5, y: 0.5 },    // 第一象限
+    G: { x: 0.5, y: -0.5 },   // 第四象限
+  };
+  const q = quadrants[main];
+  // 根据副倾向调整坐标
+  let x = q.x, y = q.y;
+  if (tendency === 'thorn') { x = -0.8; y = 0.1; }
+  else if (tendency === 'flower') { x = 0.8; y = 0.1; }
+  else if (tendency === 'memory') { x = 0.1; y = 0.8; }
+  else if (tendency === 'daily') { x = 0.1; y = -0.8; }
+
+  // 生成 3 个相同位置的碎片确保主倾向
+  return [
+    { id: "1_1", x: x, y: y },
+    { id: "1_1", x: x, y: y },
+    { id: "1_1", x: x, y: y },
+  ];
+}
+
+const combos = [
+  { main: 'R', tendency: 'thorn' }, { main: 'R', tendency: 'flower' }, { main: 'R', tendency: 'memory' }, { main: 'R', tendency: 'daily' },
+  { main: 'O', tendency: 'thorn' }, { main: 'O', tendency: 'flower' }, { main: 'O', tendency: 'memory' }, { main: 'O', tendency: 'daily' },
+  { main: 'N', tendency: 'thorn' }, { main: 'N', tendency: 'flower' }, { main: 'N', tendency: 'memory' }, { main: 'N', tendency: 'daily' },
+  { main: 'G', tendency: 'thorn' }, { main: 'G', tendency: 'flower' }, { main: 'G', tendency: 'memory' }, { main: 'G', tendency: 'daily' },
+];
+
+const grid = document.getElementById('grid');
+const loading = document.getElementById('loading');
+
+async function renderAll() {
+  for (const { main, tendency } of combos) {
+    const placed = makePlaced(main, tendency);
+    const result = window.ShareCard.PERSONALITY_RESULTS[`${main}-${tendency}`];
+
+    try {
+      const { objectURL } = await window.ShareCard.generateShareImage({
+        placed,
+        logos: [],
+        activityTitle: '宁荣荣 · 与我周旋久',
+        shareUrl: 'https://ningrr.fun',
+        userId: '佚名',
+        personality: { main, tendency, result },
+      });
+
+      const card = document.createElement('div');
+      card.className = 'card';
+
+      const img = document.createElement('img');
+      img.src = objectURL;
+
+      const label = document.createElement('div');
+      label.className = 'card-label';
+      label.textContent = `${main} · ${tendency} · ${result.title}`;
+
+      card.appendChild(img);
+      card.appendChild(label);
+      grid.appendChild(card);
+    } catch (err) {
+      console.error(`Failed to generate ${main}-${tendency}:`, err);
+    }
+  }
+  loading.style.display = 'none';
+  grid.style.display = 'grid';
+}
+
+// 等待 ShareCard 加载完成
+if (window.ShareCard) {
+  renderAll();
+} else {
+  window.addEventListener('load', renderAll);
+}
+</script>
+</body>
+</html>

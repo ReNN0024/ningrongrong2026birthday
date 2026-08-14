@@ -68,13 +68,14 @@
 ## 用户偏好与长期约束
 
 - **版本管理**：每次更新必须记录版本号和更新日志，写入 `CHANGELOG.md`（格式遵循 Keep a Changelog，版本号遵循 Semantic Versioning）
-- 素材命名规则：`行_列.webp`（如 `1_1.webp`），覆盖 `assets/logos/` 和 `assets/detail-images/` 中对应文件即可替换；用户提供的 PNG Logo 必须转为 WebP 且压缩到 50KB 以下
+- **命名规范**：前台所有用户可见文案中，原"Logo"统一称为"碎片"。代码标识符（CSS 类名、JS 变量名、文件路径等）可保留 `logo` 命名，但用户界面、提示语、说明文档等前台表述必须使用"碎片"
+- 素材命名规则：`行_列.webp`（如 `1_1.webp`），覆盖 `assets/logos/` 和 `assets/detail-images/` 中对应文件即可替换；用户提供的 PNG 碎片必须转为 WebP 且压缩到 50KB 以下
 - 不依赖任何第三方 CDN 或 npm 包
 - 需兼容 iOS Safari / 微信内置浏览器 / Android WebView
 
 ## 常见问题和预防
 
-- 素材替换只需覆盖同名 WebP，无需修改代码；Logo 文件必须小于 50KB
+- 素材替换只需覆盖同名 WebP，无需修改代码；碎片文件必须小于 50KB
 - 用户发送的截图（如 image.png、image_20260720191824384.png 等）不应保存在 assets 根目录，这些是临时文件，处理完素材后应删除
 - 素材处理流程：用户提供的原始图片应直接处理并保存到 `assets/logos/` 或 `assets/detail-images/` 对应位置，不要在 `assets/` 根目录额外保存原图副本
 - localStorage key 为 `ningrongrong-2026-coordinate-v1`，清除浏览器数据会重置坐标
