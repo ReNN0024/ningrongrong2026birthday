@@ -358,6 +358,59 @@
     return lines.map((line, index) => `<text x="${x.toFixed(2)}" y="${(y + index * lineHeight).toFixed(2)}" text-anchor="${anchor}" font-family="sans-serif" font-size="${size}" font-weight="${weight}" fill="${fill}">${escapeXML(line)}</text>`).join("");
   }
 
+  function visibleChars(value) {
+    const text = String(value || "佚名").trim() || "佚名";
+    if (typeof Intl !== "undefined" && Intl.Segmenter) {
+      return [...new Intl.Segmenter("zh", { granularity: "grapheme" }).segment(text)].map(part => part.segment);
+    }
+    return [...text];
+  }
+
+  function userIdFontSizeFor(length) {
+    if (length <= 8) return 24;
+    if (length <= 12) return 22;
+    if (length <= 16) return 20;
+    return 18;
+  }
+
+  function measureSignatureWidth(userId, fontSize) {
+    if (typeof document === "undefined") return 0;
+    const canvas = document.createElement("canvas");
+    const context = canvas.getContext("2d");
+    if (!context) return 0;
+    context.font = "500 21px Avenir Next, Helvetica Neue, PingFang SC, sans-serif";
+    const labelWidth = context.measureText("碎片捡拾者").width + 1.6 * 4;
+    context.font = "500 18px Avenir Next, Helvetica Neue, PingFang SC, sans-serif";
+    const dotWidth = context.measureText("·").width;
+    context.font = `600 ${fontSize}px Avenir Next, Helvetica Neue, PingFang SC, sans-serif`;
+    const idWidth = context.measureText(userId).width + Math.max(0, visibleChars(userId).length - 1) * 0.8;
+    return labelWidth + 10 + dotWidth + 10 + idWidth;
+  }
+
+  function fitDisplayUserId(userId, maxWidth = 360) {
+    const chars = visibleChars(userId);
+    let fontSize = userIdFontSizeFor(chars.length);
+    let text = chars.join("");
+    while (fontSize > 18 && measureSignatureWidth(text, fontSize) > maxWidth) fontSize -= 1;
+    if (measureSignatureWidth(text, fontSize) <= maxWidth) return { text, fontSize };
+    const ellipsis = "…";
+    while (chars.length > 1) {
+      chars.pop();
+      text = `${chars.join("")}${ellipsis}`;
+      if (measureSignatureWidth(text, fontSize) <= maxWidth) break;
+    }
+    return { text, fontSize };
+  }
+
+  function renderUserIdSignature({ style, userId }) {
+    const userIdX = textXFor(style, "title");
+    const userIdY = scale(style.copy.title[1]);
+    const userIdAnchor = textAnchorFor(style, "title");
+    const fittedUserId = fitDisplayUserId(userId);
+    const safeUserId = escapeXML(fittedUserId.text);
+    return `<text x="${userIdX.toFixed(2)}" y="${userIdY.toFixed(2)}" text-anchor="${userIdAnchor}" font-family="Avenir Next, Helvetica Neue, PingFang SC, sans-serif"><tspan font-size="21" font-weight="500" letter-spacing="1.6" fill="${style.desc}" opacity="0.66">碎片捡拾者</tspan><tspan dx="10" font-size="18" font-weight="500" fill="${style.accent}" opacity="0.52">·</tspan><tspan dx="10" font-size="${fittedUserId.fontSize}" font-weight="600" letter-spacing="0.8" fill="${style.desc}" opacity="0.66">${safeUserId}</tspan></text>`;
+  }
+
   function renderKickerText({ style, text }) {
     const [seriesName, tendency = ""] = String(text).split("-");
     const series = style.mapping?.series || seriesName.slice(0, 1);
@@ -436,7 +489,7 @@
     const anchor = textAnchorFor(style, "title");
     const displayTendency = DISPLAY_TENDENCY_KEYS[personality.tendency] || personality.tendency.toUpperCase();
     const kickerText = `${style.seriesName || personality.main}-${displayTendency}`;
-    const userIdText = `碎片捡拾者:${userId}`;
+    const userIdMarkup = renderUserIdSignature({ style, userId });
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
       <defs>
@@ -453,10 +506,10 @@
         ${figureDataURL ? `<image x="${scaled(style.figure.x)}" y="${scaled(style.figure.y)}" width="${scaled(style.figure.width)}" height="${scaled(style.figure.height)}" href="${figureDataURL}" opacity="${style.figure.opacity}" preserveAspectRatio="xMinYMin meet"/>` : ""}
         <g filter="url(#soft-shadow)">${renderCoordCard(style, logoLayer)}</g>
         ${renderKickerText({ style, text: kickerText })}
-        <text x="${(textXFor(style, "title") + 13).toFixed(2)}" y="${scaled(style.copy.title[1] + 5)}" text-anchor="${anchor}" font-family="sans-serif" font-size="26.67" font-weight="500" fill="${style.desc}" letter-spacing="1">${escapeXML(userIdText)}</text>
+        ${userIdMarkup}
         <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 80)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
         ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 40), lines: descLines, anchor, size: 34.67, lineHeight: 50, fill: style.desc, weight: 500 })}
-        <text x="${textXFor(style, "footer").toFixed(2)}" y="${scaled(style.copy.footer[1] + 28)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="sans-serif" font-size="37.33" font-weight="700" fill="${style.footer}">${escapeXML(footer)}</text>
+        <text x="${textXFor(style, "footer").toFixed(2)}" y="${Math.min(scale(style.copy.footer[1] + 28), CARD_HEIGHT - 82).toFixed(2)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="Avenir Next, Helvetica Neue, PingFang SC, sans-serif" font-size="28" font-weight="500" letter-spacing="0.5" fill="${style.footer}" opacity="0.72">${escapeXML(footer)}</text>
       </g>
     </svg>`;
   }
