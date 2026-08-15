@@ -407,9 +407,7 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .filter-btn.is-active { background: #4e4943; color: #fffaf1; border-color: #4e4943; }
 .share-trigger { width: 100%; min-height: 34px; margin-top: 10px; border: 1px solid rgba(142,113,55,.42); border-radius: 999px; color: #fffaf1; background: linear-gradient(135deg, #9a7a3b, #7f6634); box-shadow: 0 10px 20px rgba(103,75,31,.12); font: 600 11px var(--sans); letter-spacing: .1em; }
 .share-trigger[hidden] { display: none; }
-.return-target { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; gap: 8px; color: #7d632f; background: rgba(250, 239, 205, .96); border: 2px dashed rgba(162, 124, 46, .64); opacity: 0; pointer-events: none; transition: opacity .15s; font: 500 13px var(--sans); }
-.library-panel.is-returning .return-target { opacity: 1; }
-.return-target.is-over { background: rgba(243, 222, 164, .98); }
+
 .logo-scroll { min-height: 0; flex: 1; overflow-y: auto; overscroll-behavior: contain; scrollbar-color: rgba(154,126,76,.45) transparent; scrollbar-width: thin; touch-action: pan-y; }
 .logo-grid { padding: 15px 8px 26px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 13px 5px; }
 .logo-card { appearance: none; border: 0; padding: 0; min-width: 0; background: transparent; text-align: center; cursor: grab; touch-action: pan-y; position: relative; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; }
@@ -833,7 +831,7 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .dialog-actions .danger .btn-sub { color: rgba(255,255,255,0.8); }
 .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 >>>>>>> c02dfd8 (Restored to 'c1c2272f38c79c15ba134056948c9ff27cdf0891')
-.immersive-return { display: none; }
+
 
 body.is-immersive { overflow: hidden; }
 body.is-immersive .app-shell { position: fixed; inset: 0; padding: 12px; background: var(--paper); }

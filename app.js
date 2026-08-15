@@ -40,7 +40,7 @@
     frame: $("#coordinateFrame"), world: $("#coordinateWorld"), placedLayer: $("#placedLayer"),
     mobileInstruction: $("#mobileInstruction"), mobileGuideCompact: $("#mobileGuideCompact"), mobileGuideCollapseBtn: $("#mobileGuideCollapseBtn"),
     grid: $("#logoGrid"), scroll: $("#logoScroll"), library: $("#libraryPanel"), libraryHead: $("#libraryHead"),
-    returnTarget: $("#returnTarget"), immersiveReturn: $("#immersiveReturn"), ghost: $("#dragGhost"),
+    ghost: $("#dragGhost"),
     toolbar: $("#coordinateToolbar"), toolbarHandle: $("#toolbarHandle"), zoomValue: $("#zoomValue"),
     minimap: $("#viewportMinimap"), minimapViewport: $("#minimapViewport"),
     desktopProgressFill: $("#desktopProgressFill"),
@@ -760,7 +760,6 @@
     updateDrag(event.clientX, event.clientY);
     document.body.classList.add("is-logo-dragging");
     if (source === "placed") {
-      dom.library.classList.add("is-returning");
       document.body.classList.add("is-dragging-placed");
     }
     navigator.vibrate?.(12);
@@ -775,10 +774,6 @@
     const frameRect = dom.frame.getBoundingClientRect();
     const inFrame = isPointInRect(x, y, frameRect);
     dom.frame.classList.toggle("is-drop-valid", inFrame);
-    const targetRect = dom.libraryHead.getBoundingClientRect();
-    const inReturn = drag.source === "placed" && isPointInRect(x, y, targetRect);
-    dom.returnTarget.classList.toggle("is-over", inReturn);
-    dom.immersiveReturn.classList.toggle("is-over", inReturn);
   }
 
   function finishDrag(event, cancelled = false) {
@@ -806,9 +801,6 @@
     dom.ghost.classList.remove("is-active");
     dom.ghost.innerHTML = "";
     dom.frame.classList.remove("is-drop-valid");
-    dom.library.classList.remove("is-returning");
-    dom.returnTarget.classList.remove("is-over");
-    dom.immersiveReturn.classList.remove("is-over");
     document.body.classList.remove("is-logo-dragging", "is-dragging-placed");
     drag = null;
   }
