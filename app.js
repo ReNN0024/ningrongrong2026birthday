@@ -814,7 +814,13 @@
 
   function handleLogoPointerDown(event, source) {
     if (event.button !== 0 && event.pointerType === "mouse") return;
-    const button = event.target.closest(source === "library" ? ".logo-card" : ".placed-logo");
+    // 清理旧的 press 对象，避免状态残留
+    if (press && press.pointerId !== event.pointerId) {
+      clearTimeout(press.timer);
+      press.element?.classList.remove("is-holding", "is-drag-ready");
+      press = null;
+    }
+    const button = source === "placed" ? findLogoAtPoint(event) : event.target.closest(".logo-card");
     if (!button) return;
     if (event.pointerType !== "mouse") event.preventDefault();
     const id = button.dataset.logoId;
@@ -970,6 +976,26 @@
     return pixel[3] > 20; // alpha 阈值，避免边缘抗锯齿误判
   }
 
+  // 找到点击位置对应的 logo（考虑重叠和透明区域）
+  function findLogoAtPoint(event) {
+    const logos = [...dom.placedLayer.querySelectorAll(".placed-logo")];
+    // 按 z-index 从高到低排序
+    logos.sort((a, b) => parseInt(b.style.zIndex || 0) - parseInt(a.style.zIndex || 0));
+
+    for (const logo of logos) {
+      const rect = logo.getBoundingClientRect();
+      // 检查点击是否在 logo 的矩形范围内
+      if (event.clientX >= rect.left && event.clientX <= rect.right &&
+          event.clientY >= rect.top && event.clientY <= rect.bottom) {
+        // 检查是否在非透明像素上
+        if (isClickOnOpaquePixel(event, logo)) {
+          return logo;
+        }
+      }
+    }
+    return null;
+  }
+
   function openPreview(id, anchor) {
     const logo = logoMap.get(id);
     if (!logo) return;
@@ -1029,7 +1055,7 @@
 
   function handlePlacedHover(event) {
     if (isMobile() || event.pointerType === "touch") return;
-    const target = event.target.closest(".placed-logo");
+    const target = findLogoAtPoint(event);
     if (!target) return;
     clearTimeout(hoverTimer);
     clearTimeout(previewHideTimer);
@@ -1038,7 +1064,7 @@
 
   function handlePlacedLeave(event) {
     if (isMobile()) return;
-    const target = event.target.closest(".placed-logo");
+    const target = findLogoAtPoint(event);
     if (!target || target.contains(event.relatedTarget)) return;
     clearTimeout(hoverTimer);
     previewHideTimer = window.setTimeout(closePreview, 80);
@@ -1267,10 +1293,8 @@
     });
     dom.placedLayer.addEventListener("click", event => {
       if (event.detail !== 0) return;
-      const item = event.target.closest(".placed-logo");
+      const item = findLogoAtPoint(event);
       if (!item) return;
-      // 精准点击检测：只在点击非透明像素时触发
-      if (!isClickOnOpaquePixel(event, item)) return;
       selectLogo(item.dataset.logoId);
       openPreview(item.dataset.logoId, item);
     });
