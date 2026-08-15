@@ -619,7 +619,9 @@
 
   function getUserIdFromUser() {
     return new Promise(resolve => {
-      dom.userIdInput.value = "";
+      // 从 localStorage 读取上次保存的 userId，预填到输入框
+      const cachedUserId = localStorage.getItem("ningrongrong-2026-user-id") || "";
+      dom.userIdInput.value = cachedUserId;
       openDialog(dom.userIdDialog);
 
       function cleanup() {
@@ -639,7 +641,12 @@
         cleanup();
         dom.userIdDialog.close();
         const value = dom.userIdInput.value.trim();
-        resolve(value || "佚名");
+        const finalValue = value || "佚名";
+        // 保存到 localStorage，下次预填
+        if (value) {
+          localStorage.setItem("ningrongrong-2026-user-id", value);
+        }
+        resolve(finalValue);
       }
 
       function onClose() {
