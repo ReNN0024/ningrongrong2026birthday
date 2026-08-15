@@ -6,6 +6,18 @@
 
 ---
 
+## [1.9.5] - 2026-08-15
+
+### Fixed
+- 修复拖动位置精度：移除 ghost 的 18px 偏移，设置 placed-logo 的 height 与 width 一致 (by coze)
+- 统一横竖图预览尺寸：JavaScript 动态计算，最长边统一为 310px (by coze)
+- 修复重叠 logo 交互：使用 findLogoAtPoint() 按 z-index 和透明像素检测正确识别目标 (by coze)
+- 修复点击后操作阻塞：清理旧 press 对象避免状态残留 (by coze)
+- 精准点击检测：只在点击 logo 非透明像素时触发预览 (by coze)
+- 用户 ID 缓存：二次打开蒙层自动预填上次 ID (by coze)
+
+---
+
 ## [1.9.4] - 2026-08-14
 
 ### Fixed
