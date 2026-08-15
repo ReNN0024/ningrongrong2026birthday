@@ -769,8 +769,9 @@
   function updateDrag(x, y) {
     if (!drag) return;
     drag.x = x; drag.y = y;
+    // 直接使用手指位置，不添加偏移
     dom.ghost.style.left = `${x}px`;
-    dom.ghost.style.top = `${y - 18}px`;
+    dom.ghost.style.top = `${y}px`;
     const frameRect = dom.frame.getBoundingClientRect();
     const inFrame = isPointInRect(x, y, frameRect);
     dom.frame.classList.toggle("is-drop-valid", inFrame);
