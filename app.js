@@ -44,7 +44,7 @@
     toolbar: $("#coordinateToolbar"), toolbarHandle: $("#toolbarHandle"), zoomValue: $("#zoomValue"),
     minimap: $("#viewportMinimap"), minimapViewport: $("#minimapViewport"),
     desktopProgressFill: $("#desktopProgressFill"),
-    guideLineX: $("#guideLineX"), guideLineY: $("#guideLineY"), previewBackdrop: $("#previewBackdrop"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
+    guideLineX: $("#guideLineX"), guideLineX2: $("#guideLineX2"), guideLineY: $("#guideLineY"), guideLineY2: $("#guideLineY2"), previewBackdrop: $("#previewBackdrop"), preview: $("#previewPopover"), previewMedia: $("#previewMedia"),
     toastStack: $("#toastStack"), live: $("#liveRegion"), empty: $("#emptyState"),
     userIdDialog: $("#userIdDialog"), userIdInput: $("#userIdInput"), anonymousBtn: $("#anonymousBtn"), confirmUserIdBtn: $("#confirmUserIdBtn"), closeUserIdBtn: $("#userIdCloseBtn"),
     shareDialog: $("#shareDialog"), sharePreview: $("#sharePreview"), shareSaveGuide: $("#shareSaveGuide"), shareSaveGuideClose: $("#shareSaveGuideCloseBtn"),
@@ -373,11 +373,10 @@
     guideBtn.setAttribute("aria-pressed", String(state.guides));
     guideBtn.setAttribute("aria-label", state.guides ? "关闭参考线" : "开启参考线");
     guideBtn.setAttribute("title", state.guides ? "关闭参考线" : "开启参考线");
-    const selected = state.placed.find(item => item.id === state.selectedId);
-    const x = selected ? 50 + selected.x * 42 : 50;
-    const y = selected ? 50 - selected.y * 42 : 50;
-    dom.guideLineY.style.left = `${x}%`;
-    dom.guideLineX.style.top = `${y}%`;
+    dom.guideLineY.style.left = `29%`;
+    dom.guideLineY2.style.left = `71%`;
+    dom.guideLineX.style.top = `29%`;
+    dom.guideLineX2.style.top = `71%`;
   }
 
   function toast(message, type = "", options = {}) {
