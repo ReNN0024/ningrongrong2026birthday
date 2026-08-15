@@ -235,6 +235,7 @@
       element.style.left = `${left}px`;
       element.style.top = `${top}px`;
       element.style.width = `${logoSize}px`;
+      element.style.height = `${logoSize}px`;
     });
   }
 
