@@ -924,6 +924,8 @@
       if (current.placedLibrary) focusPlaced(current.id);
       else placeAtOrigin(current.id);
     } else if (isMobile()) {
+      // 精准点击检测：只在点击非透明像素时触发预览
+      if (!isClickOnOpaquePixel(event, current.element)) return;
       event.preventDefault();
       warmupDetail(current.id);
       openPreview(current.id, current.element);
@@ -939,6 +941,33 @@
       dom.toolbar.classList.remove("is-dragging");
       toolbarDrag = null;
     }
+  }
+
+  // 检测点击是否在图片的非透明像素上
+  function isClickOnOpaquePixel(event, element) {
+    const img = element.querySelector("img");
+    if (!img || !img.complete || img.naturalWidth === 0) return true; // 图片未加载时默认允许点击
+
+    const rect = img.getBoundingClientRect();
+    const x = Math.floor(event.clientX - rect.left);
+    const y = Math.floor(event.clientY - rect.top);
+
+    if (x < 0 || x >= rect.width || y < 0 || y >= rect.height) return false;
+
+    // 计算相对于图片原始尺寸的坐标
+    const scaleX = img.naturalWidth / rect.width;
+    const scaleY = img.naturalHeight / rect.height;
+    const srcX = Math.floor(x * scaleX);
+    const srcY = Math.floor(y * scaleY);
+
+    // 创建离屏 Canvas 检测像素 alpha
+    const canvas = document.createElement("canvas");
+    canvas.width = 1;
+    canvas.height = 1;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    ctx.drawImage(img, srcX, srcY, 1, 1, 0, 0, 1, 1);
+    const pixel = ctx.getImageData(0, 0, 1, 1).data;
+    return pixel[3] > 20; // alpha 阈值，避免边缘抗锯齿误判
   }
 
   function openPreview(id, anchor) {
@@ -1240,6 +1269,8 @@
       if (event.detail !== 0) return;
       const item = event.target.closest(".placed-logo");
       if (!item) return;
+      // 精准点击检测：只在点击非透明像素时触发
+      if (!isClickOnOpaquePixel(event, item)) return;
       selectLogo(item.dataset.logoId);
       openPreview(item.dataset.logoId, item);
     });
