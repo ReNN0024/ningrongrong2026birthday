@@ -1012,6 +1012,17 @@
     const anchorEl = anchor?.closest?.(".placed-logo") || dom.placedLayer.querySelector(`[data-logo-id="${id}"]`);
     const previewImage = dom.previewMedia.querySelector("img");
     const showPreview = () => {
+      // 统一最长边约束，让横图和竖图的最长边一致
+      if (previewImage && previewImage.complete && previewImage.naturalWidth > 0) {
+        const maxLongEdge = Math.min(310, window.innerWidth - 38);
+        const { naturalWidth, naturalHeight } = previewImage;
+        const longEdge = Math.max(naturalWidth, naturalHeight);
+        const scale = maxLongEdge / longEdge;
+        previewImage.style.width = `${naturalWidth * scale}px`;
+        previewImage.style.height = `${naturalHeight * scale}px`;
+        previewImage.style.maxWidth = "none";
+        previewImage.style.maxHeight = "none";
+      }
       requestAnimationFrame(() => {
         positionPreview(anchorEl);
         dom.preview.classList.add("is-visible");
