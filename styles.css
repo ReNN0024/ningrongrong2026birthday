@@ -415,7 +415,9 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .logo-thumb { width: 100%; aspect-ratio: 1; display: grid; place-items: center; position: relative; filter: drop-shadow(0 4px 4px rgba(69,56,41,.12)); }
 .logo-thumb img { display: block; width: 100%; height: 100%; object-fit: contain; user-select: none; -webkit-user-select: none; -webkit-user-drag: none; -webkit-touch-callout: none; }
 .logo-thumb .placeholder-mark { width: 78%; height: 78%; border-radius: 9px; display: grid; place-items: center; color: rgba(255,255,255,.82); font: 600 10px var(--sans); }
-.logo-card > span { display: block; overflow: hidden; margin-top: 4px; font: 500 9px/1.2 var(--sans); white-space: nowrap; text-overflow: ellipsis; }
+.logo-card > .fragment-name { display: block; overflow: hidden; margin-top: 4px; font: 500 9px/1.2 var(--sans); white-space: nowrap; text-overflow: ellipsis; }
+.logo-card > .fragment-name .fragment-name-line1, .logo-card > .fragment-name .fragment-name-line2 { display: block; }
+.logo-card > .fragment-name .fragment-name-line2 { margin-top: 1px; }
 .logo-card.is-placed { opacity: .5; }
 .logo-card.is-placed .logo-thumb::after { content: "已放置"; position: absolute; inset: auto 0 1px; margin: auto; width: max-content; color: white; background: rgba(75,68,61,.78); padding: 2px 5px; border-radius: 6px; font-size: 6px; }
 .logo-card.is-focused .logo-thumb { filter: drop-shadow(0 0 5px rgba(166,124,43,.7)); }
