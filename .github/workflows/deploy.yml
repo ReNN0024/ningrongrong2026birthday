@@ -29,4 +29,3 @@ jobs:
           remote_port: 22
           remote_key: ${{ secrets.SSH_PRIVATE_KEY }}
           remote_key_pass: ''
-          remote_key_options: '-o StrictHostKeyChecking=no'
