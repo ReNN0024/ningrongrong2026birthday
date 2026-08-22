@@ -12,10 +12,10 @@
   const isIOS = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   const placeholderColors = ["#caa7a2", "#cdbb83", "#9bb9bd", "#aabe91", "#c494aa", "#b7a58e", "#d5aa7c"];
-  const officialNames = ["左满舵", "暝夜", "心动瞬间", "冲调午后", "槐花冰奶七分糖", "致绽放的你", "海落潮升", "涌流幻梦之蝶", "引梦渡海", "伴生", "锋芒", "拙习", "八音", "茁壮", "莲花去国一千年", "赴明日如赴前尘"];
+  const officialNames = ["左满舵", "暝夜", "心动瞬间", "冲调午后", "槐花冰奶七分糖", "致绽放的你", "海落潮升", "涌流幻梦之蝶", "引梦渡海", "伴生", "锋芒", "拙习", "八音", "茁壮", "莲花去国一千年", "赴明日如赴前尘", "知晓我在的人"];
   const formatFragmentName = name => name.length > 7 ? escapeHTML(name.slice(0, 4)) + '<br>' + escapeHTML(name.slice(4)) : escapeHTML(name);
   const slotForIndex = index => `${Math.floor(index / 4) + 1}_${index % 4 + 1}`;
-  const logos = Array.from({ length: 43 }, (_, index) => {
+  const logos = Array.from({ length: 44 }, (_, index) => {
     const slot = slotForIndex(index);
     return {
       id: slot,
