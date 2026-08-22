@@ -11,6 +11,18 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Create directories on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 115.191.2.56
+          username: root
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22
+          script: |
+            mkdir -p /var/www/html/assets/logos
+            mkdir -p /var/www/html/assets/detail-images
+            mkdir -p /var/www/html/assets/share-card-figures
+
       - name: Deploy to server
         uses: burnett01/rsync-deployments@7.0.1
         with:
