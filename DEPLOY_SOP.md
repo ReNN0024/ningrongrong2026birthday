@@ -72,6 +72,7 @@ jobs:
 - ✅ **首次 SSH 连接会要求确认主机密钥**，需在 rsync 参数中添加 `-o StrictHostKeyChecking=no`（如遇到卡住）
 - ✅ **只监听 `main` 分支**，避免 main/master 双分支混乱
 - ✅ **部署前创建必要的目录**，如果服务器 `/var/www/html/` 是空目录或刚初始化，`assets/logos/`、`assets/detail-images/` 等子目录可能不存在，需在 rsync 前通过 SSH 创建
+- ✅ **不要使用 `remote_key_options` 参数**，`burnett01/rsync-deployments@7.0.1` 不支持该参数，会导致部署失败
 
 ---
 
