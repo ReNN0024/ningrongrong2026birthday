@@ -71,6 +71,7 @@ jobs:
 - ✅ **必须添加 `--exclude='.git'`**，否则同步 .git 目录会导致部署卡住（6+ 分钟）
 - ✅ **首次 SSH 连接会要求确认主机密钥**，需在 rsync 参数中添加 `-o StrictHostKeyChecking=no`（如遇到卡住）
 - ✅ **只监听 `main` 分支**，避免 main/master 双分支混乱
+- ✅ **部署前创建必要的目录**，如果服务器 `/var/www/html/` 是空目录或刚初始化，`assets/logos/`、`assets/detail-images/` 等子目录可能不存在，需在 rsync 前通过 SSH 创建
 
 ---
 
@@ -124,6 +125,7 @@ git push
 | "Password authentication is not supported" | GitHub 不支持密码推送 | 使用 Personal Access Token |
 | "remote rejected" (deploy.yml) | Token 缺少 `workflow` 权限 | 重新生成带 `repo` + `workflow` scope 的 Token |
 | 推送失败 "Connection was reset" | 网络问题 | 等待后重试，或直接在 GitHub 网页编辑 |
+| "No such file or directory" (assets 子目录) | 服务器目标目录不存在 | 在 rsync 前添加 SSH 步骤创建目录 |
 
 ---
 
