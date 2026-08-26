@@ -1312,7 +1312,7 @@
     dom.placedLayer.addEventListener("pointerover", handlePlacedHover);
     dom.placedLayer.addEventListener("pointerout", handlePlacedLeave);
     dom.placedLayer.addEventListener("focusin", event => {
-      if (drag || press || dragJustFinished) return;
+      if (drag || (press && press.moved) || dragJustFinished) return;
       const el = event.target.closest(".placed-logo"); if (el && !isMobile()) openPreview(el.dataset.logoId, el);
     });
     dom.placedLayer.addEventListener("focusout", event => { if (!isMobile() && !event.relatedTarget?.closest?.(".preview-popover")) closePreview(); });
