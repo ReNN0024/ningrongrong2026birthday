@@ -6,6 +6,12 @@
 
 ---
 
+## [1.10.1] - 2026-08-27
+
+### Fixed
+- 修复 6_4「阿女不答」icon 黑底问题：此前处理时误用 `convert('RGB')` 将透明区域填成黑色，现保留 RGBA 透明通道重新导出（27.1KB）(by coze)
+- 该教训已沉淀至 `ASSET_REPLACEMENT_GUIDE.md`（禁止 `convert('RGB')`、处理完必须验证 mode=RGBA 且四角 alpha=0）(by coze)
+
 ## [1.10.0] - 2026-08-27
 
 ### Added

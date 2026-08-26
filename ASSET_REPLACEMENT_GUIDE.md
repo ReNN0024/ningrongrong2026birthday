@@ -77,7 +77,9 @@ slot = "2_3"
 img = Image.open("input.png")
 
 # 碎片缩略图：缩放到 512x512，并压缩到 50KB 以下
-logo = img.copy()
+# ⚠️ 必须保留 RGBA 透明通道：任何 .convert('RGB') 都会把透明区域填成黑色，
+#    产出的 icon 会带黑色底（2026-08-27 6_4 事故根因）
+logo = img.copy().convert("RGBA")
 logo.thumbnail((512, 512), Image.LANCZOS)
 for quality in (85, 80, 75, 70, 65, 60, 55, 50, 45, 40):
     output = f"assets/logos/{slot}.webp"
@@ -97,6 +99,7 @@ detail.save(f"assets/detail-images/{slot}.webp", "WEBP", quality=85)
 
 - **文件格式必须为 WebP**，扩展名为 `.webp`。不要保存为 PNG。
 - **所有用户提供的 PNG 格式碎片都必须转换为 WebP，并压缩到 50KB 以下**；推送前必须检查 `assets/logos/*.webp`，不得存在大于 50KB 的碎片文件。
+- **碎片缩略图必须保留透明通道**：处理时保持 `RGBA` 模式保存 WebP；禁止 `convert('RGB')`（透明区域会被填成黑色）。处理完成后必须验证：`Image.open(f).mode == 'RGBA'` 且四角像素 alpha 为 0。
 - **文件名必须严格匹配编号**（如 `2_3.webp`），不能有空格、大写或其他变体。
 - **不需要修改任何代码**（app.js、HTML、CSS 均不需要改动），替换图片文件即可。
 - **碎片缩略图建议保持正方形**（512×512），主体居中并保留安全边距。
