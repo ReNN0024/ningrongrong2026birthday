@@ -841,6 +841,7 @@
       dom.placedLayer.querySelectorAll(".placed-logo").forEach(el => el.classList.toggle("is-selected", el.dataset.logoId === id));
       updateGuides();
       scheduleSave();
+      button.blur();
     }
     press = {
       id, source, pointerId: event.pointerId, x: event.clientX, y: event.clientY,
