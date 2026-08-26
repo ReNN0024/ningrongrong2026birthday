@@ -753,6 +753,7 @@
     drag = { id, source, pointerId: event.pointerId, sourceElement, startPlaced: item ? { ...item } : null, x: event.clientX, y: event.clientY };
     press = null;
     clearTimeout(hoverTimer);
+    clearTimeout(previewDelayTimer);
     closePreview();
     const logo = logoMap.get(id);
     dom.ghost.innerHTML = mediaMarkup(logo);
@@ -798,7 +799,7 @@
   }
 
   let dragJustFinished = false;
-  let placedClickGuardUntil = 0;
+  let previewDelayTimer = 0;
 
   function cleanupDrag() {
     drag?.sourceElement?.classList.remove("is-holding", "is-drag-ready");
@@ -843,7 +844,6 @@
       updateGuides();
       scheduleSave();
       button.blur();
-      placedClickGuardUntil = performance.now() + 200;
     }
     press = {
       id, source, pointerId: event.pointerId, x: event.clientX, y: event.clientY,
@@ -1307,11 +1307,13 @@
     dom.placedLayer.addEventListener("click", event => {
       if (event.detail !== 0) return;
       if (dragJustFinished) { dragJustFinished = false; return; }
-      if (performance.now() < placedClickGuardUntil) { placedClickGuardUntil = 0; return; }
       const item = findLogoAtPoint(event);
       if (!item) return;
       selectLogo(item.dataset.logoId);
-      openPreview(item.dataset.logoId, item);
+      clearTimeout(previewDelayTimer);
+      previewDelayTimer = setTimeout(() => {
+        openPreview(item.dataset.logoId, item);
+      }, 200);
     });
     dom.placedLayer.addEventListener("pointerover", handlePlacedHover);
     dom.placedLayer.addEventListener("pointerout", handlePlacedLeave);
