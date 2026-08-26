@@ -797,6 +797,8 @@
     toast(invalidDropMessage, "error", { key: `invalid-drop-${current.source}`, dedupe: 1400 });
   }
 
+  let dragJustFinished = false;
+
   function cleanupDrag() {
     drag?.sourceElement?.classList.remove("is-holding", "is-drag-ready");
     dom.ghost.classList.remove("is-active");
@@ -804,6 +806,8 @@
     dom.frame.classList.remove("is-drop-valid");
     document.body.classList.remove("is-logo-dragging", "is-dragging-placed");
     drag = null;
+    dragJustFinished = true;
+    setTimeout(() => { dragJustFinished = false; }, 50);
   }
 
   function handleLogoPointerDown(event, source) {
@@ -1298,6 +1302,7 @@
     });
     dom.placedLayer.addEventListener("click", event => {
       if (event.detail !== 0) return;
+      if (dragJustFinished) { dragJustFinished = false; return; }
       const item = findLogoAtPoint(event);
       if (!item) return;
       selectLogo(item.dataset.logoId);
