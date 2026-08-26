@@ -807,7 +807,7 @@
     document.body.classList.remove("is-logo-dragging", "is-dragging-placed");
     drag = null;
     dragJustFinished = true;
-    setTimeout(() => { dragJustFinished = false; }, 50);
+    setTimeout(() => { dragJustFinished = false; }, 200);
   }
 
   function handleLogoPointerDown(event, source) {
@@ -1064,6 +1064,7 @@
 
   function handlePlacedHover(event) {
     if (isMobile() || event.pointerType === "touch") return;
+    if (dragJustFinished) return;
     const target = findLogoAtPoint(event);
     if (!target) return;
     clearTimeout(hoverTimer);
