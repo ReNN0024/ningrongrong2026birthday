@@ -798,6 +798,7 @@
   }
 
   let dragJustFinished = false;
+  let placedClickGuardUntil = 0;
 
   function cleanupDrag() {
     drag?.sourceElement?.classList.remove("is-holding", "is-drag-ready");
@@ -842,6 +843,7 @@
       updateGuides();
       scheduleSave();
       button.blur();
+      placedClickGuardUntil = performance.now() + 200;
     }
     press = {
       id, source, pointerId: event.pointerId, x: event.clientX, y: event.clientY,
@@ -1305,6 +1307,7 @@
     dom.placedLayer.addEventListener("click", event => {
       if (event.detail !== 0) return;
       if (dragJustFinished) { dragJustFinished = false; return; }
+      if (performance.now() < placedClickGuardUntil) { placedClickGuardUntil = 0; return; }
       const item = findLogoAtPoint(event);
       if (!item) return;
       selectLogo(item.dataset.logoId);
