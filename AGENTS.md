@@ -76,6 +76,9 @@
 ## 常见问题和预防
 
 - 素材替换只需覆盖同名 WebP，无需修改代码；碎片文件必须小于 50KB
+- **透明图标处理红线**：处理带透明通道的 PNG 时禁止 `convert('RGB')`（透明区会被填成黑色），必须保留 RGBA；处理完必须做像素级验证（四角 alpha=0，或合成浅色背景扫描无黑块），详见 ASSET_REPLACEMENT_GUIDE.md
+- **部署排查顺序**：先查远端仓库实际内容（GitHub API / `git rev-parse origin/main:<file>`），再查 Actions run 状态，最后查服务器文件（`curl -sI` 看 Content-Length）；验证一律用 origin/main 的 hash，不用本地 HEAD
+- GitHub Pages 已下线（CNAME 已删），每次 push 只触发一个 Deploy to Server；若再次出现任务长期 queued，是 GitHub 平台侧问题，等待即可，不要连续推空提交重试
 - 用户发送的截图（如 image.png、image_20260720191824384.png 等）不应保存在 assets 根目录，这些是临时文件，处理完素材后应删除
 - 素材处理流程：用户提供的原始图片应直接处理并保存到 `assets/logos/` 或 `assets/detail-images/` 对应位置，不要在 `assets/` 根目录额外保存原图副本
 - localStorage key 为 `ningrongrong-2026-coordinate-v1`，清除浏览器数据会重置坐标
