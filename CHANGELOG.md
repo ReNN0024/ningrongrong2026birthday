@@ -6,6 +6,12 @@
 
 ---
 
+## [1.10.3] - 2026-08-27
+
+### Changed
+- 废除 `LOGO_QUADRANT_OFFSETS` 中全部 5 条失效偏移（1_2/2_3/2_2/3_1/3_2），保留框架结构（空对象 + getOffset/adjustedX/adjustedY 函数），等待重新调整 (by coze)
+- 这些偏移按槽位 ID 绑定，但历次徽章位置调整后已全部失效或错位（暝夜移至 4_3、2_2 等槽位内容已更换）；ASSET_REASSIGNMENT.md 对照表同步清空，概念示例去除槽位绑定 (by coze)
+
 ## [1.10.2] - 2026-08-27
 
 ### Fixed
