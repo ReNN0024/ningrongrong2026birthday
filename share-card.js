@@ -65,7 +65,12 @@
   // Logo 坐标系二次赋值（ASSET_REASSIGNMENT.md）
   // 格式：{ logoId: { x: xOffset, y: yOffset } }
   // xOffset/yOffset 为分界点偏移，默认值为 0
-  const LOGO_QUADRANT_OFFSETS = {};
+  const LOGO_QUADRANT_OFFSETS = {
+    "4_3": { x: -1, y: 0 },  // 暝夜：X 轴分界左移至 -1
+    "5_1": { x: -1, y: 0 },  // 莲花去国一千年：X 轴分界左移至 -1
+    "5_4": { x: -1, y: 0 },  // 海落潮升：X 轴分界左移至 -1
+    "8_1": { x: -1, y: 0 }   // 再加九克好奇心：X 轴分界左移至 -1
+  };
 
   function getOffset(item) {
     return LOGO_QUADRANT_OFFSETS[item.id] || { x: 0, y: 0 };
