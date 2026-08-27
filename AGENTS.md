@@ -2,14 +2,14 @@
 
 ## 项目概述
 
-"与我周旋久" —— 宁荣荣 2026 生日庆典预热活动的双端响应式 H5 页面。用户可在坐标系中拖放 41 个 Logo 素材，支持撤销/重做、缩放平移、自动保存与恢复。
+"与我周旋久" —— 宁荣荣 2026 生日庆典预热活动的双端响应式 H5 页面。用户可在坐标系中拖放碎片素材，支持撤销/重做、缩放平移、自动保存与恢复。当前共 18 个有效碎片（另有 15 个占位、11 个空槽，合计 44 个槽位）。
 
 ## 技术栈
 
 - 原生 HTML5 + CSS3 + JavaScript (ES6+)
 - 无框架、无构建工具、无 Node.js 依赖
 - 纯静态页面，可直接由任意 HTTP 服务器托管
-- 部署于 GitHub Pages（`.nojekyll` 标识）
+- 部署于火山引擎服务器（GitHub Pages 已下线）
 
 ## 目录结构
 
@@ -23,8 +23,8 @@
 ├── README.md               # 项目说明
 ├── ASSET_REPLACEMENT_GUIDE.md  # 素材替换指南
 ├── assets/
-│   ├── logos/              # Logo 缩略图（41 组）
-│   └── detail-images/      # 预览大图（41 组）
+│   ├── logos/              # 碎片缩略图（18 个有效 + 15 个占位）
+│   └── detail-images/      # 预览大图（18 个有效 + 15 个占位）
 ├── scripts/
 │   ├── coze-preview-build.sh   # 预览构建脚本（验证入口文件）
 │   ├── coze-preview-run.sh     # 预览运行脚本（Python HTTP Server :5000）
@@ -38,13 +38,39 @@
 - `index.html`：页面结构，包含坐标系工作区、素材库、工具栏、预览浮层等
 - `styles.css`：PC/Mobile 双端响应式样式，坐标系布局，动画效果
 - `app.js`：核心逻辑模块
-  - 素材数据管理（41 个 Logo，slot 命名规则 `行_列`）
+  - 素材数据管理（18 个有效碎片 + 26 个占位/空槽，slot 命名规则 `行_列`）
   - 拖放交互（点击放置、拖拽定位、拖回待选区）
   - 坐标系操作（缩放、平移、辅助线、小地图）
   - 撤销/重做栈
   - localStorage 自动保存（30 天 TTL）
   - 移动端长按三段式反馈、沉浸模式
   - 预览浮层（按图片原始比例自适应）
+
+### 碎片对照表（以线上 officialNames 为准，共 18 个有效碎片）
+
+| 槽位 | 碎片名称 | Logo 缩略图 | 预览原图 |
+|---|---|---|---|
+| `1_1` | 致绽放的你 | assets/logos/1_1.webp (16KB) | assets/detail-images/1_1.webp (142KB) |
+| `1_3` | 赴明日如赴前尘 | assets/logos/1_3.webp (20KB) | assets/detail-images/1_3.webp (224KB) |
+| `1_4` | 涌流幻梦之蝶 | assets/logos/1_4.webp (23KB) | assets/detail-images/1_4.webp (74KB) |
+| `2_1` | 锋芒 | assets/logos/2_1.webp (20KB) | assets/detail-images/2_1.webp (50KB) |
+| `2_2` | 知晓我在的人 | assets/logos/2_2.webp (22KB) | assets/detail-images/2_2.webp (409KB) |
+| `3_1` | 冲调午后 | assets/logos/3_1.webp (18KB) | assets/detail-images/3_1.webp (172KB) |
+| `3_2` | 左满舵 | assets/logos/3_2.webp (20KB) | assets/detail-images/3_2.webp (81KB) |
+| `3_3` | 槐花冰奶七分糖 | assets/logos/3_3.webp (18KB) | assets/detail-images/3_3.webp (84KB) |
+| `4_3` | 暝夜 | assets/logos/4_3.webp (22KB) | assets/detail-images/4_3.webp (40KB) |
+| `4_4` | 心动瞬间 | assets/logos/4_4.webp (16KB) | assets/detail-images/4_4.webp (174KB) |
+| `5_1` | 莲花去国一千年 | assets/logos/5_1.webp (20KB) | assets/detail-images/5_1.webp (398KB) |
+| `5_3` | 引梦渡海 | assets/logos/5_3.webp (20KB) | assets/detail-images/5_3.webp (177KB) |
+| `5_4` | 海落潮升 | assets/logos/5_4.webp (24KB) | assets/detail-images/5_4.webp (141KB) |
+| `6_3` | 现实童话 | assets/logos/6_3.webp (23KB) | assets/detail-images/6_3.webp (296KB) |
+| `6_4` | 阿女不答 | assets/logos/6_4.webp (35KB) | assets/detail-images/6_4.webp (677KB) |
+| `7_1` | 伴生 | assets/logos/7_1.webp (19KB) | assets/detail-images/7_1.webp (176KB) |
+| `7_2` | 直到世界听到 | assets/logos/7_2.webp (24KB) | assets/detail-images/7_2.webp (133KB) |
+| `8_1` | 再加九克好奇心 | assets/logos/8_1.webp (23KB) | assets/detail-images/8_1.webp (271KB) |
+
+**占位槽位**（有 ~1KB 占位图标，无碎片名称）：`6_1` `6_2` `7_3` `7_4` `8_2` `8_3` `8_4` `9_1`-`9_4` `10_1`-`10_4`（共 15 个）
+**空槽位**（无素材文件）：`1_2` `2_3` `2_4` `3_4` `4_1` `4_2` `5_2` `11_1`-`11_4`（共 11 个）
 
 ## 运行与预览
 
