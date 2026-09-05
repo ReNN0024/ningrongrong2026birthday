@@ -475,15 +475,10 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 
 .share-dialog { border: 0; padding: 0; background: transparent; width: min(430px, calc(100vw - 24px)); max-width: calc(100vw - 24px); max-height: min(94dvh, 860px); overflow: auto; }
 .confirm-dialog, .user-id-dialog { border: 0; padding: 0; background: transparent; max-width: calc(100vw - 32px); }
-<<<<<<< HEAD
 .user-id-dialog { width: min(440px, calc(100vw - 32px)); overflow: visible; }
 .share-dialog::backdrop, .confirm-dialog::backdrop { background: rgba(63,55,47,.32); backdrop-filter: blur(3px); }
 .share-dialog.is-fallback-open, .confirm-dialog.is-fallback-open { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; display: grid; place-items: center; background: rgba(63,55,47,.32); z-index: 1200; }
 .user-id-dialog.is-fallback-open { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; display: grid; place-items: center; z-index: 1200; }
-=======
-.share-dialog::backdrop, .confirm-dialog::backdrop, .user-id-dialog::backdrop { background: rgba(63,55,47,.32); backdrop-filter: blur(3px); }
-.share-dialog.is-fallback-open, .confirm-dialog.is-fallback-open, .user-id-dialog.is-fallback-open { position: fixed; inset: 0; width: 100%; height: 100%; max-width: none; display: grid; place-items: center; background: rgba(63,55,47,.32); z-index: 1200; }
->>>>>>> c02dfd8 (Restored to 'c1c2272f38c79c15ba134056948c9ff27cdf0891')
 .share-dialog-card { position: relative; width: 100%; padding: 0 0 16px; background: transparent; border: 0; border-radius: 0; box-shadow: none; text-align: center; }
 .share-close { position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(255, 250, 241, .86); color: var(--muted); box-shadow: 0 4px 14px rgba(55,46,34,.16); font-size: 22px; line-height: 1; }
 .share-preview { min-height: 320px; display: grid; place-items: center; background: transparent; overflow: visible; color: var(--muted); font-size: 12px; }
@@ -500,7 +495,6 @@ button:disabled { cursor: not-allowed; opacity: .36; }
 .share-actions a:not([aria-disabled="true"]) { color: #fffaf1; background: #8e7137; border-color: #8e7137; }
 .share-actions a[aria-disabled="true"] { opacity: .42; pointer-events: none; }
 .share-help { margin: 12px 0 0; color: var(--muted); font-size: 10px; line-height: 1.7; }
-<<<<<<< HEAD
 .dialog-card { position: relative; width: min(360px, calc(100vw - 32px)); padding: 28px; background: var(--paper-2); border: 1px solid rgba(141,112,57,.32); border-radius: 14px; box-shadow: var(--shadow); }
 .dialog-card h2 { font: 500 22px var(--sans); margin: 0 0 12px; }
 .dialog-card > p:not(.section-index) { color: var(--muted); font-size: 12px; line-height: 1.8; }
@@ -814,25 +808,7 @@ button:disabled { cursor: not-allowed; opacity: .36; }
   }
 }
 
-=======
-.dialog-card { position: relative; width: min(400px, calc(100vw - 32px)); padding: 32px; background: var(--paper-2); border: 1px solid rgba(141,112,57,.32); border-radius: 14px; box-shadow: var(--shadow); }
-.user-id-close { position: absolute; top: 10px; right: 10px; z-index: 2; width: 34px; height: 34px; border: 0; border-radius: 50%; background: rgba(255, 250, 241, .86); color: var(--muted); box-shadow: 0 4px 14px rgba(55,46,34,.16); font-size: 22px; line-height: 1; cursor: pointer; }
-.user-id-close:hover { background: rgba(255, 250, 241, 1); }
-.dialog-card h2 { font: 500 22px var(--sans); margin: 0 0 8px; }
-.user-id-subtitle { color: var(--muted); font: 400 14px var(--sans); margin: 0 0 16px; line-height: 1.6; }
-.dialog-card > p:not(.section-index) { color: var(--muted); font-size: 12px; line-height: 1.8; }
-.user-id-prompt { display: flex; align-items: center; gap: 8px; margin: 16px 0 0 !important; }
-.user-id-input { flex: 1; padding: 8px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--paper); color: var(--ink); font: 400 14px var(--sans); outline: none; transition: border-color .15s ease; }
-.user-id-input:focus { border-color: var(--accent); }
-.user-id-input::placeholder { color: var(--muted); }
-.dialog-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
-.dialog-actions button { min-height: 56px; border: 1px solid var(--line); border-radius: 8px; background: transparent; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 6px 8px; gap: 2px; }
-.dialog-actions .btn-main { font-size: 15px; font-weight: 500; line-height: 1.3; }
-.dialog-actions .btn-sub { font-size: 11px; color: var(--muted); line-height: 1.3; }
-.dialog-actions .danger { background: #8f554e; border-color: #8f554e; color: white; }
-.dialog-actions .danger .btn-sub { color: rgba(255,255,255,0.8); }
 .sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
->>>>>>> c02dfd8 (Restored to 'c1c2272f38c79c15ba134056948c9ff27cdf0891')
 
 
 body.is-immersive { overflow: hidden; }
