@@ -36,6 +36,10 @@
     { until: Infinity, maxIndex: 43 },
   ];
   function getUnlockedMaxIndex() {
+    const override = new URLSearchParams(location.search).get('unlock');
+    if (override === 'all' || override === 'full') return 43;
+    const overrideNum = parseInt(override, 10);
+    if (!isNaN(overrideNum)) return Math.min(Math.max(overrideNum, 0), 43);
     const now = Date.now();
     for (const tier of UNLOCK_SCHEDULE) {
       if (now < tier.until) return tier.maxIndex;
