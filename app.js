@@ -29,8 +29,20 @@
     };
   });
   const logoMap = new Map(logos.map(item => [item.id, item]));
-  const VISIBLE_MAX = 14;
-  const visibleLogos = logos.filter(l => l.index <= VISIBLE_MAX);
+  const UNLOCK_SCHEDULE = [
+    { until: Date.UTC(2026, 8, 19, 16, 0, 0), maxIndex: 14 },
+    { until: Date.UTC(2026, 8, 26, 16, 0, 0), maxIndex: 22 },
+    { until: Date.UTC(2026, 8, 28, 13, 0, 0), maxIndex: 32 },
+    { until: Infinity, maxIndex: 43 },
+  ];
+  function getUnlockedMaxIndex() {
+    const now = Date.now();
+    for (const tier of UNLOCK_SCHEDULE) {
+      if (now < tier.until) return tier.maxIndex;
+    }
+    return 43;
+  }
+  const visibleLogos = logos.filter(l => l.index <= getUnlockedMaxIndex());
   const legacyIds = { yuanhang: "1_1", mingye: "1_2", shuye: "1_2", xintiao: "1_3", chunxiang: "1_4", daiyan: "2_1", xinyi: "2_2" };
   function migrateLogoId(id) {
     if (legacyIds[id]) return legacyIds[id];

@@ -45,6 +45,7 @@
   - localStorage 自动保存（30 天 TTL）
   - 移动端长按三段式反馈、沉浸模式
   - 预览浮层（按图片原始比例自适应）
+  - 分批时间解锁（`UNLOCK_SCHEDULE` + `getUnlockedMaxIndex()`）：北京时间 9/20 零点、9/27 零点、9/28 21:00 三次解锁，此前仅展示 1_1~4_3；`visibleLogos` 派生数组驱动库面板渲染与计数
 
 ### 碎片对照表（以线上 officialNames 为准，共 30 个有效碎片）
 
