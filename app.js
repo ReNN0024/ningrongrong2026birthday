@@ -20,6 +20,7 @@
     return {
       id: slot,
       slot,
+      index,
       name: officialNames[index] || slot,
       src: `${ASSET_ROOT}/logos/${slot}.webp`,
       detail: `${ASSET_ROOT}/detail-images/${slot}.webp`,
@@ -28,6 +29,8 @@
     };
   });
   const logoMap = new Map(logos.map(item => [item.id, item]));
+  const VISIBLE_MAX = 14;
+  const visibleLogos = logos.filter(l => l.index <= VISIBLE_MAX);
   const legacyIds = { yuanhang: "1_1", mingye: "1_2", shuye: "1_2", xintiao: "1_3", chunxiang: "1_4", daiyan: "2_1", xinyi: "2_2" };
   function migrateLogoId(id) {
     if (legacyIds[id]) return legacyIds[id];
@@ -176,7 +179,7 @@
 
   function renderLibrary() {
     const placedIds = new Set(state.placed.map(item => item.id));
-    const visible = logos.filter(item => state.filter === "all" || !placedIds.has(item.id));
+    const visible = visibleLogos.filter(item => state.filter === "all" || !placedIds.has(item.id));
     const currentCards = dom.grid.querySelectorAll(".logo-card");
     if (currentCards.length !== visible.length) {
       dom.grid.innerHTML = visible.map((logo, index) => {
@@ -242,14 +245,14 @@
 
   function updateCounts() {
     const placed = state.placed.length;
-    $$('[data-total]').forEach(el => { el.textContent = String(logos.length); });
+    $$('[data-total]').forEach(el => { el.textContent = String(visibleLogos.length); });
     $("#placedCountDesktop").textContent = String(placed).padStart(2, "0");
     $("#placedCountMobile").textContent = String(placed).padStart(2, "0");
-    if (dom.desktopProgressFill) dom.desktopProgressFill.style.width = `${Math.round((placed / logos.length) * 100)}%`;
+    if (dom.desktopProgressFill) dom.desktopProgressFill.style.width = `${Math.round((placed / visibleLogos.length) * 100)}%`;
     if (dom.shareTrigger) dom.shareTrigger.hidden = placed < MIN_SHARE_PLACED;
     if (placed >= MIN_SHARE_PLACED) warmupShareAssets();
     warmupPlacedDetails();
-    $("#unplacedCount").textContent = String(logos.length - placed);
+    $("#unplacedCount").textContent = String(visibleLogos.length - placed);
     dom.clear.disabled = placed === 0;
   }
 
