@@ -46,7 +46,7 @@
   - 移动端长按三段式反馈、沉浸模式
   - 预览浮层（按图片原始比例自适应）
 
-### 碎片对照表（以线上 officialNames 为准，共 25 个有效碎片）
+### 碎片对照表（以线上 officialNames 为准，共 26 个有效碎片）
 
 | 槽位 | 碎片名称 | Logo 缩略图 | 预览原图 |
 |---|---|---|---|
@@ -70,13 +70,14 @@
 | `5_2` | 公主巡察时 | assets/logos/5_2.webp (22KB) | assets/detail-images/5_2.webp (104KB) |
 | `5_3` | 引梦渡海 | assets/logos/5_3.webp (20KB) | assets/detail-images/5_3.webp (177KB) |
 | `5_4` | 海落潮升 | assets/logos/5_4.webp (24KB) | assets/detail-images/5_4.webp (141KB) |
+| `6_1` | 风起青萍之末 | assets/logos/6_1.webp (20KB) | assets/detail-images/6_1.webp (238KB) |
 | `6_3` | 现实童话 | assets/logos/6_3.webp (23KB) | assets/detail-images/6_3.webp (296KB) |
 | `6_4` | 阿女不答 | assets/logos/6_4.webp (35KB) | assets/detail-images/6_4.webp (677KB) |
 | `7_1` | 伴生 | assets/logos/7_1.webp (19KB) | assets/detail-images/7_1.webp (176KB) |
 | `7_2` | 直到世界听到 | assets/logos/7_2.webp (24KB) | assets/detail-images/7_2.webp (133KB) |
 | `8_1` | 再加九克好奇心 | assets/logos/8_1.webp (23KB) | assets/detail-images/8_1.webp (271KB) |
 
-**占位槽位**（有 ~1KB 占位图标，无碎片名称）：`6_1` `6_2` `7_3` `7_4` `8_2` `8_3` `8_4` `9_1`-`9_4` `10_1`-`10_4`（共 15 个）
+**占位槽位**（有 ~1KB 占位图标，无碎片名称）：`6_2` `7_3` `7_4` `8_2` `8_3` `8_4` `9_1`-`9_4` `10_1`-`10_4`（共 14 个）
 **空槽位**（无素材文件）：`11_1`-`11_4`（共 4 个）
 
 ## 运行与预览
