@@ -46,7 +46,7 @@
   - 移动端长按三段式反馈、沉浸模式
   - 预览浮层（按图片原始比例自适应）
 
-### 碎片对照表（以线上 officialNames 为准，共 20 个有效碎片）
+### 碎片对照表（以线上 officialNames 为准，共 21 个有效碎片）
 
 | 槽位 | 碎片名称 | Logo 缩略图 | 预览原图 |
 |---|---|---|---|
@@ -57,6 +57,7 @@
 | `2_1` | 锋芒 | assets/logos/2_1.webp (20KB) | assets/detail-images/2_1.webp (50KB) |
 | `2_2` | 知晓我在的人 | assets/logos/2_2.webp (22KB) | assets/detail-images/2_2.webp (409KB) |
 | `2_3` | 珠如雨 | assets/logos/2_3.webp (21KB) | assets/detail-images/2_3.webp (211KB) |
+| `2_4` | 已收款三块五 | assets/logos/2_4.webp (22KB) | assets/detail-images/2_4.webp (135KB) |
 | `3_1` | 冲调午后 | assets/logos/3_1.webp (18KB) | assets/detail-images/3_1.webp (172KB) |
 | `3_2` | 左满舵 | assets/logos/3_2.webp (20KB) | assets/detail-images/3_2.webp (81KB) |
 | `3_3` | 槐花冰奶七分糖 | assets/logos/3_3.webp (18KB) | assets/detail-images/3_3.webp (84KB) |
@@ -72,7 +73,7 @@
 | `8_1` | 再加九克好奇心 | assets/logos/8_1.webp (23KB) | assets/detail-images/8_1.webp (271KB) |
 
 **占位槽位**（有 ~1KB 占位图标，无碎片名称）：`6_1` `6_2` `7_3` `7_4` `8_2` `8_3` `8_4` `9_1`-`9_4` `10_1`-`10_4`（共 15 个）
-**空槽位**（无素材文件）：`2_4` `3_4` `4_1` `4_2` `5_2` `11_1`-`11_4`（共 9 个）
+**空槽位**（无素材文件）：`3_4` `4_1` `4_2` `5_2` `11_1`-`11_4`（共 8 个）
 
 ## 运行与预览
 
