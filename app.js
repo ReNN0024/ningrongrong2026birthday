@@ -31,7 +31,7 @@
   const logoMap = new Map(logos.map(item => [item.id, item]));
   const UNLOCK_SCHEDULE = [
     { until: Date.UTC(2026, 8, 19, 16, 0, 0), maxIndex: 14 },
-    { until: Date.UTC(2026, 8, 26, 16, 0, 0), maxIndex: 22 },
+    { until: Date.UTC(2026, 8, 26, 16, 0, 0), maxIndex: 23 },
     { until: Date.UTC(2026, 8, 28, 13, 0, 0), maxIndex: 32 },
     { until: Infinity, maxIndex: 43 },
   ];
