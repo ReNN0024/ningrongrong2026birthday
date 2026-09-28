@@ -12,10 +12,10 @@
   const isIOS = /iP(ad|hone|od)/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
 
   const placeholderColors = ["#caa7a2", "#cdbb83", "#9bb9bd", "#aabe91", "#c494aa", "#b7a58e", "#d5aa7c"];
-  const officialNames = ["致绽放的你", "韶光慢", "赴明日如赴前尘", "涌流幻梦之蝶", "锋芒", "知晓我在的人", "珠如雨", "已收款三块五", "冲调午后", "左满舵", "槐花冰奶七分糖", "何人消隐于风声", "冠", "花", "时光的河入海流", "暝夜", "心动瞬间", "莲花去国一千年", "公主巡察时", "引梦渡海", "海落潮升", "风起青萍之末", "入世", "现实童话", "阿女不答", "伴生", "直到世界听到", "再来一瓶到天明", "梦里仍见旧乡", "共婵娟", "真理将明", "再加九克好奇心", "没有偷吃啦", "如此感谢相遇", "塔", "宣誓你不会忘记", "行行重行行", "何以为我", "惟愿孩儿愚且鲁", "不辞青山", "今日好事发生", "仙人抚我顶", "日月之行", "天明之前不可回", "人生如戏I", "", "", "", ""];
+  const officialNames = ["致绽放的你", "韶光慢", "赴明日如赴前尘", "涌流幻梦之蝶", "锋芒", "知晓我在的人", "珠如雨", "已收款三块五", "冲调午后", "左满舵", "槐花冰奶七分糖", "何人消隐于风声", "冠", "花", "时光的河入海流", "暝夜", "心动瞬间", "莲花去国一千年", "公主巡察时", "引梦渡海", "海落潮升", "风起青萍之末", "入世", "现实童话", "阿女不答", "伴生", "直到世界听到", "再来一瓶到天明", "梦里仍见旧乡", "共婵娟", "真理将明", "再加九克好奇心", "没有偷吃啦", "如此感谢相遇", "塔", "宣誓你不会忘记", "行行重行行", "何以为我", "惟愿孩儿愚且鲁", "不辞青山", "今日好事发生", "仙人抚我顶", "日月之行", "天明之前不可回", "人生如戏I", "人生如戏II", "", "", ""];
   const formatFragmentName = name => name.length > 7 ? escapeHTML(name.slice(0, 4)) + '<br>' + escapeHTML(name.slice(4)) : escapeHTML(name);
   const slotForIndex = index => `${Math.floor(index / 4) + 1}_${index % 4 + 1}`;
-  const logos = Array.from({ length: 45 }, (_, index) => {
+  const logos = Array.from({ length: 46 }, (_, index) => {
     const slot = slotForIndex(index);
     return {
       id: slot,
@@ -33,18 +33,18 @@
     { until: Date.UTC(2026, 8, 19, 16, 0, 0), maxIndex: 15 },
     { until: Date.UTC(2026, 8, 26, 16, 0, 0), maxIndex: 23 },
     { until: Date.UTC(2026, 8, 28, 13, 0, 0), maxIndex: 32 },
-    { until: Infinity, maxIndex: 44 },
+    { until: Infinity, maxIndex: 45 },
   ];
   function getUnlockedMaxIndex() {
     const override = new URLSearchParams(location.search).get('unlock');
-    if (override === 'all' || override === 'full') return 44;
+    if (override === 'all' || override === 'full') return 45;
     const overrideNum = parseInt(override, 10);
-    if (!isNaN(overrideNum)) return Math.min(Math.max(overrideNum, 0), 44);
+    if (!isNaN(overrideNum)) return Math.min(Math.max(overrideNum, 0), 45);
     const now = Date.now();
     for (const tier of UNLOCK_SCHEDULE) {
       if (now < tier.until) return tier.maxIndex;
     }
-    return 44;
+    return 45;
   }
   const visibleLogos = logos.filter(l => l.index <= getUnlockedMaxIndex());
   const legacyIds = { yuanhang: "1_1", mingye: "1_2", shuye: "1_2", xintiao: "1_3", chunxiang: "1_4", daiyan: "2_1", xinyi: "2_2" };
