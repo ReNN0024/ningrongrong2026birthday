@@ -96,7 +96,7 @@
 | `11_2` | 仙人抚我顶 | assets/logos/11_2.webp (20KB) | assets/detail-images/11_2.webp (136KB) |
 | `11_3` | 日月之行 | assets/logos/11_3.webp (22KB) | assets/detail-images/11_3.webp (182KB) |
 | `11_4` | 天明之前不可回 | assets/logos/11_4.webp (20KB) | assets/detail-images/11_4.webp (156KB) |
-| `12_1` | 人生如戏 | assets/logos/12_1.webp (21KB) | assets/detail-images/12_1.webp (148KB) |
+| `12_1` | 人生如戏I | assets/logos/12_1.webp (21KB) | assets/detail-images/12_1.webp (148KB) |
 
 **占位槽位**（有 ~1KB 占位图标，无碎片名称）：无
 **空槽位**（无素材文件）：无（45 个已启用槽位全部填满）
