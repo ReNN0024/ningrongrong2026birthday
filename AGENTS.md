@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-"与我周旋久" —— 宁荣荣 2026 生日庆典预热活动的双端响应式 H5 页面。用户可在坐标系中拖放碎片素材，支持撤销/重做、缩放平移、自动保存与恢复。当前共 34 个有效碎片（另有 6 个占位、4 个空槽，合计 44 个槽位）。
+"与我周旋久" —— 宁荣荣 2026 生日庆典预热活动的双端响应式 H5 页面。用户可在坐标系中拖放碎片素材，支持撤销/重做、缩放平移、自动保存与恢复。当前共 35 个有效碎片（另有 5 个占位、4 个空槽，合计 44 个槽位）。
 
 ## 技术栈
 
@@ -48,7 +48,7 @@
   - 分批时间解锁（`UNLOCK_SCHEDULE` + `getUnlockedMaxIndex()`）：北京时间 9/20 零点、9/27 零点、9/28 21:00 三次解锁，此前仅展示 1_1~4_3；`visibleLogos` 派生数组驱动库面板渲染与计数
   - 测试覆盖：URL 加 `?unlock=all` 绕过时间锁展示全部碎片（也可传数字如 `?unlock=22` 指定解锁到某索引）
 
-### 碎片对照表（以线上 officialNames 为准，共 34 个有效碎片）
+### 碎片对照表（以线上 officialNames 为准，共 35 个有效碎片）
 
 | 槽位 | 碎片名称 | Logo 缩略图 | 预览原图 |
 |---|---|---|---|
@@ -82,12 +82,13 @@
 | `7_4` | 再来一瓶到天明 | assets/logos/7_4.webp (25KB) | assets/detail-images/7_4.webp (95KB) |
 | `8_1` | 梦里仍见旧乡 | assets/logos/8_1.webp (24KB) | assets/detail-images/8_1.webp (361KB) |
 | `8_2` | 共婵娟 | assets/logos/8_2.webp (26KB) | assets/detail-images/8_2.webp (327KB) |
-| `8_3` | 再加九克好奇心 | assets/logos/8_3.webp (23KB) | assets/detail-images/8_3.webp (271KB) |
-| `8_4` | 没有偷吃啦 | assets/logos/8_4.webp (23KB) | assets/detail-images/8_4.webp (154KB) |
-| `9_1` | 如此感谢相遇 | assets/logos/9_1.webp (26KB) | assets/detail-images/9_1.webp (165KB) |
-| `9_2` | 塔 | assets/logos/9_2.webp (24KB) | assets/detail-images/9_2.webp (176KB) |
+| `8_3` | 真理将明 | assets/logos/8_3.webp (24KB) | assets/detail-images/8_3.webp (56KB) |
+| `8_4` | 再加九克好奇心 | assets/logos/8_4.webp (22KB) | assets/detail-images/8_4.webp (271KB) |
+| `9_1` | 没有偷吃啦 | assets/logos/9_1.webp (23KB) | assets/detail-images/9_1.webp (154KB) |
+| `9_2` | 如此感谢相遇 | assets/logos/9_2.webp (26KB) | assets/detail-images/9_2.webp (165KB) |
+| `9_3` | 塔 | assets/logos/9_3.webp (24KB) | assets/detail-images/9_3.webp (176KB) |
 
-**占位槽位**（有 ~1KB 占位图标，无碎片名称）：`9_3`-`9_4` `10_1`-`10_4`（共 6 个）
+**占位槽位**（有 ~1KB 占位图标，无碎片名称）：`9_4` `10_1`-`10_4`（共 5 个）
 **空槽位**（无素材文件）：`11_1`-`11_4`（共 4 个）
 
 ## 运行与预览
