@@ -47,6 +47,7 @@
   - 预览浮层（按图片原始比例自适应）
   - 分批时间解锁（`UNLOCK_SCHEDULE` + `getUnlockedMaxIndex()`）：北京时间 9/20 零点、9/27 零点、9/28 21:00 三次解锁，此前仅展示 1_1~4_3；`visibleLogos` 派生数组驱动库面板渲染与计数
   - 测试覆盖：URL 加 `?unlock=all` 绕过时间锁展示全部碎片（也可传数字如 `?unlock=22` 指定解锁到某索引）
+  - `share-card.js` 生成 16 种结果卡片（R/O/N/G 系列 × 4 倾向）；当摆放全部 48 个碎片（`placed.length === logos.length`）时左上角自动加四角星芒标志，用各系列专属 accent 色，未摆满不显示
 
 ### 碎片对照表（以线上 officialNames 为准，共 48 个有效碎片）
 

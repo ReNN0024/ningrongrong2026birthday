@@ -487,6 +487,18 @@
     <g id="placed-logo-result-layer">${logoLayer}</g>`;
   }
 
+  function renderStarMark(style) {
+    const cx = 66, cy = 66, r = 34;
+    const pt = (x, y) => `${x.toFixed(1)} ${y.toFixed(1)}`;
+    const star = rr => `M ${pt(cx, cy - rr)} Q ${pt(cx, cy)} ${pt(cx + rr, cy)} Q ${pt(cx, cy)} ${pt(cx, cy + rr)} Q ${pt(cx, cy)} ${pt(cx - rr, cy)} Q ${pt(cx, cy)} ${pt(cx, cy - rr)} Z`;
+    return `<g id="completion-star">
+      <circle cx="${cx}" cy="${cy}" r="${r + 12}" fill="${style.accent}" fill-opacity="0.10"/>
+      <path d="${star(r)}" fill="${style.accent}" fill-opacity="0.95"/>
+      <path d="${star(r * 0.55)}" fill="${style.base}" fill-opacity="0.55" transform="rotate(45 ${cx} ${cy})"/>
+      <path d="${star(r * 0.36)}" fill="${style.accent}" fill-opacity="0.85" transform="rotate(-45 ${cx} ${cy})"/>
+    </g>`;
+  }
+
   async function buildSVG({ placed, logos, activityTitle, shareUrl, userId = "佚名", personality: overridePersonality }) {
     const personality = overridePersonality || calculatePersonality(placed);
     const style = CARD_STYLES[personality.main] || CARD_STYLES.R;
@@ -500,6 +512,8 @@
     const displayTendency = DISPLAY_TENDENCY_KEYS[personality.tendency] || personality.tendency.toUpperCase();
     const kickerText = `${style.seriesName || personality.main}-${displayTendency}`;
     const userIdMarkup = renderUserIdSignature({ style, userId });
+    const allPlaced = logos.length > 0 && placed.length === logos.length;
+    const starMarkup = allPlaced ? renderStarMark(style) : "";
 
     return `<svg xmlns="http://www.w3.org/2000/svg" width="${CARD_WIDTH}" height="${CARD_HEIGHT}" viewBox="0 0 ${CARD_WIDTH} ${CARD_HEIGHT}">
       <defs>
@@ -520,6 +534,7 @@
         <text x="${textXFor(style, "title").toFixed(2)}" y="${scaled(style.copy.title[1] + 80)}" text-anchor="${anchor}" font-family="serif" font-size="85.33" font-weight="900" fill="${style.title}">${escapeXML(result.name)}</text>
         ${renderTextBlock({ x: textXFor(style, "desc"), y: scale(style.copy.desc[1] + 40), lines: descLines, anchor, size: 34.67, lineHeight: 50, fill: style.desc, weight: 500 })}
         <text x="${textXFor(style, "footer").toFixed(2)}" y="${Math.min(scale(style.copy.footer[1] + 28), CARD_HEIGHT - 82).toFixed(2)}" text-anchor="${textAnchorFor(style, "footer")}" font-family="Avenir Next, Helvetica Neue, PingFang SC, sans-serif" font-size="28" font-weight="500" letter-spacing="0.5" fill="${style.footer}" opacity="0.72">${escapeXML(footer)}</text>
+        ${starMarkup}
       </g>
     </svg>`;
   }
